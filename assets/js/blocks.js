@@ -126,24 +126,40 @@
           arIt ? h(ArSub, { text: (arIt.title ? arIt.title + ' — ' : '') + (arIt.text || '') }) : null));
     }));
 
+  /* Rotate SVG icon */
+  const RotateIcon = ({ size }) => h('svg', { width: size || 12, height: size || 12, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round', style: { flex: 'none' } },
+    h('path', { d: 'M21.5 2v6h-6' }),
+    h('path', { d: 'M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67' }));
+
   /* Flip Cards */
   function Flip({ b, arB, bilingual }) {
+    const { lang } = useLang();
     const [open, setOpen] = useState({});
     return h('div', { className: 'b-flip', 'data-stagger': '' },
       b.items.map((it, i) => {
         const arIt = (bilingual && arB && arB.items && arB.items[i]) || null;
         return h('button', {
-          key: i, className: 'fl' + (open[i] ? ' open' : ''), 'aria-pressed': !!open[i],
+          key: i,
+          type: 'button',
+          className: 'fl' + (open[i] ? ' open' : ''),
+          'aria-pressed': !!open[i],
           onClick: () => setOpen({ ...open, [i]: !open[i] })
         },
           h('span', { className: 'fl-in' },
             h('span', { className: 'fl-face fl-front' },
-              it.front,
-              arIt && arIt.front ? h('span', { className: 'ar-sub', style: { margin: '4px 0 0', padding: '2px 8px' }, dir: 'rtl' }, arIt.front) : null,
-              h('em', { className: 'fl-hint' }, '↻')),
+              h('span', { className: 'fl-body' },
+                h('span', { className: 'fl-front-title' }, it.front),
+                arIt && arIt.front ? h('span', { className: 'ar-sub', dir: 'rtl' }, arIt.front) : null),
+              h('span', { className: 'fl-hint' },
+                h(RotateIcon, { size: 12 }),
+                h('span', null, lang === 'ar' ? 'انقر للقلب' : 'Click to flip'))),
             h('span', { className: 'fl-face fl-back' },
-              it.back,
-              arIt && arIt.back ? h('span', { className: 'ar-sub', style: { margin: '6px 0 0', background: 'rgba(255,255,255,0.15)', color: 'inherit' }, dir: 'rtl' }, arIt.back) : null)));
+              h('span', { className: 'fl-body' },
+                h('span', { className: 'fl-back-title' }, it.back),
+                arIt && arIt.back ? h('span', { className: 'ar-sub', dir: 'rtl' }, arIt.back) : null),
+              h('span', { className: 'fl-back-hint' },
+                h(RotateIcon, { size: 12 }),
+                h('span', null, lang === 'ar' ? 'الرجوع للسؤال' : 'Click to flip back')))));
       }));
   }
 
