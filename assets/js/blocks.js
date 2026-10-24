@@ -167,9 +167,31 @@
   function Code({ b }) {
     const { t } = useLang();
     const [ok, setOk] = useState(false);
+    const handleCopy = () => {
+      const txt = b.text || '';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).catch(() => fallbackCopy(txt));
+      } else {
+        fallbackCopy(txt);
+      }
+      setOk(true);
+      setTimeout(() => setOk(false), 1400);
+    };
+    function fallbackCopy(txt) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = txt;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      } catch (e) {}
+    }
     return h('div', { className: 'b-code', 'data-reveal': '' },
       h('div', { className: 'code-bar' }, h('span', null, b.lang.toUpperCase()),
-        h('button', { onClick: () => { navigator.clipboard && navigator.clipboard.writeText(b.text); setOk(true); setTimeout(() => setOk(false), 1400); } }, ok ? t.copied : t.copy)),
+        h('button', { onClick: handleCopy }, ok ? t.copied : t.copy)),
       h('pre', { dir: 'ltr' }, h('code', null, b.text)));
   }
 

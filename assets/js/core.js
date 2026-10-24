@@ -389,8 +389,15 @@
             TTS.currentText = clean;
             TTS.currentLangHint = langHint || (isAr ? 'ar' : 'en');
             TTS.notify();
+            clearInterval(TTS._ping);
+            TTS._ping = setInterval(() => {
+              if (TTS.speaking && !TTS.paused && TTS.synth) {
+                try { TTS.synth.pause(); TTS.synth.resume(); } catch (e) {}
+              }
+            }, 10000);
           };
           u.onend = () => {
+            clearInterval(TTS._ping);
             TTS.speaking = false;
             TTS.paused = false;
             TTS.currentId = null;
@@ -398,6 +405,7 @@
             TTS.notify();
           };
           u.onerror = (e) => {
+            clearInterval(TTS._ping);
             TTS.speaking = false;
             TTS.paused = false;
             TTS.currentId = null;
@@ -426,6 +434,7 @@
       }
     },
     stop() {
+      clearInterval(TTS._ping);
       if (TTS.synth) {
         try { TTS.synth.cancel(); } catch (e) {}
       }

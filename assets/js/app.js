@@ -433,7 +433,7 @@
     useEffect(() => {
       if (!data) return;
       const st = ScrollTrigger.create({ start: 0, end: 'max', onUpdate: s => { if (bar.current) bar.current.style.transform = `scaleX(${s.progress})`; } });
-      const io = new IntersectionObserver(es => { if (es[0].isIntersecting) setReadEnd(true); }, { threshold: .1 });
+      const io = new IntersectionObserver(es => { if (es[0].isIntersecting) setReadEnd(true); }, { threshold: 0 });
       if (end.current) io.observe(end.current);
       return () => { st.kill(); io.disconnect(); };
     }, [data]);
@@ -459,7 +459,7 @@
       h('div', { className: 'read-bar', ref: bar, 'aria-hidden': 'true' }),
       h('header', { className: 'l-hero' },
         h('div', { className: 'l-num', 'aria-hidden': 'true', 'data-parallax': 40 }, chapter ? pad(chapter.id) : ''),
-        h('a', { className: 'crumb', href: '#/chapter/' + (chapter ? chapter.id : 1) }, '← ', chapter ? lt(chapter.title, lang) : ''),
+        h('a', { className: 'crumb', href: '#/chapter/' + (chapter ? chapter.id : 1) }, (lang === 'ar' ? '→ ' : '← '), chapter ? lt(chapter.title, lang) : ''),
         h('p', { className: 'kicker' }, `${t.lesson} ${info ? info.id.replace('-', '.') : ''}`),
         h(Words, { tag: 'h1', className: 'l-title', text: data.title }),
         isBi && arData ? h('span', { className: 'ar-sub-title', dir: 'rtl' }, arData.title) : null,
@@ -554,7 +554,14 @@
     const navigate = item => {
       onClose();
       const target = item.target || (item.type === 'lesson' ? '#/lesson/' + item.id : '#/chapter/' + item.ch);
-      location.hash = target;
+      if (location.hash === target) {
+        if (item.type === 'demo' || item.type === 'figure' || item.type === 'term') {
+          const el = document.querySelector('.demo') || document.querySelector('.b-figures') || document.querySelector('.terms');
+          if (el) App.scrollToEl(el, 80);
+        }
+      } else {
+        location.hash = target;
+      }
     };
 
     if (!open) return null;
@@ -660,7 +667,7 @@
       if (!lang) return;
       document.documentElement.lang = lang;
       document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-      document.title = lang === 'ar' ? 'البرمجة والذكاء الاصطناعي — البكالوريا' : 'Programming & AI — Baccalaureate';
+      document.title = 'Maged Aboraya';
     }, [lang]);
     useEffect(() => {
       document.documentElement.dataset.theme = theme;
@@ -680,6 +687,7 @@
 
     useEffect(() => {
       if (!lang) return;
+      App.TTS.stop();
       if (route.name === 'lesson' || !route.target) {
         const l = getLenis();
         if (l) l.scrollTo(0, { immediate: true }); else window.scrollTo(0, 0);

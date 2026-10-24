@@ -77,3 +77,4 @@ http://localhost:3000
 ## Copyright
 
 © 2026 Maged Aboraya. All rights reserved.
+

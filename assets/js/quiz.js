@@ -97,7 +97,16 @@
       if (i + 1 >= total) { setScore(s); setDone(true); onDone(s, total); }
       else { setScore(s); setI(i + 1); }
     };
-    const retry = () => { setI(0); setScore(0); setDone(false); setRun(run + 1); };
+    const retry = () => {
+      setI(0);
+      setScore(0);
+      setDone(false);
+      setRun(run + 1);
+      setTimeout(() => {
+        const el = document.querySelector('.quiz-box') || wrap.current;
+        if (el) App.scrollToEl(el, 90);
+      }, 50);
+    };
 
     if (done) {
       const pct = score / total;
