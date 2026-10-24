@@ -41,6 +41,17 @@
     h('polygon', { points: '11 5 6 9 2 9 2 15 6 15 11 19 11 5' }),
     h('path', { d: 'M15.54 8.46a5 5 0 0 1 0 7.07' }));
 
+  const ZenIcon = () => h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+    h('circle', { cx: 12, cy: 12, r: 3 }),
+    h('path', { d: 'M3 7V5a2 2 0 0 1 2-2h2' }),
+    h('path', { d: 'M17 3h2a2 2 0 0 1 2 2v2' }),
+    h('path', { d: 'M21 17v2a2 2 0 0 1-2 2h-2' }),
+    h('path', { d: 'M7 21H5a2 2 0 0 1-2-2v-2' }));
+
+  const CloseIcon = () => h('svg', { width: 13, height: 13, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+    h('line', { x1: 18, y1: 6, x2: 6, y2: 18 }),
+    h('line', { x1: 6, y1: 6, x2: 18, y2: 18 }));
+
   /* ============ hero ambient micro-field ============ */
   function Particles() {
     const ref = useRef(null);
@@ -140,7 +151,7 @@
   }
 
   /* ============ header / footer ============ */
-  function Header({ meta, onSwitch, route, onOpenSearch, theme, onToggleTheme }) {
+  function Header({ meta, onSwitch, route, onOpenSearch, theme, onToggleTheme, zen, onToggleZen }) {
     const { t, lang } = useLang();
     const store = useStore();
     const [scrolled, setScrolled] = useState(false);
@@ -167,6 +178,11 @@
           h(SearchIcon),
           h('span', null, lang === 'en' ? 'Search' : 'بحث'),
           h('span', { className: 'spotlight-esc' }, 'Ctrl+K')),
+        route.name === 'lesson' ? h('button', {
+          className: 'hdr-btn icon-only zen-hdr-btn' + (zen ? ' is-active' : ''),
+          onClick: onToggleZen,
+          title: t.zenModeHint
+        }, h(ZenIcon)) : null,
         h('button', {
           className: 'hdr-btn icon-only',
           onClick: onToggleTheme,
@@ -384,7 +400,7 @@
         }))));
   }
 
-  function Lesson({ id, meta, status }) {
+  function Lesson({ id, meta, status, zen, onToggleZen }) {
     const { t, lang } = useLang();
     const store = useStore();
     const [data, setData] = useState(null);
@@ -463,14 +479,23 @@
         h('p', { className: 'kicker' }, `${t.lesson} ${info ? info.id.replace('-', '.') : ''}`),
         h(Words, { tag: 'h1', className: 'l-title', text: data.title }),
         isBi && arData ? h('span', { className: 'ar-sub-title', dir: 'rtl' }, arData.title) : null,
-        lang === 'en' ? h('div', { className: 'bilingual-bar' },
-          h('div', { className: 'bilingual-bar-text' },
-            h('span', { className: 'bilingual-tag' }, 'Bilingual · ثنائي اللغة'),
-            h('span', null, 'English curriculum with Arabic translation companion')),
+        h('div', { className: 'lesson-action-strip' },
+          lang === 'en' ? h('div', { className: 'bilingual-bar' },
+            h('div', { className: 'bilingual-bar-text' },
+              h('span', { className: 'bilingual-tag' }, 'Bilingual · ثنائي اللغة'),
+              h('span', null, 'English curriculum with Arabic translation companion')),
+            h('button', {
+              className: 'bilingual-toggle-btn' + (bilingual ? ' on' : ''),
+              onClick: toggleBi
+            }, bilingual ? 'الترجمة العربية: مفعّلة' : 'تفعيل الترجمة العربية')) : null,
           h('button', {
-            className: 'bilingual-toggle-btn' + (bilingual ? ' on' : ''),
-            onClick: toggleBi
-          }, bilingual ? 'الترجمة العربية المرافقة: مفعّلة' : 'تفعيل الترجمة العربية')) : null,
+            className: 'zen-trigger-btn' + (zen ? ' is-active' : ''),
+            onClick: onToggleZen,
+            title: t.zenModeHint
+          },
+            h(ZenIcon),
+            h('span', null, zen ? t.zenExit : t.zenMode),
+            h('span', { className: 'zen-trigger-kbd' }, 'Z'))),
         h('p', { className: 'l-hook', 'data-reveal': '', 'data-delay': .3 }, data.hook),
         isBi && arData ? h('p', { className: 'ar-sub', dir: 'rtl', style: { fontSize: '16.5px' } }, arData.hook) : null,
         h('ul', { className: 'objectives', 'data-stagger': '' }, data.objectives.map((o, i) => {
@@ -637,6 +662,34 @@
         h('button', { className: 'tts-close-btn', onClick: () => App.TTS.stop(), title: 'إغلاق المشغل' }, '×')));
   }
 
+  /* ============ Floating Zen Focus Toolbar ============ */
+  function ZenToolbar({ onExit, onToggleTheme, theme, fontSize, setFontSize, t }) {
+    return h('div', { className: 'zen-bar', role: 'toolbar', 'aria-label': 'Focus Mode Bar' },
+      h('div', { className: 'zen-bar-badge' },
+        h('span', { className: 'zen-dot', 'aria-hidden': 'true' }),
+        h('span', null, t.zenMode)),
+      h('div', { className: 'zen-bar-tools' },
+        h('button', {
+          className: 'zen-tool-btn' + (fontSize === 'big' ? ' on' : ''),
+          onClick: () => setFontSize(fontSize === 'big' ? 'normal' : 'big'),
+          title: fontSize === 'big' ? t.zenFontNormal : t.zenFontBig
+        },
+          h('span', { className: 'zen-tool-txt' }, fontSize === 'big' ? 'A+' : 'A')),
+        h('button', {
+          className: 'zen-tool-btn',
+          onClick: onToggleTheme,
+          title: theme === 'dark' ? 'الوضع النهاري / Light Mode' : 'الوضع الليلي / Dark Mode'
+        }, theme === 'dark' ? h(SunIcon) : h(MoonIcon)),
+        h('button', {
+          className: 'zen-exit-pill',
+          onClick: onExit,
+          title: t.zenEsc
+        },
+          h(CloseIcon),
+          h('span', null, t.zenExit),
+          h('span', { className: 'zen-esc-kbd' }, 'ESC'))));
+  }
+
   /* ============ root ============ */
   function parseRoute() {
     const hash = location.hash.replace(/^#/, '') || '/';
@@ -651,6 +704,8 @@
     const store = useStore();
     const lang = store.lang || null;
     const theme = store.theme || 'light';
+    const [zen, setZen] = useState(false);
+    const [zenFont, setZenFont] = useState('normal');
     const [searchOpen, setSearchOpen] = useState(false);
     const [route, setRoute] = useState(parseRoute());
     const [meta, setMeta] = useState(null);
@@ -672,18 +727,39 @@
     useEffect(() => {
       document.documentElement.dataset.theme = theme;
     }, [theme]);
+    useEffect(() => {
+      document.documentElement.dataset.zen = zen ? 'true' : 'false';
+      document.documentElement.dataset.zenFont = zenFont;
+    }, [zen, zenFont]);
 
-    // Global shortcut Ctrl+K / Cmd+K
+    // Exit Zen if navigating away from lesson
+    useEffect(() => {
+      if (route.name !== 'lesson') setZen(false);
+    }, [route.name]);
+
+    // Shortcuts: Z to toggle Zen, Escape to exit Zen, Ctrl+K for search
     useEffect(() => {
       const onKeyDown = e => {
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
           e.preventDefault();
           setSearchOpen(prev => !prev);
+          return;
+        }
+        const tag = (e.target && e.target.tagName) || '';
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        if (e.key === 'Escape' && zen) {
+          e.preventDefault();
+          setZen(false);
+        } else if ((e.key === 'z' || e.key === 'Z') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+          if (route.name === 'lesson') {
+            e.preventDefault();
+            setZen(prev => !prev);
+          }
         }
       };
       window.addEventListener('keydown', onKeyDown);
       return () => window.removeEventListener('keydown', onKeyDown);
-    }, []);
+    }, [zen, route.name]);
 
     useEffect(() => {
       if (!lang) return;
@@ -700,6 +776,7 @@
     const ctx = useMemo(() => ({ lang: lang || 'en', t: STR[lang || 'en'], dir: lang === 'ar' ? 'rtl' : 'ltr' }), [lang]);
     const switchLang = () => Store.set({ lang: lang === 'ar' ? 'en' : 'ar' });
     const toggleTheme = () => Store.set({ theme: theme === 'dark' ? 'light' : 'dark' });
+    const toggleZen = () => setZen(prev => !prev);
 
     if (!lang) return h(Gate, { onPick: l => Store.set({ lang: l }) });
     return h(LangCtx.Provider, { value: ctx },
@@ -710,10 +787,22 @@
         route,
         onOpenSearch: () => setSearchOpen(true),
         theme,
-        onToggleTheme: toggleTheme
+        onToggleTheme: toggleTheme,
+        zen,
+        onToggleZen: toggleZen
       }),
+      zen && route.name === 'lesson'
+        ? h(ZenToolbar, {
+            onExit: () => setZen(false),
+            onToggleTheme: toggleTheme,
+            theme,
+            fontSize: zenFont,
+            setFontSize: setZenFont,
+            t: ctx.t
+          })
+        : null,
       route.name === 'lesson'
-        ? h(Lesson, { key: route.id + lang, id: route.id, meta, status })
+        ? h(Lesson, { key: route.id + lang, id: route.id, meta, status, zen, onToggleZen: toggleZen })
         : h(Home, { key: 'home' + lang, meta, status, route }),
       h(Footer),
       h(SpotlightSearch, { open: searchOpen, onClose: () => setSearchOpen(false), lang }),

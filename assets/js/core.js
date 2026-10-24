@@ -81,7 +81,13 @@
       copy: 'نسخ',
       copied: 'تم النسخ',
       section: 'القسم',
-      sensitiveNote: 'كل ما تكتبه يبقى في متصفحك فقط.'
+      sensitiveNote: 'كل ما تكتبه يبقى في متصفحك فقط.',
+      zenMode: 'وضع التركيز',
+      zenModeHint: 'قراءة هادئة بدون مشتتات (Z)',
+      zenExit: 'إنهاء وضع التركيز',
+      zenEsc: 'ESC للخروج',
+      zenFontNormal: 'خط عادي',
+      zenFontBig: 'خط كبير'
     },
     en: {
       brand: 'Maged Aboraya',
@@ -155,7 +161,13 @@
       copy: 'Copy',
       copied: 'Copied',
       section: 'Section',
-      sensitiveNote: 'Everything you type stays in your browser.'
+      sensitiveNote: 'Everything you type stays in your browser.',
+      zenMode: 'Focus Mode',
+      zenModeHint: 'Distraction-free reading (Z)',
+      zenExit: 'Exit Focus Mode',
+      zenEsc: 'ESC to exit',
+      zenFontNormal: 'Normal font',
+      zenFontBig: 'Large font'
     }
   };
 
