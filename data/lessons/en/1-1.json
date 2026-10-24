@@ -1,0 +1,341 @@
+{
+  "id": "1-1",
+  "title": "Evolution of IT and Social Transformation",
+  "hook": "Have you ever wondered what life looked like just thirty years ago? A room-sized computer once had less computing power than the smartwatch on your wrist today.",
+  "objectives": [
+    "Trace key historical milestones in the evolution of computing hardware",
+    "Understand Moore's Law and its impact on chip density and performance",
+    "Analyze social transformations including e-commerce, cashless payments, and remote learning",
+    "Examine emerging technologies such as edge computing and quantum computing"
+  ],
+  "keyTerms": [
+    {
+      "term": "Moore's Law",
+      "def": "The empirical observation that the number of transistors on a microchip doubles roughly every two years while costs drop"
+    },
+    {
+      "term": "Cloud Computing",
+      "def": "On-demand delivery of computing resources like storage and processing power over the Internet as a managed service"
+    },
+    {
+      "term": "Edge Computing",
+      "def": "Processing data near its physical source rather than relying exclusively on a distant centralized data center"
+    },
+    {
+      "term": "Cashless Payment",
+      "def": "Completing financial transactions electronically using digital wallets, payment cards, and mobile banking applications"
+    },
+    {
+      "term": "Quantum Computing",
+      "def": "A computing paradigm that harnesses quantum mechanical phenomena to solve complex problems intractable for classical computers"
+    },
+    {
+      "term": "Augmented and Virtual Reality",
+      "def": "Technologies that overlay digital assets onto real-world views or immerse users in completely simulated environments"
+    }
+  ],
+  "sections": [
+    {
+      "id": "s1",
+      "title": "Milestones in Computing History",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The computer revolution began with huge computers that used vacuum tubes and needed massive amounts of electricity. Rapid leaps followed with the invention of the transistor, integrated circuits, and the modern microprocessor."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/gordon_moore.png",
+              "badge": "Pioneer",
+              "title": "Gordon Moore",
+              "caption": "Co-founder of Intel who formulated Moore Law predicting that transistors on a chip double every two years."
+            },
+            {
+              "img": "/assets/img/lessons/eniac.jpg",
+              "badge": "Historic Machine",
+              "title": "ENIAC Computer (1945)",
+              "caption": "The first general-purpose electronic computer; it filled an entire room and used vacuum tubes."
+            },
+            {
+              "img": "/assets/img/lessons/intel_4004.jpg",
+              "badge": "Real Microchip",
+              "title": "Intel 4004 Microprocessor",
+              "caption": "The world first single-chip microprocessor released in 1971 containing 2,300 transistors."
+            },
+            {
+              "img": "/assets/img/lessons/transistor.jpg",
+              "badge": "Component",
+              "title": "Electronic Transistors",
+              "caption": "Tiny semiconductor switches that replaced bulky vacuum tubes and made modern electronics possible."
+            }
+          ]
+        },
+        {
+          "type": "timeline",
+          "items": [
+            {
+              "label": "1940s - 1950s",
+              "text": "First-generation mainframes like ENIAC occupying entire rooms for specialized scientific and military computations"
+            },
+            {
+              "label": "1970s - 1980s",
+              "text": "Arrival of personal desktop computers enabled by microprocessors, moving computation into offices and homes"
+            },
+            {
+              "label": "1990s - 2000s",
+              "text": "Worldwide web expansion, search engines, early e-commerce, and the rise of interactive web applications"
+            },
+            {
+              "label": "2010s to Present",
+              "text": "Ubiquitous smartphones, cloud computing architectures, artificial intelligence, IoT, and edge processing"
+            }
+          ]
+        },
+        {
+          "type": "stat",
+          "items": [
+            {
+              "value": "2,300",
+              "label": "transistors in the first commercial CPU in 1971"
+            },
+            {
+              "value": "100,000,000,000",
+              "label": "transistors in top-tier silicon chips today"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "Moore's Law and the Pace of Progress",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In 1965, Intel co-founder Gordon Moore noticed that the number of transistors on a microchip doubles about every two years, making computers faster and cheaper."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/printing_press.png",
+              "badge": "Milestone",
+              "title": "Gutenberg Printing Press",
+              "caption": "The historic machine that sparked the printing revolution and mass sharing of human knowledge."
+            },
+            {
+              "img": "/assets/img/lessons/data_center.jpg",
+              "badge": "Cloud Infrastructure",
+              "title": "Modern Cloud Data Center",
+              "caption": "Rows of high-speed servers inside a cloud data center powering online apps and storage."
+            }
+          ]
+        },
+        {
+          "type": "demo",
+          "name": "moore"
+        },
+        {
+          "type": "callout",
+          "tone": "think",
+          "title": "Think like a computer engineer",
+          "text": "Can Moore's Law continue indefinitely at this pace? Engineers encountered atomic scale limits, prompting architectural breakthroughs like multi-core CPUs and quantum exploration."
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "title": "Contrasting Lifestyles: Yesterday and Today",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Information technology has changed our daily lives in shopping, education, work, and how we communicate with others."
+        },
+        {
+          "type": "compare",
+          "left": {
+            "title": "Traditional Everyday Model",
+            "points": [
+              "Transactions strictly tied to paper cash, coins, and physical bank checks",
+              "Retail shopping required physical transit to brick-and-mortar storefronts",
+              "Employment mandated fixed-hour physical presence inside office cubicles",
+              "Reference materials restricted to printed paper volumes and brick libraries"
+            ]
+          },
+          "right": {
+            "title": "Contemporary Digital Era",
+            "points": [
+              "One-tap mobile wallets, contactless cards, and instant digital payments",
+              "Global electronic commerce with package tracking and doorstep delivery",
+              "Flexible remote collaboration platforms supporting asynchronous distributed teams",
+              "On-demand interactive digital curricula and continuous virtual learning"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "title": "Emerging Technologies Shaping Tomorrow",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Technology keeps advancing beyond smartphones, introducing powerful new systems like 5G, IoT, and quantum computing."
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "title": "Edge Computing",
+              "text": "Performs real-time analytics right at the network perimeter within local sensors and cameras to eliminate latency in robotics and vehicles."
+            },
+            {
+              "title": "Quantum Computing",
+              "text": "Utilizes qubits instead of classical binary bits, evaluating vast combinatorial solution spaces simultaneously for drug and materials discovery."
+            },
+            {
+              "title": "Autonomous Vehicles",
+              "text": "Integrate specialized sensors, computer vision, and machine learning models to navigate roads safely without human driver intervention."
+            },
+            {
+              "title": "Extended Reality (XR)",
+              "text": "Combines augmented and virtual reality for high-fidelity surgical simulation, immersive training, and interactive 3D engineering."
+            }
+          ]
+        },
+        {
+          "type": "flip",
+          "items": [
+            {
+              "front": "What is the key difference between AR and VR?",
+              "back": "Augmented reality overlays digital objects onto the physical world, whereas virtual reality completely immerses the user in a synthetic environment."
+            },
+            {
+              "front": "Why do we need edge computing alongside cloud servers?",
+              "back": "Because mission-critical applications like self-driving cars cannot wait for round-trip latency to a distant data center."
+            },
+            {
+              "front": "What role does a transistor play in a processor?",
+              "back": "It acts as a microscopic electrical switch controlling current to represent the binary states zero and one."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "recap": [
+    "Computing hardware progressed from power-hungry, room-sized mainframes to ubiquitous embedded microprocessors.",
+    "Moore's Law served as the historical compass for doubling computational power while driving costs down.",
+    "Social structures transitioned to cashless payments, instant e-commerce, and distributed remote workflows.",
+    "Frontier paradigms such as edge processing and quantum mechanics unlock next-generation intelligent applications."
+  ],
+  "exercises": [
+    {
+      "prompt": "Explain why a self-driving car traveling at 100 km/h relies on edge computing rather than a remote cloud server when detecting sudden road hazards.",
+      "solution": "At 100 km/h, emergency obstacle avoidance must occur within milliseconds. Transmitting sensor video to a remote cloud server introduces round-trip network latency that could cause an unavoidable collision. Onboard edge computing enables immediate local inference and actuation of the braking system without relying on external network connectivity."
+    },
+    {
+      "prompt": "Discuss the positive economic and operational impacts of nationwide cashless payment adoption.",
+      "solution": "1. Dramatically reduces cash handling and transit risks, limiting physical theft.\n2. Curbs the administrative expense of printing and circulating paper currency.\n3. Accelerates financial inclusion and enables transparent, auditable digital accounting for small businesses."
+    },
+    {
+      "prompt": "What physical barrier limits classical silicon transistor miniaturization under Moore's Law today?",
+      "solution": "Transistor gates have approached atomic dimensions (a few nanometers across). At this scale, quantum tunneling causes electrical leakage and extreme localized heating. Industry has adapted by shifting to multi-core architectures, 3D chiplet stacking, and novel computational paradigms like quantum computing."
+    }
+  ],
+  "quiz": [
+    {
+      "type": "mcq",
+      "q": "What does Moore's Law primarily predict regarding semiconductor manufacturing?",
+      "options": [
+        "Internet bandwidth doubles every twenty-four months",
+        "The number of transistors on a microchip doubles roughly every two years",
+        "Random access memory capacity halves annually",
+        "Power consumption of supercomputers doubles every five years"
+      ],
+      "answer": 1,
+      "explain": "Gordon Moore predicted in 1965 that transistor density on integrated circuits would double approximately every two years."
+    },
+    {
+      "type": "tf",
+      "q": "Augmented reality completely blocks out the user's physical surroundings to construct an artificial world.",
+      "answer": false,
+      "explain": "Virtual reality completely replaces the physical surroundings, whereas augmented reality overlays digital information on top of the real world."
+    },
+    {
+      "type": "mcq",
+      "q": "Which characteristic serves as the primary operational advantage of edge computing over centralized clouds?",
+      "options": [
+        "Infinitely scalable storage capacity exceeding all data centers",
+        "Substantially reduced latency by performing computation near data generation points",
+        "Elimination of software programming requirements",
+        "Operation of complex sensors without any electrical power"
+      ],
+      "answer": 1,
+      "explain": "Edge computing processes data locally or nearby, drastically reducing round-trip network delays for latency-sensitive tasks."
+    },
+    {
+      "type": "tf",
+      "q": "First-generation computers in the 1940s relied primarily on microscopic silicon transistors.",
+      "answer": false,
+      "explain": "Earliest computational systems used large, heat-generating vacuum tubes; transistors were integrated in subsequent generations."
+    },
+    {
+      "type": "mcq",
+      "q": "What core architectural property distinguishes quantum computing from traditional digital machines?",
+      "options": [
+        "Exclusive reliance on classical binary bits taking strict values of zero or one",
+        "Utilization of qubits that exploit quantum superposition to represent multiple states simultaneously",
+        "Miniature dimensions allowing immediate placement inside pocket smartphones today",
+        "Total independence from algorithms when solving mathematical equations"
+      ],
+      "answer": 1,
+      "explain": "Quantum systems exploit quantum bits (qubits) capable of superposition and entanglement, enabling parallel exploration of vast problem spaces."
+    },
+    {
+      "type": "tf",
+      "q": "Cashless payment systems are only usable for transactions between multinational commercial banks.",
+      "answer": false,
+      "explain": "Mobile wallets and QR-based digital payments are widely used by individual consumers and small local merchants daily."
+    },
+    {
+      "type": "mcq",
+      "q": "Which organizational shift was directly enabled by modern cloud architectures and high-speed networks?",
+      "options": [
+        "Eliminating the need for electrical power in corporate offices",
+        "Distributed remote working, flexible collaboration, and real-time document synchronization",
+        "Completely preventing human errors across enterprise operations",
+        "Halting the development of digital retail shopping"
+      ],
+      "answer": 1,
+      "explain": "Cloud infrastructure allows team members to access corporate assets, collaborate, and learn from any connected geographic location."
+    },
+    {
+      "type": "tf",
+      "q": "The first commercial microprocessor, the Intel 4004 released in 1971, contained over ten billion transistors.",
+      "answer": false,
+      "explain": "The Intel 4004 contained approximately 2,300 transistors; modern high-performance microprocessors house tens of billions."
+    },
+    {
+      "type": "match",
+      "q": "Match each emerging technology with its representative real-world application:",
+      "pairs": [
+        [
+          "Edge Computing",
+          "Instant braking decisions in self-driving cars"
+        ],
+        [
+          "Augmented Reality",
+          "Heads-up turn-by-turn navigation on vehicle windshields"
+        ],
+        [
+          "Quantum Computing",
+          "Simulating complex molecular interactions for drug design"
+        ]
+      ],
+      "explain": "Edge ensures near-zero latency, AR overlays useful visuals onto physical space, and quantum computers simulate atomic structures."
+    }
+  ]
+}

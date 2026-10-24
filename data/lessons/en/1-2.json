@@ -1,0 +1,341 @@
+{
+  "id": "1-2",
+  "title": "How Artificial Intelligence Works",
+  "hook": "How can an algorithm recognize your face in a fraction of a second among billions of images? The answer lies in learning complex patterns rather than memorizing rigid rules.",
+  "objectives": [
+    "Distinguish clearly between Artificial Intelligence, Machine Learning, Deep Learning, and Generative AI",
+    "Examine core machine learning paradigms: supervised, unsupervised, and reinforcement learning",
+    "Explain artificial neural network architecture and iterative weight optimization during training",
+    "Identify causes of hallucination in generative AI models and practical mitigation strategies"
+  ],
+  "keyTerms": [
+    {
+      "term": "Artificial Intelligence",
+      "def": "The broad discipline within computer science aimed at building systems capable of simulating human cognitive abilities"
+    },
+    {
+      "term": "Machine Learning",
+      "def": "A subfield of AI providing computational systems the ability to learn from data without explicit procedural programming"
+    },
+    {
+      "term": "Deep Learning",
+      "def": "A specialized branch of machine learning utilizing multi-layered artificial neural networks to extract hierarchical features"
+    },
+    {
+      "term": "Generative AI",
+      "def": "Advanced algorithmic models capable of creating novel content including natural language, images, audio, and executable code"
+    },
+    {
+      "term": "Hallucination",
+      "def": "A phenomenon where a model generates factually false or fabricated assertions presented with convincing linguistic fluency"
+    },
+    {
+      "term": "Artificial Neural Network",
+      "def": "A mathematical computing structure inspired by biological brains consisting of interconnected nodes with adjustable weights"
+    }
+  ],
+  "sections": [
+    {
+      "id": "s1",
+      "title": "Hierarchical Relationship of AI Terminology",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "People often mix up AI terms in daily news, but they are actually organized like circles inside each other: AI is the biggest circle, Machine Learning is inside it, and Deep Learning is at the center."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/alan_turing.jpg",
+              "badge": "Pioneer",
+              "title": "Alan Turing",
+              "caption": "Father of modern computer science and creator of the Turing Test for machine intelligence."
+            },
+            {
+              "img": "/assets/img/lessons/john_mccarthy.jpg",
+              "badge": "Pioneer",
+              "title": "John McCarthy",
+              "caption": "Computer scientist who coined the term Artificial Intelligence at the 1956 Dartmouth conference."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Artificial Intelligence AI (Broad Umbrella)",
+              "text": "Encompasses any computational system designed to mimic human cognitive processes, ranging from rule-based expert systems to autonomous agents."
+            },
+            {
+              "title": "Machine Learning ML",
+              "text": "Focuses on statistical algorithms that extract predictive patterns directly from historical datasets without human hardcoding of rules."
+            },
+            {
+              "title": "Deep Learning DL",
+              "text": "Employs deep architectures with multiple hidden layers capable of processing unstructured data such as speech, natural imagery, and video."
+            },
+            {
+              "title": "Generative AI",
+              "text": "The cutting-edge tier capable not merely of classifying or predicting, but synthesizing completely novel, coherent digital artifacts."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "note",
+          "title": "Foundational Principle",
+          "text": "All deep learning is machine learning, and all machine learning is artificial intelligence, but not every AI system relies on deep learning networks."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "Three Machine Learning Paradigms",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Machine learning works in three main ways depending on the data we give it and how much human guidance it receives during training."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Paradigm",
+            "Data Nature",
+            "Algorithmic Mechanism",
+            "Prominent Use Cases"
+          ],
+          "rows": [
+            [
+              "Supervised Learning",
+              "Labeled datasets containing paired input features and target answers",
+              "Minimizing prediction loss against verified ground truth labels",
+              "Spam filtering, medical imaging diagnosis, credit scoring"
+            ],
+            [
+              "Unsupervised Learning",
+              "Unlabeled raw datasets with no target outputs",
+              "Discovering latent clusters, associations, and intrinsic data geometry",
+              "Customer segmentation, anomaly detection, genomic analysis"
+            ],
+            [
+              "Reinforcement Learning",
+              "Dynamic interactive environment with state transitions",
+              "Iterative trial-and-error policy optimization driven by reward and penalty signals",
+              "Game-playing agents (chess, Go), robotics, autonomous driving"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "title": "Inside Artificial Neural Networks",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "An artificial neural network is built from three main layers: the Input Layer, the Hidden Layers in the middle, and the Output Layer."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/gpu_board.jpg",
+              "badge": "AI Hardware",
+              "title": "AI Neural Computing Board",
+              "caption": "Specialized high-speed processor boards that train deep learning neural networks."
+            },
+            {
+              "img": "/assets/img/lessons/computer_vision.jpg",
+              "badge": "Real Application",
+              "title": "Computer Vision Object Detection",
+              "caption": "How AI models detect and label objects, people, and vehicles in real-world camera feeds."
+            }
+          ]
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "title": "Inputs and Numerical Weights",
+              "text": "Digital neurons receive numerical feature values and compute weighted sums that reflect the relative importance of each feature in the decision."
+            },
+            {
+              "title": "Nonlinear Activation Functions",
+              "text": "Determine whether and how strongly a node activates, enabling the network to learn complex non-linear boundary surfaces."
+            },
+            {
+              "title": "Backpropagation Algorithm",
+              "text": "The mathematical backbone that propagates output errors backward through layers to iteratively update connection weights via gradient descent."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "think",
+          "title": "How does a deep network distinguish dogs from cats?",
+          "text": "Early layers identify basic edges and gradients, intermediate layers detect contours like ears and whiskers, while final layers assemble full facial representations."
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "title": "Understanding Hallucination in Generative Models",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Large Language Models (LLMs) do not think or feel like humans; instead, they calculate probabilities to predict the best next word in a sentence."
+        },
+        {
+          "type": "compare",
+          "left": {
+            "title": "Underlying Causes of Hallucination",
+            "points": [
+              "Prioritizing smooth linguistic fluency and coherence over verifiable factual accuracy",
+              "Presence of conflicting, outdated, or inaccurate information within training datasets",
+              "Tendency of conversational models to generate affirmative answers instead of expressing uncertainty"
+            ]
+          },
+          "right": {
+            "title": "Engineering Mitigation Strategies",
+            "points": [
+              "Implementing Retrieval-Augmented Generation RAG to ground responses in external authoritative corpora",
+              "Designing structured system prompts requiring explicit citation of provided references",
+              "Mandating rigorous human-in-the-loop review for high-consequence domains like medicine and law"
+            ]
+          }
+        },
+        {
+          "type": "flip",
+          "items": [
+            {
+              "front": "What is the primary computational unit of a neural network?",
+              "back": "The artificial neuron (node), which computes a weighted sum of inputs and applies an activation function."
+            },
+            {
+              "front": "Why are language models considered probabilistic?",
+              "back": "Because they generate responses by calculating likelihood distributions over vocabulary tokens given conversational context."
+            },
+            {
+              "front": "How do supervised and unsupervised learning differ fundamentally?",
+              "back": "Supervised models learn from human-labeled ground truth pairs, whereas unsupervised models uncover hidden patterns in raw unlabeled data."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "recap": [
+    "AI is the overarching field, housing machine learning, deep neural architectures, and modern generative models.",
+    "Machine learning spans supervised (labeled data), unsupervised (cluster discovery), and reinforcement (reward-driven) paradigms.",
+    "Artificial neural networks progressively refine connection weights using backpropagation to minimize objective loss.",
+    "Hallucination stems from probabilistic token generation and can be significantly curtailed using grounded retrieval architectures."
+  ],
+  "exercises": [
+    {
+      "prompt": "Categorize the following applications into their appropriate learning paradigm (Supervised / Unsupervised / Reinforcement): a) Teaching a robot navigation policy by rewarding collision-free movement. b) Grouping hundreds of thousands of customer purchase histories into behavioral segments without predefined labels. c) Estimating residential property values using historical records of square footage, location, and verified sale prices.",
+      "solution": "a) Reinforcement Learning (agent interacts with an environment receiving reward signals for optimal navigation).\nb) Unsupervised Learning (discovering natural clusters and latent behavioral groupings in unlabeled transactional data).\nc) Supervised Learning (training a regression model on historical feature sets with known price ground truth)."
+    },
+    {
+      "prompt": "Explain why a large language model might generate an articulate, well-structured paragraph citing a scientific research paper that does not exist.",
+      "solution": "Large language models are probabilistic token predictors trained on extensive textual corpora. In scholarly writing, academic citations typically follow predictable grammatical and stylistic structures (author names, publication years, journal titles). The model predicts tokens that match this stylistic convention seamlessly to satisfy the prompt, without consulting a live registry of real-world scientific literature, producing a fabricated citation known as a hallucination."
+    },
+    {
+      "prompt": "Describe the specific functional role performed by hidden layers inside a deep convolutional neural network during facial recognition.",
+      "solution": "Hidden layers execute hierarchical feature extraction across progressive levels of abstraction:\n- Low-level hidden layers detect primitive graphical primitives like oriented edges, corners, and light-dark gradients.\n- Mid-level hidden layers combine edges into geometric facial subcomponents such as eyes, nose bridges, and lip contours.\n- Deep hidden layers synthesize these modular components into a comprehensive facial embedding vector for individual identification."
+    }
+  ],
+  "quiz": [
+    {
+      "type": "mcq",
+      "q": "Which concept represents the broadest umbrella term encompassing all other listed technologies?",
+      "options": [
+        "Deep Learning",
+        "Generative AI",
+        "Artificial Intelligence",
+        "Supervised Learning"
+      ],
+      "answer": 2,
+      "explain": "Artificial Intelligence is the comprehensive discipline aimed at building systems capable of simulating cognitive reasoning and problem solving."
+    },
+    {
+      "type": "tf",
+      "q": "In unsupervised learning, training datasets are supplied with verified human ground truth labels for every record.",
+      "answer": false,
+      "explain": "Unsupervised learning operates on raw, unlabeled datasets where algorithms must discover intrinsic clustering patterns autonomously."
+    },
+    {
+      "type": "mcq",
+      "q": "Which paradigm is used to train video game agents and robotic systems through environmental feedback and penalty systems?",
+      "options": [
+        "Reinforcement Learning",
+        "Linear Supervised Regression",
+        "Asymmetric Cryptography",
+        "Deterministic Rule Compilation"
+      ],
+      "answer": 0,
+      "explain": "Reinforcement learning optimizes an agent's behavioral policy through iterative interaction with an environment to maximize cumulative reward."
+    },
+    {
+      "type": "tf",
+      "q": "An artificial neural network fundamentally comprises an input layer, hidden processing layers, and an output layer.",
+      "answer": true,
+      "explain": "This layered topology is the classical architecture of feedforward and deep neural networks."
+    },
+    {
+      "type": "mcq",
+      "q": "What does the term hallucination signify within generative artificial intelligence systems?",
+      "options": [
+        "Hardware throttling caused by elevated processor temperatures during training runs",
+        "Generating factually inaccurate claims presented with high linguistic confidence and grammatical fluency",
+        "A sudden network disconnect interrupting an ongoing chat session",
+        "Flushing temporary RAM memory when closing an interactive prompt window"
+      ],
+      "answer": 1,
+      "explain": "Hallucination refers to generative models producing fabricated, non-factual information that appears deceptively plausible."
+    },
+    {
+      "type": "tf",
+      "q": "Large language models possess conscious awareness and philosophically understand the meaning of their generated responses.",
+      "answer": false,
+      "explain": "Language models are statistical mathematical engines predicting sequential token likelihoods based on corpus distribution patterns."
+    },
+    {
+      "type": "mcq",
+      "q": "Which architectural technique grounds generative language models in verified external documents to curb hallucination?",
+      "options": [
+        "Retrieval-Augmented Generation RAG",
+        "Increasing cooling fan velocity inside the server chassis",
+        "Completely removing the output layer from the neural network",
+        "Disabling nonlinear activation functions across all layers"
+      ],
+      "answer": 0,
+      "explain": "Retrieval-Augmented Generation (RAG) fetches relevant, authoritative factual documents before generation, grounding the model output."
+    },
+    {
+      "type": "tf",
+      "q": "Connection weights in artificial neural networks are adjusted dynamically during training to minimize output prediction errors.",
+      "answer": true,
+      "explain": "Backpropagation computes error gradients with respect to weights, updating them iteratively to optimize performance."
+    },
+    {
+      "type": "match",
+      "q": "Match each machine learning paradigm with its representative real-world application:",
+      "pairs": [
+        [
+          "Supervised Learning",
+          "Training a model on labeled medical X-rays annotated by radiologists"
+        ],
+        [
+          "Unsupervised Learning",
+          "Clustering e-commerce shoppers into groups sharing purchase habits"
+        ],
+        [
+          "Reinforcement Learning",
+          "Training a robotic arm to balance a sphere via trial-and-error"
+        ]
+      ],
+      "explain": "Supervised uses labels, unsupervised segments customer groups without guidance, and reinforcement balances through rewards."
+    }
+  ]
+}

@@ -1,0 +1,322 @@
+{
+  "id": "3-2",
+  "title": "Communication Methods in Web Applications",
+  "hook": "HTTP is the universal grammar spoken billions of times a day between web browsers and cloud servers. How does the server decipher your intent, and what do iconic status codes like 404 really communicate?",
+  "objectives": [
+    "Understand HTTP request-response envelope structure and transmission metadata headers",
+    "Master standard HTTP verbs (GET, POST, PUT, DELETE) and map them cleanly to CRUD operations",
+    "Decode universal HTTP response status codes across 2xx, 3xx, 4xx, and 5xx families",
+    "Comprehend RESTful API conventions and real-time bidirectional WebSockets pipelines"
+  ],
+  "keyTerms": [
+    {
+      "term": "Hypertext Transfer Protocol (HTTP)",
+      "def": "The foundational application-layer communications protocol governing distributed hypermedia transfer across the World Wide Web"
+    },
+    {
+      "term": "HTTP Request Methods",
+      "def": "Standardized command verbs indicating the desired action to be performed on a target web resource (GET, POST, PUT, DELETE)"
+    },
+    {
+      "term": "HTTP Status Codes",
+      "def": "Standardized three-digit numerical response codes returned by servers signaling transaction success, client errors, or server failures"
+    },
+    {
+      "term": "RESTful API",
+      "def": "An architectural software design pattern leveraging unique URIs, standard HTTP verbs, and lightweight data interchange representations"
+    },
+    {
+      "term": "JSON",
+      "def": "JavaScript Object Notation: an open, text-based data interchange format structured around human-readable key-value pairs"
+    },
+    {
+      "term": "WebSockets Protocol",
+      "def": "A persistent, low-latency, full-duplex communications protocol enabling simultaneous client-server data streaming over a single TCP socket"
+    }
+  ],
+  "sections": [
+    {
+      "id": "s1",
+      "title": "Standard HTTP Verbs: The Grammar of the Web",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Every time you browse a website, your browser sends an HTTP request method (like GET, POST, PUT, or DELETE) to tell the server what action to take."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/blade_server.jpg",
+              "badge": "Server Hardware",
+              "title": "High-Density Web Server Rack",
+              "caption": "Enterprise servers wired to process thousands of HTTP requests and responses every second."
+            },
+            {
+              "img": "/assets/img/lessons/fiber_optic.jpg",
+              "badge": "Data Medium",
+              "title": "Optical Fiber Strands",
+              "caption": "Glass fibers transmitting web packets as high-speed pulses of light across the internet."
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Verb",
+            "CRUD Operation",
+            "Intended Architectural Purpose",
+            "Carries Payload Body?"
+          ],
+          "rows": [
+            [
+              "GET",
+              "Read",
+              "Retrieves existing resource representations without modifying server state",
+              "No; parameters append to URL query string"
+            ],
+            [
+              "POST",
+              "Create",
+              "Submits an entity payload to append a new record under the designated resource",
+              "Yes; payload packaged inside request body"
+            ],
+            [
+              "PUT",
+              "Full Update",
+              "Completely replaces an existing target resource with the supplied updated entity",
+              "Yes; contains full replacement representation"
+            ],
+            [
+              "DELETE",
+              "Delete",
+              "Purges the specified target resource permanently from persistent storage",
+              "Rarely; target specified via URI path parameter"
+            ]
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "tip",
+          "title": "Critical Security Rule",
+          "text": "Never pass authentication passwords or payment tokens via HTTP GET queries; query parameters leak into browser histories, proxy logs, and referer headers in plaintext!"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "Interactive HTTP Request-Response Simulator",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Try sending live HTTP requests in the simulator below and watch how the server responds with status codes and JSON data."
+        },
+        {
+          "type": "demo",
+          "name": "http"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "title": "Decoding HTTP Response Status Codes",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Every server response starts with a 3-digit status code (like 200 OK or 404 Not Found) where the first digit tells you the type of result."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/wireshark.png",
+              "badge": "Network Tool",
+              "title": "Wireshark Packet Analyzer",
+              "caption": "Industry-standard software tool used by engineers to inspect HTTP traffic and verify HTTPS encryption."
+            }
+          ]
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "title": "2xx Success",
+              "text": "Signals successfully processed transactions: 200 OK (standard success) and 201 Created (resource successfully created on server)."
+            },
+            {
+              "title": "3xx Redirection",
+              "text": "Signals client user agents to take further action: 301 Moved Permanently updates bookmarks to new URIs."
+            },
+            {
+              "title": "4xx Client Errors",
+              "text": "Signals client-side syntax or authentication errors: 404 Not Found (missing resource) and 401 Unauthorized (missing credentials)."
+            },
+            {
+              "title": "5xx Server Errors",
+              "text": "Signals unhandled exceptions on remote servers: 500 Internal Server Error (crash in backend runtime) and 503 Unavailable."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "title": "RESTful Architecture and Real-Time WebSockets",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Mobile apps and websites talk to the same backend server using REST APIs (for standard requests) and WebSockets (for live instant chat and games)."
+        },
+        {
+          "type": "compare",
+          "left": {
+            "title": "RESTful API Architecture",
+            "points": [
+              "Synchronous polling request-response cycle; server speaks only when asked",
+              "Completely stateless; every request bundles self-contained authentication tokens",
+              "Ideal for commerce checkouts, profile updates, and standard document workflows"
+            ]
+          },
+          "right": {
+            "title": "WebSockets Protocol",
+            "points": [
+              "Persistent, full-duplex TCP socket remaining open indefinitely",
+              "Server can push telemetry immediately without awaiting a client poll",
+              "Foundational for multiplayer gaming, chat platforms, and live trading terminals"
+            ]
+          }
+        },
+        {
+          "type": "flip",
+          "items": [
+            {
+              "front": "What are HTTP Headers?",
+              "back": "Key-value metadata pairs transmitting content-type definitions, caching policies, cookies, and bearer authentication tokens."
+            },
+            {
+              "front": "Why is JSON favored over XML?",
+              "back": "JSON is significantly more compact, parses faster natively in JavaScript engines, and features lower transmission overhead."
+            },
+            {
+              "front": "What does Stateless HTTP mean?",
+              "back": "The server retains no memory of past requests from the client; session state must be conveyed via cookies or authorization tokens."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "recap": [
+    "HTTP structures web communication through verb-driven requests and standardized numerical status response codes.",
+    "Core HTTP methods map to CRUD operations: GET retrieves, POST creates, PUT updates, and DELETE removes resources.",
+    "Status code classes range from 2xx (Success) to 4xx (Client fault like 404) and 5xx (Server-side runtime failures).",
+    "RESTful APIs serialize lightweight JSON objects, whereas WebSockets maintain real-time bi-directional streaming sockets."
+  ],
+  "exercises": [
+    {
+      "prompt": "Analyze the technical sequence when a user submits an account registration form on an educational portal. Identify the HTTP verb, expected payload format, and status codes for success versus an email collision.",
+      "solution": "1. Request Verb & Payload: The browser executes an HTTP POST to an endpoint like /api/v1/auth/register. The payload body contains JSON-formatted registration fields (name, email, password) encrypted over TLS/HTTPS.\n2. Success Response: The server returns HTTP 201 Created containing the newly provisioned user profile object (omitting passwords) and a session JWT token.\n3. Conflict Response: If the email address is already registered, the server returns HTTP 409 Conflict (or 400 Bad Request) with a structured JSON error body detailing the validation error."
+    },
+    {
+      "prompt": "Explain why polling an API endpoint every second with HTTP GET creates severe inefficiencies in a collaborative messaging application, and how WebSockets resolves this.",
+      "solution": "Repeated HTTP polling forces the browser to establish TCP sockets, complete TLS handshakes, and transmit full HTTP header blocks every single second, even when no new messages exist. This saturates mobile device batteries and overloads server connection pools with useless 304 or empty 200 payloads.\nWebSockets negotiates a single HTTP Upgrade handshake once, keeping a lightweight bi-directional TCP socket open. The connection consumes negligible bandwidth while idle; the moment an incoming message arrives, the server immediately pushes it downstream to the client in milliseconds."
+    },
+    {
+      "prompt": "What is the critical semantic distinction between HTTP status code 401 Unauthorized and 403 Forbidden?",
+      "solution": "1. 401 Unauthorized: The client has failed to provide valid authentication credentials. The client is unauthenticated (anonymous or possessing an expired bearer token) and must log in.\n2. 403 Forbidden: The client is successfully authenticated and their identity is verified by the server, but their account role lacks permission to access the requested resource (e.g. a student attempting to access an administrator-only grade modification endpoint)."
+    }
+  ],
+  "quiz": [
+    {
+      "type": "mcq",
+      "q": "Which standard HTTP verb is architecturally designated to read and retrieve a web resource without altering server state?",
+      "options": [
+        "The GET method",
+        "The DELETE method",
+        "The POST method",
+        "The REBOOT method"
+      ],
+      "answer": 0,
+      "explain": "The HTTP GET method is designated exclusively for safe, idempotent retrieval of resource representations from the server."
+    },
+    {
+      "type": "tf",
+      "q": "An HTTP status code of 200 OK signals that an unhandled crash occurred inside server-side database logic.",
+      "answer": false,
+      "explain": "Status code 200 OK signals universal transaction success; server-side crashes are flagged via 5xx error codes."
+    },
+    {
+      "type": "mcq",
+      "q": "What does the widely recognized HTTP status code 404 Not Found represent?",
+      "options": [
+        "The requested file was saved successfully onto the cloud server",
+        "The server received the request but could locate no matching resource at the specified URI",
+        "The user entered a completely valid administrative password",
+        "A severe electrical power outage struck the client's home city"
+      ],
+      "answer": 1,
+      "explain": "Code 404 communicates that the origin server cannot locate a representation for the requested target URI path."
+    },
+    {
+      "type": "tf",
+      "q": "The WebSockets protocol establishes a full-duplex persistent channel allowing servers to push data to clients proactively.",
+      "answer": true,
+      "explain": "WebSockets enables continuous bi-directional messaging over an open TCP pipe, powering real-time chat and financial feeds."
+    },
+    {
+      "type": "mcq",
+      "q": "Which data serialization format has become the universal standard for payload interchange across RESTful APIs?",
+      "options": [
+        "JSON formatted key-value string notation",
+        "Legacy analog AVI video container files",
+        "Uncompressed WAV audio waveforms",
+        "Magnetic 3.5-inch floppy disk drive images"
+      ],
+      "answer": 0,
+      "explain": "JSON is the universal standard for web API data interchange due to its lightweight syntax and native JavaScript integration."
+    },
+    {
+      "type": "tf",
+      "q": "Sensitive payloads like login credentials can be transmitted securely inside the encrypted body of an HTTPS POST request.",
+      "answer": true,
+      "explain": "POST packages credentials inside the encrypted transport body, keeping sensitive tokens out of URL strings."
+    },
+    {
+      "type": "mcq",
+      "q": "What do HTTP status codes beginning with the digit 5 (such as 500) designate?",
+      "options": [
+        "100 percent flawless client transaction completion",
+        "An unhandled internal server-side processing error or back-end crash",
+        "That the client laptop battery requires immediate charging",
+        "That the user manually deleted their operating system"
+      ],
+      "answer": 1,
+      "explain": "5xx codes designate server-side faults where the server encountered an unexpected condition preventing request fulfillment."
+    },
+    {
+      "type": "tf",
+      "q": "The HTTP protocol is stateful by default, perpetually memorizing every user's past actions without cookies or tokens.",
+      "answer": false,
+      "explain": "HTTP is fundamentally a stateless protocol; session continuity must be sustained using cookies or authorization headers."
+    },
+    {
+      "type": "match",
+      "q": "Match each HTTP verb with its canonical web application operation:",
+      "pairs": [
+        [
+          "POST",
+          "Transmitting a registration payload to create a new user profile"
+        ],
+        [
+          "PUT",
+          "Submitting a complete replacement payload to update phone numbers"
+        ],
+        [
+          "DELETE",
+          "Dispatching a request to purge an obsolete forum posting"
+        ]
+      ],
+      "explain": "POST creates new entities, PUT replaces existing records, and DELETE purges resources permanently."
+    }
+  ]
+}

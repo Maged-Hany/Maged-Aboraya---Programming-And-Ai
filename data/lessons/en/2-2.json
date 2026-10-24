@@ -1,0 +1,341 @@
+{
+  "id": "2-2",
+  "title": "Network Security Design",
+  "hook": "Envision a medieval citadel defended by moats, fortified gates, and compartmentalized vaults. How do cybersecurity architects translate defensive depth into digital network architecture?",
+  "objectives": [
+    "Distinguish between firewall generations and inline detection versus prevention systems (IDS/IPS)",
+    "Understand network segmentation and Demilitarized Zones (DMZ) in containing security breaches",
+    "Apply Zero Trust Architecture principles to govern network access controls",
+    "Analyze Distributed Denial of Service (DDoS) attack vectors and mitigation strategies"
+  ],
+  "keyTerms": [
+    {
+      "term": "Firewall",
+      "def": "A perimeter security appliance that monitors and filters ingress and egress network traffic based on predefined security rules"
+    },
+    {
+      "term": "Intrusion Detection and Prevention (IDS/IPS)",
+      "def": "Security technologies that inspect network traffic to alert administrators or automatically block malicious exploits in real time"
+    },
+    {
+      "term": "Virtual Private Network (VPN)",
+      "def": "An encrypted communication tunnel extending a private network securely across an untrusted public infrastructure like the Internet"
+    },
+    {
+      "term": "Demilitarized Zone (DMZ)",
+      "def": "An isolated subnetwork buffering public-facing internet servers (web, mail) from sensitive internal enterprise assets"
+    },
+    {
+      "term": "Zero Trust Architecture",
+      "def": "A security framework requiring strict, continuous authentication and least-privilege authorization for every transaction, assuming no implicit trust"
+    },
+    {
+      "term": "Distributed Denial of Service (DDoS)",
+      "def": "A coordinated cyber-attack weaponizing thousands of compromised endpoints to flood target servers with synthetic traffic, rendering them unavailable"
+    }
+  ],
+  "sections": [
+    {
+      "id": "s1",
+      "title": "First Line of Defense: Firewalls and IDS/IPS",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "A firewall acts like a security guard at the entrance of a computer network, inspecting incoming and outgoing data to block dangerous traffic."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/firewall.png",
+              "badge": "Security Appliance",
+              "title": "Hardware Network Firewall",
+              "caption": "A dedicated security device that inspects network traffic and blocks unauthorized connections."
+            },
+            {
+              "img": "/assets/img/lessons/network_switch.jpg",
+              "badge": "Network Hardware",
+              "title": "Ethernet Network Switch",
+              "caption": "Hardware device connecting computers and servers inside a local network via RJ45 cables."
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Technology",
+            "Operational Mechanism",
+            "Response Mode",
+            "Network Placement"
+          ],
+          "rows": [
+            [
+              "Packet Filtering",
+              "Evaluates source/destination IP addresses and ports without inspecting packet payloads",
+              "Stateless permit or deny rule matching",
+              "Perimeter border routers"
+            ],
+            [
+              "Next-Gen Firewalls NGFW",
+              "Deep packet inspection evaluating Layer 7 application protocols and threat signatures",
+              "Inline application control and malware blocking",
+              "Primary network enterprise gateways"
+            ],
+            [
+              "Intrusion Detection IDS",
+              "Passively copies traffic to analyze against vulnerability databases and behavioral heuristics",
+              "Dispatches real-time alerts to security analysts",
+              "Tapped mirrored switch ports"
+            ],
+            [
+              "Intrusion Prevention IPS",
+              "Resides inline directly in the live network packet traversal path",
+              "Actively drops malicious packets and resets TCP connections",
+              "Directly in-line behind perimeter firewalls"
+            ]
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "note",
+          "title": "Crucial Distinction: IDS vs. IPS",
+          "text": "An IDS is analogous to a security camera sounding an audible alarm upon detecting a burglar, whereas an IPS is an armed security guard standing at the door who actively restrains the intruder."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "Network Segmentation and Demilitarized Zones (DMZ)",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Putting a public website on the exact same internal network as private databases is dangerous. Instead, we separate them using a DMZ."
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Untrusted Public Internet",
+              "text": "The open external wilderness from which legitimate web visitors and malicious threat actors connect."
+            },
+            {
+              "title": "Demilitarized Zone DMZ",
+              "text": "An isolated buffer subnet housing public-facing servers, bounded by dual firewalls to contain potential breaches."
+            },
+            {
+              "title": "Internal Sensitive Intranet",
+              "text": "Houses corporate databases, HR systems, and internal workstations, completely inaccessible to direct inbound public traffic."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "tip",
+          "title": "Defense-in-Depth Principle",
+          "text": "If a compromised zero-day exploit breaches a public web server inside the DMZ, interior firewall policies prevent lateral movement into internal financial databases."
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "title": "Zero Trust Architecture: Never Trust, Always Verify",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Modern cybersecurity uses the Zero Trust rule: never trust any device automatically, even if it is already inside the company network—always verify first."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/wifi_router.jpg",
+              "badge": "Wireless Device",
+              "title": "Wi-Fi Wireless Router",
+              "caption": "Broadcasts local wireless connectivity and requires WPA3 encryption to keep intruders out."
+            }
+          ]
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "title": "Continuous Verification",
+              "text": "Every user, device, and API call must undergo cryptographic authentication for each resource request, regardless of physical location."
+            },
+            {
+              "title": "Principle of Least Privilege",
+              "text": "Accounts are provisioned with the minimal permissions necessary to execute their explicit duties, strictly time-bounded."
+            },
+            {
+              "title": "Context-Aware Authorization",
+              "text": "Access policies evaluate real-time context: device patch posture, geographical anomalies, and risk heuristics."
+            },
+            {
+              "title": "Micro-Segmentation",
+              "text": "Isolating individual workloads and virtual machines to prevent lateral reconnaissance and malware spread across the enterprise."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "title": "Countering Distributed Denial of Service (DDoS)",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In a DDoS attack, hackers flood a website with millions of fake requests from infected devices (a botnet) until the server crashes."
+        },
+        {
+          "type": "compare",
+          "left": {
+            "title": "DDoS Attack Vectors",
+            "points": [
+              "Weaponizing thousands of compromised IoT routers and webcams into coordinated botnets",
+              "Flooding target web endpoints with gigabits of volumetric syn-floods or HTTP queries",
+              "Exhausting socket connection pools so legitimate visitors receive timeout errors"
+            ]
+          },
+          "right": {
+            "title": "Architectural Countermeasures",
+            "points": [
+              "Deploying globally distributed Content Delivery Networks (CDNs) to absorb and distribute traffic",
+              "Configuring edge rate-limiting rules and automated behavioral browser challenges",
+              "Contracting cloud scrubbing centers that ingest and filter terabits of synthetic traffic"
+            ]
+          }
+        },
+        {
+          "type": "flip",
+          "items": [
+            {
+              "front": "What constitutes a Botnet?",
+              "back": "A global network of infected computers, cameras, and IoT devices hijacked by malware and controlled remotely by an attacker."
+            },
+            {
+              "front": "How does a VPN safeguard remote workers?",
+              "back": "By creating an encrypted cryptographic tunnel encapsulating all traffic over public coffee-shop Wi-Fi networks."
+            },
+            {
+              "front": "Why is Least Privilege essential to network containment?",
+              "back": "It restricts blast radius: an attacker compromising a junior account cannot wipe enterprise domain backups."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "recap": [
+    "Firewalls and inline IPS engines represent network protections filtering unauthorized protocol traffic and exploits.",
+    "Network segmentation and DMZ buffer zones isolate public services from core internal database tiers.",
+    "Zero Trust Architecture mandates continuous verification and least privilege, eliminating implicit internal trust.",
+    "DDoS volumetric floods weaponize distributed botnets and are mitigated through global CDNs and cloud scrubbing centers."
+  ],
+  "exercises": [
+    {
+      "prompt": "Analyze a scenario where a major retail e-commerce platform suffers a massive DDoS attack during a seasonal flash sale, and design immediate and architectural mitigations.",
+      "solution": "1. Immediate Response: Route DNS traffic through an enterprise cloud DDoS mitigation provider (e.g. Cloudflare, AWS Shield). Enforce challenge rules (cryptographic JS challenges and CAPTCHAs) to discard automated botnet requests while keeping backend origin IP addresses concealed.\n2. Architectural Strategy: Decouple the monolithic web application using geographically distributed CDN edge caching, implement API gateway rate-limiting, and configure auto-scaling origin clusters behind multi-region load balancers."
+    },
+    {
+      "prompt": "Explain the security hazard of allowing an internet-accessible public web server to connect directly to an enterprise database server on an unsegmented network.",
+      "solution": "If the public web application suffers from a critical application vulnerability (such as SQL injection or Remote Code Execution), an attacker obtaining a web shell inherits immediate, unfiltered network adjacency to the database server. Without an interior firewall and DMZ boundary, the intruder can exfiltrate customer databases, alter schemas, and deploy ransomware laterally across the entire corporate subnet."
+    },
+    {
+      "prompt": "How does Zero Trust Architecture protect an enterprise employing hundreds of distributed remote workers?",
+      "solution": "Under Zero Trust:\n1. Device posture checks verify that employee laptops have active endpoint protection, disk encryption, and current OS patches before connecting.\n2. Context-aware MFA assesses anomalous login locations.\n3. Micro-segmentation restricts access solely to the specific internal tools needed by that worker's role, meaning a compromised personal laptop cannot compromise the core financial network."
+    }
+  ],
+  "quiz": [
+    {
+      "type": "mcq",
+      "q": "What is the primary operational distinction between an IDS and an IPS?",
+      "options": [
+        "An IDS only detects and alerts on attacks, whereas an IPS resides inline to actively intercept and drop malicious packets",
+        "An IDS operates only when electrical power is completely switched off",
+        "An IPS is dedicated solely to calculating monthly corporate payroll disbursements",
+        "An IDS automatically reformats the computer storage drive upon reboot"
+      ],
+      "answer": 0,
+      "explain": "An Intrusion Detection System (IDS) alerts administrators passively, while an Intrusion Prevention System (IPS) actively blocks malicious packets inline."
+    },
+    {
+      "type": "tf",
+      "q": "Under Zero Trust Architecture, any computer physically located inside corporate headquarters is automatically granted total network trust.",
+      "answer": false,
+      "explain": "Zero Trust assumes threats exist inside and outside the perimeter; every access request requires explicit, continuous verification."
+    },
+    {
+      "type": "mcq",
+      "q": "What is the primary architectural purpose of a Demilitarized Zone (DMZ) in network topology?",
+      "options": [
+        "A designated employee lounge for dining and recreational activities",
+        "An isolated buffer subnetwork housing public services like web servers, separating the open Internet from internal networks",
+        "A warehouse for discarding obsolete copper ethernet wiring",
+        "A computer software utility used strictly for drawing 3D architectural blueprints"
+      ],
+      "answer": 1,
+      "explain": "The DMZ isolates external-facing servers from sensitive internal enterprise intranets, limiting lateral exploit traversal."
+    },
+    {
+      "type": "tf",
+      "q": "Virtual Private Networks (VPNs) construct an encrypted communication tunnel to protect data passing across public untrusted networks.",
+      "answer": true,
+      "explain": "VPNs encapsulate and encrypt network traffic, shielding credentials and payloads from eavesdropping over open networks."
+    },
+    {
+      "type": "mcq",
+      "q": "What do cyber-adversaries construct to launch volumetric Distributed Denial of Service (DDoS) traffic floods?",
+      "options": [
+        "Botnets consisting of thousands of hijacked, compromised internet-connected devices",
+        "Legacy optical compact disc readers (CD-ROM drives)",
+        "Defective high-resolution computer video monitors",
+        "Physically flipping the main wall power switch of the server room"
+      ],
+      "answer": 0,
+      "explain": "DDoS attacks marshal distributed botnets of compromised IoT devices and servers to overwhelm target networks with artificial traffic."
+    },
+    {
+      "type": "tf",
+      "q": "The principle of least privilege implies granting every incoming intern unrestricted domain administrative permissions.",
+      "answer": false,
+      "explain": "Least privilege restricts account permissions strictly to the minimal access rights necessary for explicit job responsibilities."
+    },
+    {
+      "type": "mcq",
+      "q": "Which firewall technology evaluates Layer 7 application protocols and performs deep packet inspection against advanced threats?",
+      "options": [
+        "Next-Generation Firewalls (NGFW)",
+        "Legacy 10 Mbps coaxial network adapters",
+        "Mechanical tactile computer keyboards",
+        "Analog VGA video monitor cables"
+      ],
+      "answer": 0,
+      "explain": "Next-Generation Firewalls inspect application-layer traffic and execute deep signature analysis to intercept advanced malware."
+    },
+    {
+      "type": "tf",
+      "q": "Content Delivery Networks (CDNs) absorb and distribute inbound web traffic, assisting in DDoS mitigation.",
+      "answer": true,
+      "explain": "CDNs disperse incoming traffic across hundreds of edge proxy servers globally, buffering origin servers from overwhelming loads."
+    },
+    {
+      "type": "match",
+      "q": "Match each security mechanism with its explicit defensive responsibility:",
+      "pairs": [
+        [
+          "Network Firewall",
+          "Filtering traffic and managing permitted protocol ports"
+        ],
+        [
+          "Intrusion Prevention (IPS)",
+          "Actively intercepting and dropping malicious exploit payloads"
+        ],
+        [
+          "Virtual Private Network (VPN)",
+          "Establishing an encrypted tunnel across untrusted public networks"
+        ]
+      ],
+      "explain": "Firewalls filter traffic rules, IPS halts active exploits inline, and VPN encrypts transmission tunnels."
+    }
+  ]
+}

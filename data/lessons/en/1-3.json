@@ -1,0 +1,336 @@
+{
+  "id": "1-3",
+  "title": "AI in Daily Life and Industry",
+  "hook": "From recommending your favorite video playlist to detecting an invisible tumor years before symptoms appear, how did artificial intelligence transform from academic papers into the core engine of the modern global economy?",
+  "objectives": [
+    "Explore AI deployments across medical diagnostics and rapid clinical drug discovery",
+    "Analyze precision agriculture systems that optimize irrigation and soil health monitoring",
+    "Trace real-time machine learning workflows in financial fraud mitigation and trading",
+    "Understand Industry 4.0 paradigms, collaborative robotics, and predictive asset maintenance"
+  ],
+  "keyTerms": [
+    {
+      "term": "Predictive Maintenance",
+      "def": "Leveraging IoT sensor streams and machine learning models to anticipate industrial machinery failures before serious downtime occurs"
+    },
+    {
+      "term": "Precision Agriculture",
+      "def": "Deploying data analytics and robotics to inspect soil conditions, optimize fertilization, and conserve water resources"
+    },
+    {
+      "term": "Financial Fraud Detection",
+      "def": "Real-time algorithmic scoring of transactional streams to block unauthorized account takeovers and payment breaches"
+    },
+    {
+      "term": "Computer-Aided Diagnosis",
+      "def": "Computer vision frameworks that scrutinize radiographic imagery and MRI scans to assist clinicians with diagnostic precision"
+    },
+    {
+      "term": "Collaborative Robots (Cobots)",
+      "def": "Intelligent industrial robots equipped with proximity and force sensors engineered to operate safely beside human workers"
+    },
+    {
+      "term": "Smart Cities",
+      "def": "Urban environments utilizing AI and interconnected sensor networks to optimize traffic flow, electrical grids, and municipal logistics"
+    }
+  ],
+  "sections": [
+    {
+      "id": "s1",
+      "title": "Clinical Revolution: AI in Modern Healthcare",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "AI has transformed modern medicine. Computer vision systems can now read X-rays and medical scans with high accuracy to help doctors spot diseases early."
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "title": "Early Oncology Screening",
+              "text": "Screening mammograms and lung CT scans with over 95 percent sensitivity, saving lives through early clinical intervention."
+            },
+            {
+              "title": "Accelerated Drug Discovery",
+              "text": "Simulating protein folding dynamics and small-molecule affinity in days rather than spending decades on bench trials."
+            },
+            {
+              "title": "Robot-Assisted Surgery",
+              "text": "Precision multi-joint articulating arms guided by surgeon intent and AI tremor dampening to reduce trauma and speed recovery."
+            },
+            {
+              "title": "Personalized Precision Medicine",
+              "text": "Synthesizing patient genomics, electronic health records, and lifestyle metrics to formulate tailored treatment regimens."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "tip",
+          "title": "The Clinician of the Future",
+          "text": "AI will not replace medical doctors; rather, clinicians who master AI tools will replace those who do not, liberating more time for patient empathy and care."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "Precision Farming and Resource Stewardship",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "With a growing world population and limited water, smart farming uses AI and sensors to save water and grow healthier crops."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/self_driving.jpg",
+              "badge": "Smart Mobility",
+              "title": "Waymo Self-Driving Car",
+              "caption": "An autonomous vehicle equipped with LiDAR, radar, and AI cameras to navigate streets safely."
+            },
+            {
+              "img": "/assets/img/lessons/surgical_robot.jpg",
+              "badge": "Smart Healthcare",
+              "title": "Da Vinci Surgical Robot",
+              "caption": "A precision robotic surgical system assisting doctors during delicate medical procedures."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Multispectral Aerial Surveillance",
+              "text": "Autonomous drones and orbital satellites capture multispectral imagery measuring vegetative vigor and ground moisture indices."
+            },
+            {
+              "title": "Algorithmic Agronomic Diagnosis",
+              "text": "Computer vision systems diagnose early foliar fungal infections and nutrient deficiencies days before macroscopic symptoms appear."
+            },
+            {
+              "title": "Targeted Autonomous Spraying",
+              "text": "Automated variable-rate nozzles dispense targeted water and fertilizer doses only where required, reducing water consumption by up to 40%."
+            }
+          ]
+        },
+        {
+          "type": "stat",
+          "items": [
+            {
+              "value": "40%",
+              "label": "reduction in irrigation water waste via smart sensor feedback"
+            },
+            {
+              "value": "30%",
+              "label": "average crop yield improvements via precision soil management"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "title": "Financial Systems and Digital Commerce",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Billions of online payments happen every day, and AI systems watch over them 24/7 to spot and block credit card fraud immediately."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/industrial_robot.jpg",
+              "badge": "Industry 4.0",
+              "title": "Smart Factory Robotic Arms",
+              "caption": "Automated industrial robots assembling vehicles with high speed and accuracy."
+            },
+            {
+              "img": "/assets/img/lessons/agri_drone.jpg",
+              "badge": "Smart Farming",
+              "title": "Precision Agriculture Drone",
+              "caption": "An AI-guided drone scanning crop health and optimizing water and fertilizer usage."
+            }
+          ]
+        },
+        {
+          "type": "compare",
+          "left": {
+            "title": "Traditional Manual Audit Processes",
+            "points": [
+              "Auditing retrospective statistical samples days or weeks following settlement",
+              "Inability to detect distributed, cross-border card-testing schemes in real time",
+              "Delayed institutional responses occurring after malicious transfers execute"
+            ]
+          },
+          "right": {
+            "title": "Real-Time Algorithmic Fraud Detection",
+            "points": [
+              "Scoring every individual payment payload within under 50 milliseconds",
+              "Correlating terminal location, velocity checks, and typical consumer habits",
+              "Challenging suspicious authorizations instantaneously before settlement"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "title": "Industry 4.0 and Predictive Machinery Health",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In smart factories, engineers do not wait for machines to break down. AI sensors listen to heat and vibration to fix parts before they fail."
+        },
+        {
+          "type": "timeline",
+          "items": [
+            {
+              "label": "Corrective Reactive Maintenance",
+              "text": "Operating equipment until outright serious failure occurs, causing unpredictable downtime and expensive emergency repairs."
+            },
+            {
+              "label": "Calendar-Based Preventive Care",
+              "text": "Replacing machinery parts on rigid time schedules regardless of their actual operational wear, wasting viable components."
+            },
+            {
+              "label": "Intelligent Predictive Maintenance",
+              "text": "Continuous vibration and thermal telemetric analysis forecasting component fatigue weeks before physical breakdown."
+            }
+          ]
+        },
+        {
+          "type": "flip",
+          "items": [
+            {
+              "front": "What are Collaborative Robots (Cobots)?",
+              "back": "Lightweight robotic arms equipped with force-limiting safety sensors, allowing humans and robots to work together without protective caging."
+            },
+            {
+              "front": "How do Smart Cities cut urban carbon emissions?",
+              "back": "By dynamically tuning traffic light timing according to real vehicle flow, lowering idling, and automating building energy grids."
+            },
+            {
+              "front": "What is AI route optimization in last-mile logistics?",
+              "back": "Calculating optimal multi-stop driver paths taking live traffic congestion, road closures, and delivery time windows into account."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "recap": [
+    "AI is transforming modern healthcare through early cancer screening and accelerated biomedical discovery.",
+    "Precision agriculture conserves vital water and soil resources using drone imagery and variable-rate delivery.",
+    "Real-time fraud engines evaluate transactional signals within milliseconds to shield consumers from identity theft.",
+    "Industry 4.0 harnesses predictive telemetry and collaborative robotics to eliminate unscheduled manufacturing downtime."
+  ],
+  "exercises": [
+    {
+      "prompt": "Explain how an automated credit card fraud model differentiates between an authorized transaction during foreign travel and an unauthorized international cyber-heist.",
+      "solution": "The model assesses hundreds of real-time multi-dimensional risk vectors:\n1. Mobile device geolocation triangulation correlating with the physical terminal location.\n2. Prior flight booking or hotel reservation transactions previously settled on the card.\n3. Category congruence (dining and transport charges versus sudden bulk electronics or crypto-wallet cashouts).\n4. Plausible transit speed between the last domestic swipe and the new international authorization request."
+    },
+    {
+      "prompt": "Contrast the cost and efficiency benefits of predictive maintenance against calendar-based scheduled servicing in a commercial airline fleet.",
+      "solution": "1. Calendar-based servicing replaces jet engine parts at fixed flight hour intervals, often discarding components that still possess significant safe operational lifespan, while remaining blind to sudden defects between intervals.\n2. Predictive maintenance relies on continuous sensor streams (exhaust gas temperature, vibration spectra, oil pressure). It identifies micro-cracks or bearing degradation early, allowing airlines to schedule replacements during planned overnight layovers and avoiding flight cancellations."
+    },
+    {
+      "prompt": "How can a mobile vision model empower a rural smallholder farmer to protect their wheat crop from disease?",
+      "solution": "The farmer captures a photo of an affected leaf using their smartphone. An onboard or lightweight cloud convolutional neural network compares the visual lesion pattern against agricultural disease datasets. Within seconds, it identifies the pathogen (such as stripe rust), suggests the exact fungicide dosage, and details quarantine steps to prevent blight spread across the entire farm."
+    }
+  ],
+  "quiz": [
+    {
+      "type": "mcq",
+      "q": "What is the primary operational advantage of predictive maintenance over traditional reactive repairs in manufacturing?",
+      "options": [
+        "Waiting for serious failure before ordering replacement hardware",
+        "Forecasting component fatigue to schedule repairs before unexpected line shutdowns occur",
+        "Completely eliminating human technicians from all enterprise payrolls",
+        "Allowing industrial machines to run perpetually without electrical energy"
+      ],
+      "answer": 1,
+      "explain": "Predictive maintenance utilizes real-time sensor streams to identify wear and schedule servicing before costly unplanned downtime happens."
+    },
+    {
+      "type": "tf",
+      "q": "Artificial intelligence in modern medicine is exclusively confined to typing patient appointment dates at hospital reception desks.",
+      "answer": false,
+      "explain": "AI actively assists in radiologic image diagnosis, early tumor screening, protein modeling, and robotic surgery guidance."
+    },
+    {
+      "type": "mcq",
+      "q": "How does precision agriculture enhance environmental conservation efforts?",
+      "options": [
+        "Preventing rainfall from precipitating across cultivated acreage",
+        "Minimizing water waste and applying chemical treatments only to affected plant clusters",
+        "Inhibiting the biological photosynthesis process within crops",
+        "Replacing natural topsoil with petroleum-based synthetic plastics"
+      ],
+      "answer": 1,
+      "explain": "Precision agriculture targets water and nutrients strictly where and when crops need them, preventing excess runoff and resource waste."
+    },
+    {
+      "type": "tf",
+      "q": "Collaborative robots (cobots) require heavy steel safety cages to isolate them completely from human operators.",
+      "answer": false,
+      "explain": "Cobots are equipped with sensitive force and proximity sensors specifically engineered to share workspace safely alongside humans."
+    },
+    {
+      "type": "mcq",
+      "q": "Which analytical signal is scored by financial machine learning models when evaluating a new transaction authorization?",
+      "options": [
+        "The physical color of the metallic chip embedded in the credit card",
+        "Congruence of the transaction with historical behavioral patterns and geographic location",
+        "The cellular carrier brand utilized by the retail store cashier",
+        "The number of hours the account holder slept the previous evening"
+      ],
+      "answer": 1,
+      "explain": "Fraud models cross-reference transaction metadata against historical user spending patterns and geographic norms to flag anomalies."
+    },
+    {
+      "type": "tf",
+      "q": "Artificial intelligence algorithms can accelerate biomedical research by simulating molecular interactions in days rather than years.",
+      "answer": true,
+      "explain": "Computational modeling rapidly screens candidate compounds against biological targets, vastly expediting the drug discovery pipeline."
+    },
+    {
+      "type": "mcq",
+      "q": "What benefit do intelligent adaptive traffic control systems deliver across major metropolitan centers?",
+      "options": [
+        "Eliminating all traffic signals and letting automobiles navigate intersections randomly",
+        "Dynamically adjusting signal cycle lengths according to live congestion densities to reduce gridlock",
+        "Completely prohibiting pedestrians from crossing metropolitan streets",
+        "Legally mandating that every resident purchase a fully autonomous vehicle"
+      ],
+      "answer": 1,
+      "explain": "Adaptive traffic networks analyze real-time camera sensor feeds to adjust green-light phases, minimizing vehicular idle times."
+    },
+    {
+      "type": "tf",
+      "q": "Under calendar-based maintenance schedules, perfectly functional mechanical parts may be discarded prematurely.",
+      "answer": true,
+      "explain": "Calendar schedules replace parts after fixed operational intervals without verifying whether the part has reached true mechanical end-of-life."
+    },
+    {
+      "type": "match",
+      "q": "Match each industry sector with its corresponding artificial intelligence deployment:",
+      "pairs": [
+        [
+          "Modern Healthcare",
+          "Screening mammography scans for early-stage oncology detection"
+        ],
+        [
+          "Precision Agriculture",
+          "Directing aerial drones to map soil moisture variances"
+        ],
+        [
+          "Smart Manufacturing",
+          "Analyzing motor vibration telemetry to predict gear failure"
+        ]
+      ],
+      "explain": "Oncology screening belongs to healthcare, moisture drone mapping to agriculture, and vibration telemetry to manufacturing."
+    }
+  ]
+}

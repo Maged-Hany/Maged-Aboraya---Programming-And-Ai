@@ -1,0 +1,312 @@
+{
+  "id": "2-1",
+  "title": "Encryption and Authentication Techniques",
+  "hook": "When you make an online purchase on your phone, credit card numbers travel across global physical wires alongside millions of strangers without anyone intercepting them. What mathematical armor makes this possible?",
+  "objectives": [
+    "Differentiate between symmetric and public-key encryption and identify their optimal use cases",
+    "Understand Multi-Factor Authentication MFA mechanisms in remediating credential vulnerabilities",
+    "Implement robust password construction habits resistant to automated brute-force attacks",
+    "Grasp the operational roles of digital signatures and PKI certificates in web identity verification"
+  ],
+  "keyTerms": [
+    {
+      "term": "Encryption",
+      "def": "The mathematical process of transforming readable plaintext into unintelligible ciphertext using an algorithm and a secret key"
+    },
+    {
+      "term": "Symmetric Encryption",
+      "def": "A cryptographic cipher system that utilizes the exact same shared secret key for both data encryption and decryption"
+    },
+    {
+      "term": "Asymmetric Encryption",
+      "def": "Public-key cryptography employing a mathematically linked pair: a public key for encryption and a private key for decryption"
+    },
+    {
+      "term": "Multi-Factor Authentication",
+      "def": "A security protocol requiring two or more distinct evidentiary factors before granting system or account access"
+    },
+    {
+      "term": "Digital Signature",
+      "def": "A cryptographic validation mechanism establishing message authenticity, sender non-repudiation, and document integrity"
+    },
+    {
+      "term": "Brute-Force Attack",
+      "def": "An automated trial-and-error attack systematically enumerating every potential cryptographic credential until the correct match is found"
+    }
+  ],
+  "sections": [
+    {
+      "id": "s1",
+      "title": "Cryptographic Evolution: From Caesar to Modern Ciphers",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Cryptography began with ancient classical substitution ciphers like the Caesar cipher, which shifted alphabet characters by a fixed number of steps. Try our interactive Caesar lab below."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/julius_caesar.jpg",
+              "badge": "Historic Figure",
+              "title": "Julius Caesar",
+              "caption": "Roman leader who used the Caesar shift cipher to protect confidential military messages."
+            },
+            {
+              "img": "/assets/img/lessons/enigma.jpg",
+              "badge": "Cipher Machine",
+              "title": "The Enigma Cipher Machine",
+              "caption": "Famous electromechanical rotor cipher machine used to encrypt secret messages in World War II."
+            }
+          ]
+        },
+        {
+          "type": "demo",
+          "name": "caesar"
+        },
+        {
+          "type": "callout",
+          "tone": "think",
+          "title": "Why are classical substitution ciphers obsolete?",
+          "text": "The Latin alphabet has only 26 characters; a modern computer breaks a mono-alphabetic Caesar cipher in microseconds through exhaustive 25-key permutation tests."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "Symmetric Versus Asymmetric Cryptography",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Modern encryption is divided into two main types—Symmetric and Asymmetric—that work together to keep the internet safe."
+        },
+        {
+          "type": "compare",
+          "left": {
+            "title": "Symmetric Encryption (e.g. AES)",
+            "points": [
+              "Employs a single identical secret key for both encryption and decryption",
+              "Delivers exceptional computation throughput, ideal for multi-gigabyte file payloads",
+              "Key Distribution Dilemma: How do parties securely transmit the key over an untrusted network?"
+            ]
+          },
+          "right": {
+            "title": "Asymmetric Encryption (e.g. RSA)",
+            "points": [
+              "Employs mathematically linked key pairs: a public key and a guarded private key",
+              "Elegantly resolves secure key exchange over hostile, unencrypted network paths",
+              "Computationally heavier, requiring substantial CPU cycles compared to symmetric ciphers"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "tone": "tip",
+          "title": "How does HTTPS work in your browser?",
+          "text": "It uses public-key encryption to securely negotiate a shared session key during the TLS handshake, then immediately switches to fast symmetric encryption for data transfer."
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "title": "Password Robustness and Brute-Force Resistance",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Hackers use fast computers that can guess billions of passwords per second. Test how strong your password is in the interactive lab below."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/yubikey.jpg",
+              "badge": "Security Tool",
+              "title": "USB Hardware Security Key (2FA)",
+              "caption": "A physical two-factor authentication key that protects accounts even if a password is leaked."
+            },
+            {
+              "img": "/assets/img/lessons/fingerprint.jpg",
+              "badge": "Biometric Device",
+              "title": "Fingerprint Biometric Scanner",
+              "caption": "A sensor that verifies identity using unique physical traits (something you are)."
+            }
+          ]
+        },
+        {
+          "type": "demo",
+          "name": "password"
+        },
+        {
+          "type": "stat",
+          "items": [
+            {
+              "value": "8 basic characters",
+              "label": "can be cracked in seconds via automated rainbow tables"
+            },
+            {
+              "value": "14 mixed characters",
+              "label": "demands millions of compute years under current hardware"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "title": "Multi-Factor Authentication and Digital Signatures",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "A password alone is no longer enough to protect important accounts. Multi-Factor Authentication (MFA) adds extra layers of security."
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Knowledge Factor (Something You Know)",
+              "text": "A secret password, passphrase, or personal identification number PIN stored in human memory."
+            },
+            {
+              "title": "Possession Factor (Something You Have)",
+              "text": "A mobile device receiving cryptographic push notifications, an authenticator app, or a hardware FIDO token."
+            },
+            {
+              "title": "Inherence Factor (Something You Are)",
+              "text": "Biological telemetry including capacitive fingerprint scans, facial geometry, or retinal iris imaging."
+            }
+          ]
+        },
+        {
+          "type": "flip",
+          "items": [
+            {
+              "front": "What is the purpose of a Digital Signature?",
+              "back": "It guarantees the authentic identity of the document author and cryptographically proves the content was not altered in transit."
+            },
+            {
+              "front": "What is an SSL/TLS Certificate?",
+              "back": "A digital credential issued by a trusted Certificate Authority CA certifying ownership of a web domain and enabling encryption."
+            },
+            {
+              "front": "Why are Passphrases superior to short passwords?",
+              "back": "They concatenate multiple random words, creating massive mathematical entropy that is easy for humans to recall yet impossible for brute-force engines."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "recap": [
+    "Encryption transforms sensitive plaintext data into unreadable ciphertext to thwart eavesdroppers across networks.",
+    "Symmetric ciphers provide high-throughput bulk encryption, while asymmetric ciphers resolve secure key exchange.",
+    "Multi-Factor Authentication MFA integrates knowledge, possession, and biometric factors to eliminate single points of failure.",
+    "Password character length and high entropy are the primary mathematical defenses against modern dictionary attacks."
+  ],
+  "exercises": [
+    {
+      "prompt": "Explain why passphrase length (character count) provides exponential protection against brute-force attacks compared to adding one special character to a short password.",
+      "solution": "Every added character position exponentially expands the cryptographic keyspace. For an 8-character alphanumeric string, total combinations equal 62^8 (~218 trillion permutations, crackable in seconds on a GPU cluster). Expanding length to 16 characters raises the keyspace to 26^16 even with basic lowercase characters, yielding an astronomical search space requiring millennia of compute time."
+    },
+    {
+      "prompt": "Describe how symmetric and asymmetric encryption cooperate during a secure browser connection to an online banking portal using HTTPS.",
+      "solution": "1. The browser initiates a TLS Handshake using public-key encryption: the bank server presents its public key inside a certified SSL certificate.\n2. The browser validates the certificate, generates a random symmetric session key, encrypts it using the bank's public key, and transmits it back.\n3. The bank server decrypts the session key using its private key.\n4. Both client and server now share an identical symmetric key securely, switching exclusively to fast symmetric AES encryption to stream sensitive banking data."
+    },
+    {
+      "prompt": "Why has SMS-based two-factor authentication been deprecated in high-security financial and corporate environments?",
+      "solution": "SMS protocols are vulnerable to telecom-level exploitation, notably SIM Swapping where attackers manipulate mobile carrier agents into porting a victim's phone number to a rogue SIM card. Furthermore, unencrypted mobile cellular signaling networks (such as SS7) can be intercepted over the air. Security organizations mandate app-based TOTP generators or hardware security keys (FIDO2) instead."
+    }
+  ],
+  "quiz": [
+    {
+      "type": "mcq",
+      "q": "What fundamental property defines symmetric encryption architectures?",
+      "options": [
+        "Using two distinct mathematical keys: one public and one strictly private",
+        "Using the exact same secret key for both data encryption and decryption",
+        "Operating completely without mathematical keys of any kind",
+        "Restricting cipher execution strictly to Python programming environments"
+      ],
+      "answer": 1,
+      "explain": "Symmetric encryption relies on a single shared secret key utilized by both sender and recipient to encode and decode payloads."
+    },
+    {
+      "type": "tf",
+      "q": "In public-key encryption, users must openly publish their private key on social networks for everyone to inspect.",
+      "answer": false,
+      "explain": "The private key must remain strictly secret to its owner; only the corresponding public key is shared openly."
+    },
+    {
+      "type": "mcq",
+      "q": "Which item corresponds to the 'Something You Have' possession factor in Multi-Factor Authentication?",
+      "options": [
+        "Your memorized corporate account password",
+        "Your biological thumbprint pattern",
+        "A physical smartphone receiving a time-based authenticator code",
+        "Your government national ID number recalled from memory"
+      ],
+      "answer": 2,
+      "explain": "Smartphones and hardware tokens represent physical possession items proving the authentic user holds authorized hardware."
+    },
+    {
+      "type": "tf",
+      "q": "The ancient Caesar cipher is robust enough to protect modern online banking systems against automated cyber-attacks.",
+      "answer": false,
+      "explain": "The Caesar cipher offers only 25 possible shifts, which can be cracked in microseconds by automated script attacks."
+    },
+    {
+      "type": "mcq",
+      "q": "What dual assurance does a Digital Signature provide in electronic communication?",
+      "options": [
+        "Altering desktop wallpaper backgrounds while transmitting email attachments",
+        "Verifying sender authenticity and guaranteeing the document was not tampered with in transit",
+        "Automatically formatting and cleaning storage drives on the recipient machine",
+        "Doubling the physical download speed of the local broadband connection"
+      ],
+      "answer": 1,
+      "explain": "Digital signatures provide non-repudiation of sender identity and cryptographic proof of message integrity."
+    },
+    {
+      "type": "tf",
+      "q": "Increasing password length and using multi-word passphrases effectively defends against automated brute-force attacks.",
+      "answer": true,
+      "explain": "Length exponentially expands the permutations an attacker must evaluate, rendering brute-force attacks computationally infeasible."
+    },
+    {
+      "type": "mcq",
+      "q": "How does the HTTPS protocol synthesize symmetric and asymmetric encryption?",
+      "options": [
+        "Asymmetric encryption exchanges the session key safely, then symmetric encryption accelerates payload transfer",
+        "It completely disables encryption whenever image files are rendered",
+        "Symmetric encryption is applied exclusively to unauthenticated guest visitors",
+        "Transmitting passwords in cleartext to maximize server throughput"
+      ],
+      "answer": 0,
+      "explain": "HTTPS capitalizes on asymmetric security to exchange keys, followed by symmetric speed for the main communication session."
+    },
+    {
+      "type": "tf",
+      "q": "Facial recognition and fingerprint biometrics are classified under the 'Something You Know' authentication pillar.",
+      "answer": false,
+      "explain": "Biometrics represent 'Something You Are' (Inherence); passwords and PINs represent 'Something You Know'."
+    },
+    {
+      "type": "match",
+      "q": "Match each authentication mechanism with its corresponding MFA factor category:",
+      "pairs": [
+        [
+          "Memorized master password",
+          "Something You Know"
+        ],
+        [
+          "Hardware USB security key",
+          "Something You Have"
+        ],
+        [
+          "Retinal optical iris scan",
+          "Something You Are"
+        ]
+      ],
+      "explain": "Multi-factor authentication balances knowledge (passwords), physical possession (tokens), and biometrics (iris scans)."
+    }
+  ]
+}

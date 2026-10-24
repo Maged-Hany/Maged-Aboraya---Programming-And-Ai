@@ -1,0 +1,327 @@
+{
+  "id": "3-1",
+  "title": "General Architecture of Web Applications",
+  "hook": "What actually happens behind the scenes in the millisecond between clicking a hyperlink and viewing a fully rendered, dynamic website? The answer lies in how web systems work together.",
+  "objectives": [
+    "Understand the Client-Server architectural model governing modern request and response cycles",
+    "Distinguish clearly between Front-End interfaces, Back-End application logic, and persistence Data Tiers",
+    "Trace the domain name resolution lifecycle across hierarchical DNS infrastructure",
+    "Compare Single-Page Applications (SPA) with classic Multi-Page Applications (MPA)"
+  ],
+  "keyTerms": [
+    {
+      "term": "Client-Server Architecture",
+      "def": "A computing model where the client initiates service requests and the centralized server processes and returns corresponding data payloads"
+    },
+    {
+      "term": "Front-End",
+      "def": "The client-facing software tier executing inside the end-user browser, constructed using HTML, CSS, and modern JavaScript"
+    },
+    {
+      "term": "Back-End",
+      "def": "The server-side computing layer responsible for executing business rules, authenticating user sessions, and interacting with storage databases"
+    },
+    {
+      "term": "Domain Name System (DNS)",
+      "def": "The global distributed directory protocol translating human-readable domain names into machine-routable numerical IP addresses"
+    },
+    {
+      "term": "Single-Page Application (SPA)",
+      "def": "A web application architecture loading a single initial document and dynamically rewriting the viewport via asynchronous data updates"
+    },
+    {
+      "term": "Database Tier",
+      "def": "A structured software repository designed to persist, query, and manipulate vast volumes of enterprise data securely and efficiently"
+    }
+  ],
+  "sections": [
+    {
+      "id": "s1",
+      "title": "The Client-Server Communications Model",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Every modern internet service relies on an smooth communication between two main parts: the Client and the Server."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/tim_berners_lee.jpg",
+              "badge": "Pioneer",
+              "title": "Sir Tim Berners-Lee",
+              "caption": "Inventor of the World Wide Web in 1989 who created HTML, HTTP, and URLs."
+            },
+            {
+              "img": "/assets/img/lessons/next_computer.jpg",
+              "badge": "Historic Server",
+              "title": "The First Web Server (NeXT at CERN)",
+              "caption": "The actual NeXT computer used by Tim Berners-Lee to host the world very first website."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "1. The Client Browser",
+              "text": "Dispatches an HTTP Request across network sockets when you type a URL or click an action button."
+            },
+            {
+              "title": "2. The Internet Fabric",
+              "text": "Encrypted network packets traverse transit providers, routing hops, and fiber-optic backbones toward remote cloud facilities."
+            },
+            {
+              "title": "3. The Web Server",
+              "text": "Terminates the network socket, applies security checks, and invokes server-side logic to assemble the required response."
+            },
+            {
+              "title": "4. The HTTP Response",
+              "text": "Streams structured HTML, CSS, and JSON payloads back across the wire, enabling the browser rendering engine to paint pixels."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "note",
+          "title": "The Restaurant Analogy",
+          "text": "The client is the diner at the table, the HTTP protocol is the waiter carrying the ticket, and the kitchen is the secure back-end and database where orders are processed!"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "Three-Tier Architecture: Presentation, Logic, and Data",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Production-grade enterprise web applications decompose functionality into three isolated layers (3-Tier Architecture) to ensure scalability, security, and maintainability."
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "title": "Presentation Tier (Front-End)",
+              "text": "The visual viewport rendered inside user agents: form controls, layout grids, and interactive widgets executing on local client CPUs."
+            },
+            {
+              "title": "Application Tier (Back-End)",
+              "text": "Server runtimes (such as Node.js, Python, or Go) enforcing domain logic, session cryptography, and transactional integrity."
+            },
+            {
+              "title": "Data Tier (Persistence)",
+              "text": "Enterprise relational and document databases (e.g., PostgreSQL, MongoDB) managing atomic storage, indexing, and transactional ACID guarantees."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "title": "Domain Name System (DNS): Internet Telephone Directory",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Computing machines route packets strictly using numerical IP addresses like '192.0.2.1'. DNS operates as the real-time translation telephone directory of the Internet."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/submarine_cable.png",
+              "badge": "Internet Backbone",
+              "title": "Undersea Fiber-Optic Cable",
+              "caption": "Cross-section of an armored submarine cable carrying global internet traffic across ocean floors."
+            }
+          ]
+        },
+        {
+          "type": "timeline",
+          "items": [
+            {
+              "label": "URL Submission",
+              "text": "The user submits a human-readable domain name (e.g., ekb.eg) into the browser navigation bar."
+            },
+            {
+              "label": "Cache Resolution",
+              "text": "The browser inspects local memory and OS resolver caches; if the IP mapping is cached, the connection initiates instantly."
+            },
+            {
+              "label": "Recursive Query Hierarchy",
+              "text": "If uncached, recursive resolvers query Root nameservers, Top-Level Domain (TLD) servers, and authoritative nameservers."
+            },
+            {
+              "label": "IP Returned",
+              "text": "The definitive IP address is returned and cached, allowing the browser to initiate a TCP/TLS handshake with the target host."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "think",
+          "title": "Imagine the Web Without DNS",
+          "text": "Instead of remembering readable domain names, you would be forced to memorize dozens of 12-digit IPv4 or 32-character IPv6 strings for every favorite site!"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "title": "Single-Page (SPA) vs. Multi-Page (MPA) Paradigms",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Web interface user experience shifted fundamentally with the emergence of client-side routing and single-page application engineering."
+        },
+        {
+          "type": "compare",
+          "left": {
+            "title": "Multi-Page Applications (MPA)",
+            "points": [
+              "Every route navigation triggers a synchronous round-trip request fetching full new HTML documents",
+              "Characteristic visual white-flash screen flicker during full-page reloads",
+              "Well-suited for content-heavy news sites, e-commerce storefronts, and SEO-dominated blogs"
+            ]
+          },
+          "right": {
+            "title": "Single-Page Applications (SPA)",
+            "points": [
+              "Downloads the initial application shell once; route changes update the DOM asynchronously via API calls",
+              "Near-instantaneous view transitions mirroring native desktop and mobile applications",
+              "Ideal for complex interactive web apps, software-as-a-service dashboards, and social networks"
+            ]
+          }
+        },
+        {
+          "type": "flip",
+          "items": [
+            {
+              "front": "What is a Web Server software process?",
+              "back": "A program like Nginx or Node.js listening on network ports (80, 443) to serve web assets and route API calls."
+            },
+            {
+              "front": "What differentiates a Public IP from a Private IP?",
+              "back": "Private IPs are routed strictly inside local LANs, while Public IPs are globally unique and routable across the public Internet."
+            },
+            {
+              "front": "Why isolate databases behind a back-end tier?",
+              "back": "To protect credentials, prevent unauthorized direct SQL queries, and avoid exposing database ports to the open Internet."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "recap": [
+    "Web applications operate on the Client-Server model, exchanging structured requests and responses across global networks.",
+    "Three-tier architectures decouple Presentation (Front-End), Business Logic (Back-End), and Data Persistence (Database).",
+    "DNS operates as the global distributed directory resolving human-friendly domain names to routable IP addresses.",
+    "Single-Page Applications (SPA) eliminate page reloads by dynamically updating interface components via asynchronous APIs."
+  ],
+  "exercises": [
+    {
+      "prompt": "Trace the comprehensive technical sequence that unfolds from the moment a student types 'ekb.eg' into their web browser until the interactive page renders completely.",
+      "solution": "1. The student enters the URL; the browser queries local browser and operating system DNS caches for the mapped IP address.\n2. In the event of a cache miss, a recursive DNS resolver queries Root, .eg TLD, and authoritative nameservers to resolve the IP address.\n3. The browser initiates a three-way TCP handshake followed by a cryptographic TLS negotiation over port 443.\n4. The browser issues an HTTP GET request for the root document.\n5. The remote web server receives the request, delegates computation to the application back-end and database tiers, and streams back an HTTP 200 OK response containing HTML.\n6. The browser parses HTML tokens, constructs the DOM and CSSOM trees, downloads referenced CSS/JS assets, and executes the rendering pipeline."
+    },
+    {
+      "prompt": "Contrast SPA and MPA architectural suitability for an enterprise building real-time telemetry monitoring dashboards for municipal utility grids.",
+      "solution": "A Single-Page Application (SPA) is far superior for a real-time municipal telemetry dashboard. The operator requires continuous metric updates and alerts streaming over WebSockets without interface interruptions. An MPA would force complete page reloads, causing constant visual stuttering, resetting scroll positions, and re-initializing client charting libraries on every minor update."
+    },
+    {
+      "prompt": "Explain why security best practices strictly forbid direct client-side database connections from browser JavaScript.",
+      "solution": "Client-side browser JavaScript executes entirely on the user's local machine, meaning any user can inspect application source code via developer DevTools. Embedding database connection strings (such as database credentials, hostnames, and secret keys) directly in front-end scripts exposes administrative access to anyone. Furthermore, without a protective server-side validation layer, malicious users could execute arbitrary destructive SQL operations."
+    }
+  ],
+  "quiz": [
+    {
+      "type": "mcq",
+      "q": "What is the primary function of the Domain Name System (DNS) across the Internet?",
+      "options": [
+        "Accelerating the physical rotation of computer cooling fans",
+        "Translating human-readable alphanumeric domain names into machine-routable IP addresses",
+        "Applying decorative typography and color palettes to web pages",
+        "Validating credit card billing records during retail checkout"
+      ],
+      "answer": 1,
+      "explain": "DNS acts as the internet directory service, mapping readable hosts like example.com to numerical IP addresses."
+    },
+    {
+      "type": "tf",
+      "q": "The Front-End tier of a web application executes strictly on remote enterprise servers and cannot be viewed by browser engines.",
+      "answer": false,
+      "explain": "The Front-End executes locally within the client's web browser using client-side HTML, CSS, and JavaScript runtimes."
+    },
+    {
+      "type": "mcq",
+      "q": "What constitutes the defining user experience advantage of Single-Page Applications (SPAs)?",
+      "options": [
+        "Dynamically updating viewport elements without triggering disruptive full-page reloads",
+        "Operating perpetually without any physical connection to telecommunication networks",
+        "Eliminating the need to write JavaScript source code",
+        "Automatically transmitting printed paper copies of web pages to desk printers"
+      ],
+      "answer": 0,
+      "explain": "SPAs load an initial HTML shell once and dynamically update view contents asynchronously via API calls."
+    },
+    {
+      "type": "tf",
+      "q": "In the Client-Server model, the client initiates the request and the server evaluates and returns the response.",
+      "answer": true,
+      "explain": "This request-response paradigm forms the architectural cornerstone of the World Wide Web."
+    },
+    {
+      "type": "mcq",
+      "q": "Which architectural tier in a three-tier web application is responsible for persistent storage of customer records?",
+      "options": [
+        "Data Tier (Databases)",
+        "Video Monitor Cable Tier",
+        "Browser Temporary Cache Memory Tier",
+        "Keyboard Hardware Switch Tier"
+      ],
+      "answer": 0,
+      "explain": "The Data Tier persists relational and document records in specialized database management systems."
+    },
+    {
+      "type": "tf",
+      "q": "Production database credentials should be openly embedded directly into public client-side JavaScript source code.",
+      "answer": false,
+      "explain": "Client-side code is publicly inspectable; database credentials must remain strictly guarded inside back-end server environments."
+    },
+    {
+      "type": "mcq",
+      "q": "Which software daemon listens on network ports to receive incoming HTTP requests and serve static files or route API calls?",
+      "options": [
+        "Web Servers like Nginx and Apache",
+        "Spreadsheet calculation office tools",
+        "High-definition 3D video game titles",
+        "Personal video editing suites"
+      ],
+      "answer": 0,
+      "explain": "Web servers (Nginx, Apache, Node.js) bind to ports 80/443 to accept HTTP socket connections and serve digital assets."
+    },
+    {
+      "type": "tf",
+      "q": "Classic Multi-Page Applications (MPAs) request and render an entirely new HTML document from the server on every route change.",
+      "answer": true,
+      "explain": "This classic web paradigm performs a full document fetch and redraw cycle for each clicked navigation link."
+    },
+    {
+      "type": "match",
+      "q": "Match each web component with its core functional responsibility:",
+      "pairs": [
+        [
+          "Front-End Tier",
+          "Rendering visual layouts and facilitating direct user interaction"
+        ],
+        [
+          "Back-End Tier",
+          "Executing business rules and validating credentials"
+        ],
+        [
+          "DNS Server",
+          "Resolving domain names into numerical IP addresses"
+        ]
+      ],
+      "explain": "The Front-End displays UI, the Back-End handles logic and authentication, and DNS resolves network addresses."
+    }
+  ]
+}

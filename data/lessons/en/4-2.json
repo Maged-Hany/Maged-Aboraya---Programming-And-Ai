@@ -1,0 +1,408 @@
+{
+  "id": "4-2",
+  "title": "Information Design and User Experience for Websites",
+  "hook": "Have you ever felt lost or frustrated inside a website because you could not find the submit button, or struggled to read paragraphs against low-contrast backgrounds? World-class digital design is never just about good looks; it begins with an intuitive, seamless user journey.",
+  "objectives": [
+    "Distinguish between User Experience UX and User Interface UI in modern web engineering",
+    "Apply information architecture and visual hierarchy principles to structure web interfaces",
+    "Grasp Don Norman fundamental usability and human interaction design principles",
+    "Evaluate web accessibility compliance using WCAG standards and color contrast ratios"
+  ],
+  "keyTerms": [
+    {
+      "term": "User Experience UX",
+      "def": "How easy, smooth, and comfortable it feels for a person to use a website or app"
+    },
+    {
+      "term": "User Interface UI",
+      "def": "The visual and interactive touchpoints of a website including buttons, typography, colors, forms, and layouts"
+    },
+    {
+      "term": "Information Architecture",
+      "def": "The structural design and taxonomy of digital content to facilitate intuitive navigation and information discovery"
+    },
+    {
+      "term": "Affordance",
+      "def": "The physical or visual property of an interface element that signals to the user how it can be operated"
+    },
+    {
+      "term": "Feedback",
+      "def": "The immediate sensory response delivered by a system to confirm that a user action has been acknowledged and processed"
+    },
+    {
+      "term": "Accessibility a11y",
+      "def": "Designing web applications to ensure equal usability for all people including those with visual, auditory, or motor impairments"
+    },
+    {
+      "term": "Contrast Ratio",
+      "def": "The difference in brightness between the text color and the background color so people can read easily"
+    }
+  ],
+  "sections": [
+    {
+      "id": "sec-1",
+      "title": "The Core Distinction Between UX and UI Design",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Many beginners confuse User Experience with User Interface. In professional software teams, they represent two connected parts: UX focuses on logic, information flow, and task accomplishment, while UI crafts colors, fonts, and visual style."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/don_norman.jpg",
+              "badge": "Pioneer",
+              "title": "Don Norman (Father of UX)",
+              "caption": "Cognitive scientist who coined the term User Experience and defined core usability principles."
+            },
+            {
+              "img": "/assets/img/lessons/wireframe.png",
+              "badge": "Design Tool",
+              "title": "Website Wireframe Blueprint",
+              "caption": "A simple grayscale layout sketch used to plan page structure and navigation before styling."
+            }
+          ]
+        },
+        {
+          "type": "compare",
+          "left": {
+            "title": "User Experience (UX)",
+            "points": [
+              "Focuses on user journeys, problem solving, and task completion efficiency",
+              "Driven by user research, interviews, usability tests, and user workflow diagrams",
+              "Measured by task completion rates, error frequency, and holistic user satisfaction",
+              "Architects the unseen functional logic and navigational taxonomy of the platform"
+            ]
+          },
+          "right": {
+            "title": "User Interface (UI)",
+            "points": [
+              "Focuses on visual aesthetics, typography scales, and tactile touchpoints",
+              "Governed by color palettes, icon libraries, spacing grids, and responsive layouts",
+              "Measured by visual delight, brand fidelity, and interface polish",
+              "Transforms structural wireframe blueprints into engaging, interactive screens"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "tone": "think",
+          "title": "Thought Experiment",
+          "text": "A sports car with a glistening, handcrafted exterior is utterly worthless if its steering wheel locks up and its brakes fail on the highway. Flawless UI can never rescue broken UX."
+        }
+      ]
+    },
+    {
+      "id": "sec-2",
+      "title": "Information Architecture and Visual Hierarchy",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Visitors scan a web page in just a few seconds. If the content is not organized clearly with headings, contrast, and spacing, they leave right away."
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Content Inventory and Audit",
+              "text": "Catalogue all articles, multimedia assets, and functional utilities planned for the website into structured clusters."
+            },
+            {
+              "title": "User Card Sorting",
+              "text": "Observe real target users organizing content topics to uncover intuitive mental models and natural taxonomy labels."
+            },
+            {
+              "title": "Hierarchical Site Mapping",
+              "text": "Architect a tree diagram defining top-level navigation, parent sections, and sub-pages to establish deep navigational paths."
+            },
+            {
+              "title": "Low-Fidelity Wireframing",
+              "text": "Sketch grayscale screen wireframes to establish layout balance, text hierarchy, and CTA placement prior to aesthetic styling."
+            }
+          ]
+        },
+        {
+          "type": "flip",
+          "items": [
+            {
+              "front": "Scale and Proportion",
+              "back": "Human eyes gravitate toward larger elements first. Primary titles command dominant scale compared to body copy."
+            },
+            {
+              "front": "Color Contrast",
+              "back": "High contrast instantly commands focal priority, making it indispensable for primary call-to-action buttons."
+            },
+            {
+              "front": "Negative White Space",
+              "back": "Generous whitespace between cards and text blocks prevents cognitive fatigue and elevates perceived quality."
+            },
+            {
+              "front": "Navigational Breadcrumbs",
+              "back": "Hierarchical link trails orient users regarding their exact location within the site tree and provide instant back-navigation."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sec-3",
+      "title": "Don Norman Usability and Interaction Principles",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Design pioneer Don Norman explained the key rules that make any website or device easy to use without needing an instruction manual."
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "title": "Affordance",
+              "text": "Visual cues that intuitively announce how an object functions; an interactive button features subtle depth and borders signaling clickability."
+            },
+            {
+              "title": "Immediate Feedback",
+              "text": "Every user touchpoint warrants immediate acknowledgment; hover states, pressed transitions, and spinners reassure users that requests are live."
+            },
+            {
+              "title": "Intuitive Mapping",
+              "text": "A logical spatial relationship between controls and real-world outcomes, such as swiping rightward to advance to the next carousel slide."
+            },
+            {
+              "title": "Preventative Constraints",
+              "text": "Guiding users away from serious errors by disabling submit buttons until required fields pass client-side validation rules."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "tip",
+          "title": "Consistency Principle",
+          "text": "Stick to established web design conventions. Positioning the brand logo at the top left and shopping cart at the top right builds instant muscle memory and comfort for first-time visitors."
+        }
+      ]
+    },
+    {
+      "id": "sec-4",
+      "title": "Web Accessibility (WCAG) and Contrast Verification Lab",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The web is meant for everyone. WCAG accessibility rules make sure people with disabilities or weak eyesight can easily read and use websites."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/braille_display.jpg",
+              "badge": "Accessibility Hardware",
+              "title": "Refreshable Braille Display",
+              "caption": "Assistive device that converts semantic web text and alt descriptions into tactile Braille characters."
+            }
+          ]
+        },
+        {
+          "type": "stat",
+          "items": [
+            {
+              "value": "4.5 : 1",
+              "label": "Minimum contrast ratio for standard body text under WCAG AA compliance"
+            },
+            {
+              "value": "3.0 : 1",
+              "label": "Minimum contrast ratio for large headings over 18pt or bold 14pt"
+            },
+            {
+              "value": "7.0 : 1",
+              "label": "High-contrast benchmark required for enhanced WCAG AAA compliance"
+            }
+          ]
+        },
+        {
+          "type": "demo",
+          "name": "contrast"
+        },
+        {
+          "type": "list",
+          "style": "bullets",
+          "items": [
+            "Provide descriptive alternative text attributes for all meaningful imagery to empower screen reader navigation",
+            "Ensure full keyboard navigation through Tab indexing with high-visibility focus indicator rings around active elements",
+            "Leverage semantic HTML tags such as main, nav, section, and article to provide meaningful structural landmarks for assistive devices",
+            "Never communicate crucial system state through color alone; always pair red error states with explicit text warnings and icons"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sec-5",
+      "title": "WCAG Conformance Levels and Best Practices",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "WCAG divides accessibility into three levels: A, AA, and AAA. Most schools, governments, and companies aim for Level AA."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Level",
+            "Scope",
+            "Contrast Target",
+            "Key Technical Mandates"
+          ],
+          "rows": [
+            [
+              "Level A",
+              "Minimum baseline",
+              "Not strictly numerical",
+              "Alternative text, keyboard traps prevention, meaningful sequence"
+            ],
+            [
+              "Level AA",
+              "Global industry standard",
+              "4.5:1 for body copy",
+              "Adequate contrast, visible keyboard focus, responsive reflow"
+            ],
+            [
+              "Level AAA",
+              "Specialized maximum access",
+              "7.0:1 for body copy",
+              "Sign language translation, zero flashing triggers, extended timing"
+            ]
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "title": "The Aesthetic Low-Contrast Trap",
+          "text": "Styling light-gray text on a pale-gray background might look sleek on an expensive color-calibrated monitor, but it renders text completely illegible on budget mobile screens in direct sunlight."
+        }
+      ]
+    }
+  ],
+  "recap": [
+    "UX design prioritizes task completion logic and user satisfaction, while UI crafts sensory visual aesthetics, typography, and controls.",
+    "Information architecture and visual hierarchy steer user attention through scale, contrast, white space, and breadcrumbs.",
+    "Don Norman usability principles encompass affordance, feedback, natural mapping, and preventative constraints.",
+    "WCAG Level AA mandates a minimum 4.5 to 1 contrast ratio for standard text to guarantee universal readability."
+  ],
+  "exercises": [
+    {
+      "prompt": "You are auditing a checkout form with a light-blue submit button and white text (contrast ratio 2.4:1). When clicked, the page freezes for 5 seconds without visual feedback. Identify the UX/a11y defects and propose solutions.",
+      "solution": "Defect 1: The 2.4:1 contrast violates WCAG AA minimum 4.5:1; solution is to darken the button background to deep navy (#1d4ed8) or shift text to black. Defect 2: The lack of immediate feedback causes anxious users to click multiple times; solution is to immediately transition the button to a loading state with a spinner, change text to Processing, and disable the button to prevent duplicate charges."
+    },
+    {
+      "prompt": "Why should web development teams draft low-fidelity wireframes before designing final high-fidelity mockups?",
+      "solution": "Low-fidelity wireframes allow teams to evaluate layout architecture, content prioritization, and user flow logic rapidly without getting distracted by color choices, custom icons, or typography details. Iterating on wireframes is fast and cost-effective, preventing expensive architectural redesigns later in the project."
+    },
+    {
+      "prompt": "Explain how Norman preventative constraints principle can be applied to an online university enrollment form.",
+      "solution": "Preventative constraints stop users from committing invalid entries before form submission. Examples: 1) Restricting national ID inputs to strictly 14 numeric characters and suppressing alphabetic keystrokes; 2) Using a date-picker widget that grays out future dates for birth dates; 3) Keeping the final submit button disabled until all mandatory fields pass client-side validation."
+    }
+  ],
+  "quiz": [
+    {
+      "type": "mcq",
+      "q": "What is the primary difference between User Experience (UX) and User Interface (UI)?",
+      "options": [
+        "UX focuses on user journey logic and task efficiency, while UI governs visual styling and sensory touchpoints",
+        "UI is exclusively written in SQL, while UX is written in PHP",
+        "There is no difference between them as they are completely identical concepts",
+        "UX is only applied to government portals while UI is used for mobile games"
+      ],
+      "answer": 0,
+      "explain": "UX guides the structural logic and ease of interaction, whereas UI shapes the aesthetic look and visual components."
+    },
+    {
+      "type": "tf",
+      "q": "Affordance refers to the visual design attribute of an element that intuitively communicates its functional operation.",
+      "answer": true,
+      "explain": "Affordance allows users to understand how to interact with an element (such as a raised button inviting a click) without instructions."
+    },
+    {
+      "type": "mcq",
+      "q": "What is the minimum color contrast ratio required for standard body text under WCAG 2.1 Level AA?",
+      "options": [
+        "1.5 to 1",
+        "4.5 to 1",
+        "10 to 1",
+        "100 to 1"
+      ],
+      "answer": 1,
+      "explain": "WCAG Level AA mandates at least a 4.5:1 luminance contrast ratio for regular body text."
+    },
+    {
+      "type": "tf",
+      "q": "Communicating a form validation error using only red text is sufficient to satisfy web accessibility criteria.",
+      "answer": false,
+      "explain": "Relying on color alone fails color-blind users; error states must always include explicit text descriptions and warning icons."
+    },
+    {
+      "type": "mcq",
+      "q": "Which of the following exemplifies the design principle of immediate feedback?",
+      "options": [
+        "Displaying an animated spinner and disabling a button immediately after a user taps submit",
+        "Leaving the screen completely frozen for 10 seconds without visual updates",
+        "Erasing all user inputs without an error notice upon network failure",
+        "Shrinking font size to save screen space"
+      ],
+      "answer": 0,
+      "explain": "Feedback provides immediate confirmation to the user that their interaction has been registered by the application."
+    },
+    {
+      "type": "tf",
+      "q": "Negative white space around interface cards is wasted digital space that degrades usability.",
+      "answer": false,
+      "explain": "White space is a vital structural tool that reduces visual clutter, relieves cognitive load, and elevates visual hierarchy."
+    },
+    {
+      "type": "mcq",
+      "q": "What is the primary objective of creating grayscale wireframes early in a web project?",
+      "options": [
+        "To establish layout balance and content flow without distraction from color and decorative styling",
+        "To purchase custom brand fonts before planning content",
+        "To build database tables before understanding screen flows",
+        "To publish an unfinished website to customers immediately"
+      ],
+      "answer": 0,
+      "explain": "Wireframes focus design discussions on information structure, hierarchy, and functionality rather than visual aesthetics."
+    },
+    {
+      "type": "tf",
+      "q": "HTML image alt attributes assist visually impaired visitors using screen readers and improve search engine indexing.",
+      "answer": true,
+      "explain": "Alt attributes describe image contents audibly for screen readers and textually for search crawler indexing."
+    },
+    {
+      "type": "mcq",
+      "q": "What are navigational breadcrumbs in web design?",
+      "options": [
+        "A hierarchical sequence of contextual links displaying the user current position within the site taxonomy",
+        "Spyware cookies tracking physical geographic coordinates without permission",
+        "Cached temporary database passwords",
+        "Utilities that measure broadband network bandwidth"
+      ],
+      "answer": 0,
+      "explain": "Breadcrumbs depict site architecture and provide quick parent-category navigation shortcuts."
+    },
+    {
+      "type": "match",
+      "q": "Match each Norman design principle with its practical interface application:",
+      "pairs": [
+        [
+          "Affordance",
+          "Elevated button styling signals it can be pressed"
+        ],
+        [
+          "Feedback",
+          "A spinner confirms an asynchronous API call is underway"
+        ],
+        [
+          "Constraints",
+          "Form submit remains disabled until required inputs are valid"
+        ]
+      ],
+      "explain": "Affordance suggests function, feedback confirms response, and constraints prevent erroneous submissions."
+    }
+  ]
+}

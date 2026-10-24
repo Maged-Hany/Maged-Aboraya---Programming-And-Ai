@@ -1,0 +1,423 @@
+{
+  "id": "4-3",
+  "title": "Methods of Evaluating Websites",
+  "hook": "How do you make sure your website is fast and easy to use without just guessing? In professional web design, we test websites with real users and clear speed tools to fix problems early.",
+  "objectives": [
+    "Conduct real-world usability testing observing authentic participants through think-aloud protocols",
+    "Perform expert heuristic evaluations guided by Jakob Nielsen ten usability tenets",
+    "Monitor Google Core Web Vitals to quantify loading speed, interactivity, and visual stability",
+    "Architect and execute data-driven split-run A/B tests to validate UI enhancements empirically"
+  ],
+  "keyTerms": [
+    {
+      "term": "Usability Testing",
+      "def": "An observational evaluation methodology where authentic users perform specific target scenarios while researchers note points of friction"
+    },
+    {
+      "term": "Heuristic Evaluation",
+      "def": "A systematic expert review inspecting whether an interface complies with recognized human-computer interaction heuristics"
+    },
+    {
+      "term": "Think-Aloud Protocol",
+      "def": "A testing protocol requiring participants to verbalize their thoughts, expectations, and reasoning continuously during tasks"
+    },
+    {
+      "term": "Core Web Vitals",
+      "def": "Google standardized performance metrics quantifying web speed, interactive responsiveness, and layout stability"
+    },
+    {
+      "term": "Bounce Rate",
+      "def": "The percentage of visitors who land on a web page and exit immediately without interacting or visiting a second page"
+    },
+    {
+      "term": "Heatmaps",
+      "def": "Color-graded visual representations illustrating aggregated cursor tracking, click density, and page scroll depths"
+    },
+    {
+      "term": "A/B Testing",
+      "def": "A controlled experiment comparing two versions of a webpage against split live traffic to measure conversion differences"
+    }
+  ],
+  "sections": [
+    {
+      "id": "sec-1",
+      "title": "Usability Testing and Observing Authentic Behavior",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Simply asking people what they like is not enough. Watching how real users actually use your website shows you exactly where they get stuck. Usability testing places participants into authentic workflows to pinpoint usability breakdowns."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/jakob_nielsen.jpg",
+              "badge": "Pioneer",
+              "title": "Jakob Nielsen (Usability Guru)",
+              "caption": "Co-founder of Nielsen Norman Group and creator of the 10 usability heuristics for interface evaluation."
+            },
+            {
+              "img": "/assets/img/lessons/eye_tracking.jpg",
+              "badge": "Testing Hardware",
+              "title": "Eye-Tracking Usability Analyzer",
+              "caption": "Specialized hardware sensor tracking exactly where a user looks while scanning a website."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Drafting Task Scenarios",
+              "text": "Formulate realistic, goal-oriented prompts such as find an introductory programming course and checkout, avoiding step-by-step procedural hints."
+            },
+            {
+              "title": "Recruiting Representative Participants",
+              "text": "Select 5 to 8 participants matching the authentic target audience demographics rather than internal development teammates."
+            },
+            {
+              "title": "Applying the Think-Aloud Protocol",
+              "text": "Encourage participants to speak their inner monologue freely while navigating, screen-recording their mouse cursor and emotional pauses."
+            },
+            {
+              "title": "Synthesizing Findings and Metrics",
+              "text": "Log task completion rates, time-on-task, and confusion moments to prioritize high-severity interface bug fixes."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "note",
+          "title": "Jakob Nielsen Five-User Rule",
+          "text": "Mathematical research by Nielsen and Landauer proved that testing with just 5 authentic users uncovers approximately 85 percent of all usability defects. Expanding test cohorts beyond this yields diminishing returns with repetitive observations."
+        }
+      ]
+    },
+    {
+      "id": "sec-2",
+      "title": "Heuristic Evaluation and Nielsen Ten Principles",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In a Heuristic Evaluation, UX experts inspect a website against Jakob Nielsen 10 usability rules to quickly spot design mistakes."
+        },
+        {
+          "type": "flip",
+          "items": [
+            {
+              "front": "Visibility of System Status",
+              "back": "The system should always keep users informed about ongoing operations through appropriate timely feedback like upload progress bars."
+            },
+            {
+              "front": "Match System and Real World",
+              "back": "Speak the user language with familiar concepts and real-world phrases rather than cryptic database error codes."
+            },
+            {
+              "front": "User Control and Freedom",
+              "back": "Provide clearly marked emergency exits such as undo, cancel, or back navigation when users select features mistakenly."
+            },
+            {
+              "front": "Error Prevention",
+              "back": "Careful design that eliminates error-prone conditions is far superior to crafting polite error dialogs after disasters occur."
+            }
+          ]
+        },
+        {
+          "type": "compare",
+          "left": {
+            "title": "Heuristic Evaluation (Experts)",
+            "points": [
+              "Conducted by experienced UX evaluators",
+              "Rapid turnaround and low cost without external user recruitment",
+              "Catches standard interface blunders and WCAG compliance issues early",
+              "May overlook unpredictable quirks of real non-technical audiences"
+            ]
+          },
+          "right": {
+            "title": "Usability Testing (Real Users)",
+            "points": [
+              "Conducted with authentic end-users performing real tasks",
+              "Requires dedicated logistical coordination and screen recording tools",
+              "Uncovers true emotional friction, comprehension gaps, and mental models",
+              "Delivers undeniable behavioral evidence to align stakeholder teams"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-3",
+      "title": "Google Core Web Vitals and Technical Experience Metrics",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Google Core Web Vitals measure three things that matter to every visitor: loading speed (LCP), quick button response (INP), and visual stability (CLS)."
+        },
+        {
+          "type": "stat",
+          "items": [
+            {
+              "value": "Under 2.5s",
+              "label": "Good target for Largest Contentful Paint (LCP) visual hero load"
+            },
+            {
+              "value": "Under 200ms",
+              "label": "Good target for Interaction to Next Paint (INP) responsiveness"
+            },
+            {
+              "value": "Under 0.1",
+              "label": "Good target for Cumulative Layout Shift (CLS) visual stability"
+            }
+          ]
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "title": "Largest Contentful Paint (LCP)",
+              "text": "Measures perceived load speed by logging when the primary above-the-fold image or content block finishes rendering; must remain under 2.5 seconds."
+            },
+            {
+              "title": "Interaction to Next Paint (INP)",
+              "text": "Measures overall UI responsiveness when users tap buttons or toggle menus; the browser paint update should complete within 200 milliseconds."
+            },
+            {
+              "title": "Cumulative Layout Shift (CLS)",
+              "text": "Quantifies unexpected layout shifting caused by late-loading banner ads or un-dimensioned imagery; score must remain below 0.1."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "tip",
+          "title": "Search Ranking Factor",
+          "text": "Core Web Vitals serve as direct Google search ranking signals. Slow or visually jittery websites get demoted in search engine results pages in favor of responsive, stable competitors."
+        }
+      ]
+    },
+    {
+      "id": "sec-4",
+      "title": "Behavioral Web Analytics and Aggregate Heatmaps",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Web analytics tools and heatmaps track how thousands of visitors click and scroll, helping us improve the site based on real numbers."
+        },
+        {
+          "type": "figures",
+          "items": [
+            {
+              "img": "/assets/img/lessons/ab_testing.jpg",
+              "badge": "Analytics Tool",
+              "title": "Visual Engagement & Analytics Tracking",
+              "caption": "Data visualizations helping teams measure visitor behavior and compare A/B test results."
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Metric / Tool",
+            "Core Purpose",
+            "High Metric Significance",
+            "Remediation Action"
+          ],
+          "rows": [
+            [
+              "Bounce Rate",
+              "Single-page sessions without interaction",
+              "Content mismatch or agonizing load latency",
+              "Clarify value proposition and accelerate asset loading"
+            ],
+            [
+              "Conversion Rate",
+              "Percentage completing target business goals",
+              "Streamlined intuitive checkout / signup journey",
+              "Amplify CTA visibility and eliminate redundant form fields"
+            ],
+            [
+              "Click Heatmaps",
+              "Aggregated mouse tap / click distribution",
+              "Highlights users clicking dead unlinked graphics",
+              "Convert heavily clicked graphic badges into interactive links"
+            ],
+            [
+              "Scroll Heatmaps",
+              "Vertical page depth reached by audience",
+              "Steep drop-off indicates content buried too low",
+              "Move critical value messaging and primary CTAs above the fold"
+            ]
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warning",
+          "title": "Rage Clicks Detection",
+          "text": "Heatmaps highlight rage clicks when a visitor clicks rapidly on the exact same coordinate multiple times. This signals deep user exasperation caused by a frozen UI script or pseudo-button styling."
+        }
+      ]
+    },
+    {
+      "id": "sec-5",
+      "title": "Controlled Split Testing (A/B Testing)",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Instead of arguing over which button color or title is better, A/B testing shows Version A to half the visitors and Version B to the other half to see which one wins."
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": "Formulate Empirical Hypothesis",
+              "text": "Postulate that replacing the generic button label Submit with Start Free Trial will increase course enrollment by 15 percent."
+            },
+            {
+              "title": "Develop Variant B",
+              "text": "Create an alternate branch holding every page element constant except for the specific test variable under evaluation."
+            },
+            {
+              "title": "Split Traffic Concurrently",
+              "text": "Direct 50 percent of incoming traffic to control Variant A and 50 percent to challenger Variant B across the exact same timeframe."
+            },
+            {
+              "title": "Measure Statistical Significance",
+              "text": "Gather sufficient sample volume until confidence intervals reach 95 percent or higher before permanently rolling out the winner."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "think",
+          "title": "Isolate Single Variables",
+          "text": "Modifying the headline, color palette, navigation menu, and pricing model simultaneously obscures causality; if conversions jump, you will never know which modification drove the improvement."
+        }
+      ]
+    }
+  ],
+  "recap": [
+    "Usability testing observes real users verbalizing thoughts via think-aloud protocols; testing 5 users uncovers 85 percent of core defects.",
+    "Heuristic evaluation provides swift, cost-effective expert reviews benchmarked against Jakob Nielsen 10 tenets.",
+    "Core Web Vitals benchmark real-world performance: LCP under 2.5s, INP under 200ms, and CLS under 0.1.",
+    "A/B split testing and heatmaps replace subjective debates with quantitative, empirical decision-making."
+  ],
+  "exercises": [
+    {
+      "prompt": "An educational platform exhibits an 82 percent bounce rate on its landing page. Diagnostics reveal an LCP score of 7.1 seconds and a CLS score of 0.42 caused by dynamic hero ads pushing text downward. Formulate an engineering remediation plan.",
+      "solution": "1) Remediate LCP: Compress high-resolution hero graphics into modern WebP format, implement preloading via link rel=preload, and configure browser caching to bring LCP under 2.5 seconds. 2) Remediate CLS: Explicitly reserve CSS aspect-ratio or min-height layout boxes for dynamic banner ads so that the viewport layout remains structurally locked when ads load, dropping CLS below 0.1."
+    },
+    {
+      "prompt": "Outline a usability testing plan for high school students registering for term exams. Include one target task scenario and explain how the observer enforces the think-aloud protocol.",
+      "solution": "Plan: Recruit 5 authentic grade 11 students with no prior platform exposure. Task scenario: You need to register for the Grade 11 Programming and AI Exam for Term 1. Please locate the course syllabus and complete the exam enrollment confirmation. Think-aloud protocol: The observer asks the student to narrate everything they see and think out loud (e.g. I am clicking the curriculum tab because I expect the exam link to live there). The observer remains neutral and avoids offering hints."
+    },
+    {
+      "prompt": "Differentiate between heuristic evaluation and A/B testing across execution method, cost, and qualitative versus quantitative outcomes.",
+      "solution": "Execution & Evaluators: Heuristic evaluation is an expert-driven qualitative audit assessing an interface against standard usability guidelines (e.g. Nielsen heuristics), usually performed quickly by 1-3 specialists at low cost. A/B testing is an empirical quantitative experiment where two live variants are served simultaneously to thousands of authentic users to measure statistical conversion differences."
+    }
+  ],
+  "quiz": [
+    {
+      "type": "mcq",
+      "q": "According to Jakob Nielsen usability research, what is the optimal sample size to uncover roughly 85% of usability defects?",
+      "options": [
+        "1 user",
+        "5 users",
+        "500 users",
+        "100,000 users"
+      ],
+      "answer": 1,
+      "explain": "Nielsen research demonstrated that testing with 5 authentic users captures the vast majority of usability flaws efficiently."
+    },
+    {
+      "type": "tf",
+      "q": "During a think-aloud usability session, the facilitator should immediately intervene and complete the task for the student whenever they struggle.",
+      "answer": false,
+      "explain": "Facilitators must observe silently without assisting so they can accurately document authentic friction points."
+    },
+    {
+      "type": "mcq",
+      "q": "What is the recommended threshold for Largest Contentful Paint (LCP) under Google Core Web Vitals?",
+      "options": [
+        "Under 2.5 seconds",
+        "Under 15 seconds",
+        "Under 60 seconds",
+        "Load time is irrelevant as long as it opens eventually"
+      ],
+      "answer": 0,
+      "explain": "Google Core Web Vitals benchmarks LCP under 2.5 seconds for a good user experience."
+    },
+    {
+      "type": "tf",
+      "q": "Cumulative Layout Shift (CLS) measures layout stability and should ideally remain under 0.1 to avoid jarring visual jumps.",
+      "answer": true,
+      "explain": "A CLS score below 0.1 ensures elements do not jump abruptly while reading or interacting."
+    },
+    {
+      "type": "mcq",
+      "q": "What does a web heatmap visually illustrate through color gradations?",
+      "options": [
+        "Aggregated cursor movement, click concentration, and scroll depths across page sections",
+        "Database thermal temperatures inside the server rack",
+        "Network cable resistance across geographical countries",
+        "The battery life of visitor mobile devices"
+      ],
+      "answer": 0,
+      "explain": "Heatmaps visualize aggregate behavioral density, highlighting where visitors look, click, and stop scrolling."
+    },
+    {
+      "type": "tf",
+      "q": "In scientific A/B split testing, developers should alter five major visual variables simultaneously on Variant B.",
+      "answer": false,
+      "explain": "Isolating one variable at a time ensures you understand precisely which modification altered user behavior."
+    },
+    {
+      "type": "mcq",
+      "q": "Which Nielsen usability heuristic mandates providing emergency exits such as undo or cancel buttons?",
+      "options": [
+        "User Control and Freedom",
+        "Aesthetic and Minimalist Design",
+        "Flexibility and Efficiency of Use",
+        "Suppression of System Status"
+      ],
+      "answer": 0,
+      "explain": "User Control and Freedom ensures users can undo accidental actions without navigating complex menus."
+    },
+    {
+      "type": "tf",
+      "q": "An 85 percent bounce rate on an e-commerce landing page invariably indicates exceptional user engagement.",
+      "answer": false,
+      "explain": "A high bounce rate indicates visitors leave immediately without interaction, signaling content irrelevance or poor performance."
+    },
+    {
+      "type": "mcq",
+      "q": "What does the occurrence of rage clicks signal in behavioral web analytics?",
+      "options": [
+        "Frustrated users repeatedly clicking an unresponsive element or broken link in rapid succession",
+        "Pro-gamers achieving high actions per minute on an online game",
+        "A distributed denial of service cyber attack",
+        "Successful multi-item cart purchases"
+      ],
+      "answer": 0,
+      "explain": "Rage clicks occur when visitors tap an element repeatedly because the interface fails to respond."
+    },
+    {
+      "type": "match",
+      "q": "Match each Core Web Vital metric with its target dimension of user experience:",
+      "pairs": [
+        [
+          "LCP",
+          "Perceived loading speed of primary visual content"
+        ],
+        [
+          "CLS",
+          "Visual layout stability and absence of unexpected jumps"
+        ],
+        [
+          "INP",
+          "Interactive responsiveness when clicking buttons or controls"
+        ]
+      ],
+      "explain": "LCP tracks visual loading, CLS monitors layout stability, and INP measures interactive responsiveness."
+    }
+  ]
+}

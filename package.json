@@ -1,0 +1,13 @@
+{
+  "name": "bac2-programming-ai",
+  "version": "1.0.0",
+  "description": "Interactive study site for Programming & AI, Grade 11 Baccalaureate (Egypt)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Maged Aboraya",
+  "license": "UNLICENSED",
+  "private": true
+}
+
