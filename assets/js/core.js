@@ -5,7 +5,6 @@
   gsap.registerPlugin(ScrollTrigger);
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!reduced) document.documentElement.classList.add('js-anim');
 
   /* ---------- UI strings ---------- */
   const STR = {
@@ -87,7 +86,40 @@
       zenExit: 'إنهاء وضع التركيز',
       zenEsc: 'ESC للخروج',
       zenFontNormal: 'خط عادي',
-      zenFontBig: 'خط كبير'
+      zenFontBig: 'خط كبير',
+      siteTitle: 'البرمجة والذكاء الاصطناعي',
+      siteSub: 'شرح مبسّط لكل درس، أمثلة وصور حقيقية، تمارين محلولة، واختبار قصير في نهاية كل درس.',
+      startFirst: 'ابدأ الدرس الأول',
+      continueLesson: 'كمّل من حيث توقفت',
+      allDone: 'خلّصت كل الدروس! راجع أي درس',
+      browse: 'تصفّح الفصول',
+      yourProgress: 'تقدّمك',
+      lessonsDone: 'درس مكتمل',
+      avgScore: 'متوسط الاختبارات',
+      stream: 'القسم',
+      chaptersTitle2: 'الفصول والدروس',
+      chaptersSub: 'اختر أي درس وابدأ مباشرة.',
+      inChapter: 'شخصيات وأجهزة في هذا الفصل',
+      allChapters: 'كل الفصول',
+      onThisPage: 'في هذا الدرس',
+      minRead: 'دقيقة قراءة',
+      prevLesson: 'الدرس السابق',
+      textSize: 'حجم الخط',
+      youWillLearn: 'ستتعلم في هذا الدرس',
+      showAll: 'اعرض الكل',
+      hideAll: 'أخفِ الكل',
+      translationOn: 'الترجمة العربية: ظاهرة',
+      translationOff: 'إظهار الترجمة العربية',
+      listen: 'استمع',
+      stop: 'إيقاف',
+      pause: 'إيقاف مؤقت',
+      resume: 'استئناف',
+      speed: 'السرعة',
+      close: 'إغلاق',
+      searchPh: 'ابحث عن درس أو مصطلح أو شخصية…',
+      search: 'بحث',
+      lightMode: 'الوضع النهاري',
+      darkMode: 'الوضع الليلي'
     },
     en: {
       brand: 'Maged Aboraya',
@@ -167,7 +199,40 @@
       zenExit: 'Exit Focus Mode',
       zenEsc: 'ESC to exit',
       zenFontNormal: 'Normal font',
-      zenFontBig: 'Large font'
+      zenFontBig: 'Large font',
+      siteTitle: 'Programming & AI',
+      siteSub: 'Clear explanations for every lesson, real photos and examples, worked exercises, and a short quiz at the end of each lesson.',
+      startFirst: 'Start the first lesson',
+      continueLesson: 'Continue where you left off',
+      allDone: 'You finished every lesson! Review any of them',
+      browse: 'Browse chapters',
+      yourProgress: 'Your progress',
+      lessonsDone: 'lessons completed',
+      avgScore: 'Average quiz score',
+      stream: 'Stream',
+      chaptersTitle2: 'Chapters & lessons',
+      chaptersSub: 'Pick any lesson and jump straight in.',
+      inChapter: 'People and devices in this chapter',
+      allChapters: 'All chapters',
+      onThisPage: 'In this lesson',
+      minRead: 'min read',
+      prevLesson: 'Previous lesson',
+      textSize: 'Text size',
+      youWillLearn: 'In this lesson you will',
+      showAll: 'Show all',
+      hideAll: 'Hide all',
+      translationOn: 'Arabic translation: on',
+      translationOff: 'Show Arabic translation',
+      listen: 'Listen',
+      stop: 'Stop',
+      pause: 'Pause',
+      resume: 'Resume',
+      speed: 'Speed',
+      close: 'Close',
+      searchPh: 'Search lessons, key terms, people…',
+      search: 'Search',
+      lightMode: 'Light mode',
+      darkMode: 'Dark mode'
     }
   };
 
@@ -210,71 +275,32 @@
     return cache.get(url);
   }
 
-  /* ---------- smooth scroll (Lenis driven by GSAP ticker) ---------- */
-  let lenis = null;
-  function initSmoothScroll() {
-    if (reduced || lenis || typeof Lenis === 'undefined') return;
-    lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 0.95, smoothWheel: true });
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add(t => lenis.raf(t * 1000));
-    gsap.ticker.lagSmoothing(0);
-  }
+  /* ---------- scrolling (native: fast and predictable on every device) ---------- */
+  function initSmoothScroll() { /* native scrolling is used on purpose */ }
+  const HEADER_OFFSET = 76;
   function scrollToY(y, immediate) {
-    if (lenis) lenis.scrollTo(y, { immediate: !!immediate, duration: 1.4, easing: x => 1 - Math.pow(1 - x, 4) });
-    else window.scrollTo({ top: y, behavior: immediate ? 'auto' : 'smooth' });
+    window.scrollTo({ top: Math.max(0, y), behavior: immediate || reduced ? 'auto' : 'smooth' });
   }
   function scrollToEl(el, offset) {
     if (!el) return;
-    scrollToY(el.getBoundingClientRect().top + window.scrollY - (offset || 0));
+    scrollToY(el.getBoundingClientRect().top + window.scrollY - (offset == null ? HEADER_OFFSET : offset));
   }
-  const getLenis = () => lenis;
+  const getLenis = () => null;
 
-  /* ---------- scroll reveal engine ---------- */
+  /* ---------- reveal engine ----------
+     Content is always visible immediately (no blank areas while scrolling).
+     Only the timeline progress line is animated. */
   const made = [];
-  let refreshTimer = 0;
   function scan(root) {
-    if (reduced) return;
+    if (reduced || typeof ScrollTrigger === 'undefined') return;
     const scope = root || document;
-    scope.querySelectorAll('[data-reveal]:not([data-r])').forEach(el => {
-      el.dataset.r = '1';
-      const kind = el.dataset.reveal;
-      const from = kind === 'fade' ? { opacity: 0 } : kind === 'left' ? { opacity: 0, x: -40 } : kind === 'scale' ? { opacity: 0, scale: .94 } : { opacity: 0, y: 40 };
-      const tw = gsap.fromTo(el, from, { opacity: 1, x: 0, y: 0, scale: 1, duration: 1, ease: 'power3.out', delay: +(el.dataset.delay || 0), scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
-      made.push(tw);
-    });
-    scope.querySelectorAll('[data-stagger]:not([data-r])').forEach(el => {
-      el.dataset.r = '1';
-      const kids = Array.from(el.children);
-      const tw = gsap.fromTo(kids, { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', stagger: .09, scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
-      made.push(tw);
-    });
-    scope.querySelectorAll('[data-words]:not([data-r])').forEach(el => {
-      el.dataset.r = '1';
-      const words = el.querySelectorAll('.wi');
-      const tw = gsap.fromTo(words, { yPercent: 115 }, { yPercent: 0, duration: 1.1, ease: 'power4.out', stagger: .07, delay: +(el.dataset.delay || 0), scrollTrigger: { trigger: el, start: 'top 92%', once: true } });
-      made.push(tw);
-    });
-    scope.querySelectorAll('[data-scrub-words]:not([data-r])').forEach(el => {
-      el.dataset.r = '1';
-      const words = el.querySelectorAll('.sw');
-      const tw = gsap.fromTo(words, { opacity: .14 }, { opacity: 1, ease: 'none', stagger: .12, scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 45%', scrub: true } });
-      made.push(tw);
-    });
     scope.querySelectorAll('[data-draw]:not([data-r])').forEach(el => {
       el.dataset.r = '1';
       const fill = el.querySelector('.tl-fill');
       if (!fill) return;
-      const tw = gsap.fromTo(fill, { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 70%', end: 'bottom 60%', scrub: true } });
+      const tw = gsap.fromTo(fill, { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 75%', end: 'bottom 60%', scrub: true } });
       made.push(tw);
     });
-    scope.querySelectorAll('[data-parallax]:not([data-r])').forEach(el => {
-      el.dataset.r = '1';
-      const amt = +el.dataset.parallax;
-      const tw = gsap.fromTo(el, { y: -amt }, { y: amt, ease: 'none', scrollTrigger: { trigger: el.parentElement || el, start: 'top bottom', end: 'bottom top', scrub: true } });
-      made.push(tw);
-    });
-    clearTimeout(refreshTimer);
-    refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 250);
   }
   function killAll() {
     while (made.length) {
@@ -292,11 +318,9 @@
   }
 
   /* ---------- tiny components ---------- */
-  function Words({ text, tag, className, delay }) {
+  function Words({ text, tag, className }) {
     const T = tag || 'span';
-    return h(T, { className: 'words ' + (className || ''), 'data-words': '', 'data-delay': delay || 0, 'aria-label': Array.isArray(text) ? text.join(' ') : text },
-      (Array.isArray(text) ? text : String(text).split(' ')).map((w, i) =>
-        h('span', { className: 'w', key: i, 'aria-hidden': 'true' }, h('span', { className: 'wi' }, w), ' ')));
+    return h(T, { className: className || '' }, Array.isArray(text) ? text.join(' ') : text);
   }
   function ScrubWords({ text, className }) {
     return h('p', { className: 'scrub ' + (className || ''), 'data-scrub-words': '' },
