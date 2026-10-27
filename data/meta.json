@@ -32,7 +32,7 @@
     {
       "id": 3,
       "accent": "#0f9d8a",
-      "title": { "ar": "الويب", "en": "The Web" },
+      "title": { "ar": "تطوير الويب", "en": "Web Development" },
       "blurb": {
         "ar": "ماذا يحدث بين ضغطة الزر وظهور الصفحة؟ بنية تطبيقات الويب وطرق الاتصال وأساسيات الواجهة الأمامية.",
         "en": "What happens between a click and a page appearing? Web app architecture, communication, and front-end basics."
