@@ -890,10 +890,59 @@
     }).slice(0, 12);
   }
 
+  /* ---------- site texts remote synchronization ---------- */
+  const textListeners = new Set();
+  const notifyTextChange = () => textListeners.forEach(fn => fn(STR));
+  const subscribeTexts = (fn) => { textListeners.add(fn); return () => textListeners.delete(fn); };
+
+  async function loadSiteTexts() {
+    try {
+      const res = await fetch('/api/site/texts');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.texts) {
+          if (data.texts.ar) Object.assign(STR.ar, data.texts.ar);
+          if (data.texts.en) Object.assign(STR.en, data.texts.en);
+          notifyTextChange();
+          if (STR.ar.siteTitle) document.title = STR.ar.siteTitle;
+          return data.texts;
+        }
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  async function saveSiteTexts(updatedTexts) {
+    try {
+      const res = await fetch('/api/site/texts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedTexts)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.texts) {
+          if (data.texts.ar) Object.assign(STR.ar, data.texts.ar);
+          if (data.texts.en) Object.assign(STR.en, data.texts.en);
+          notifyTextChange();
+          if (STR.ar.siteTitle) document.title = STR.ar.siteTitle;
+          return { ok: true, texts: data.texts };
+        }
+      }
+    } catch (e) {
+      return { error: 'تعذّر الاتصال بالخادم لحفظ النصوص' };
+    }
+    return { error: 'تعذّر حفظ النصوص' };
+  }
+
+  // Auto-load on page script execution
+  loadSiteTexts();
+
   window.App = {
     h, STR, Store, useStore, LangCtx, useLang, getJSON, initSmoothScroll, scrollToY, scrollToEl, getLenis,
     scan, killAll, useScan, Words, ScrubWords, reduced, TTS, search, SEARCH_ITEMS,
-    Auth, useAuth, COUNTRIES, StoreVideos
+    Auth, useAuth, COUNTRIES, StoreVideos,
+    loadSiteTexts, saveSiteTexts, subscribeTexts
   };
 })();
 

@@ -21,6 +21,7 @@ const PUBLIC_DIRS = ['assets'];
 const LANGS = new Set(['ar', 'en']);
 const USERS_FILE = path.join(ROOT, 'data', 'users.json');
 const VIDEOS_FILE = path.join(ROOT, 'data', 'videos.json');
+const TEXTS_FILE = path.join(ROOT, 'data', 'texts.json');
 
 const send = (res, code, body, type = 'application/json; charset=utf-8', extra = {}) => {
   res.writeHead(code, { 'Content-Type': type, 'X-Content-Type-Options': 'nosniff', ...extra });
@@ -62,6 +63,19 @@ function getVideos() {
 
 function saveVideos(data) {
   fs.writeFileSync(VIDEOS_FILE, JSON.stringify(data, null, 2), 'utf8');
+}
+
+function getTexts() {
+  if (!fs.existsSync(TEXTS_FILE)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(TEXTS_FILE, 'utf8').replace(/^\uFEFF/, ''));
+  } catch (e) {
+    return null;
+  }
+}
+
+function saveTexts(data) {
+  fs.writeFileSync(TEXTS_FILE, JSON.stringify(data, null, 2), 'utf8');
 }
 
 function readBody(req) {
@@ -217,6 +231,25 @@ async function handleApi(req, url, res) {
     v[lessonId] = String(videoUrl || '').trim();
     saveVideos(v);
     return sendJSON(res, 200, { ok: true, videoUrl: v[lessonId] });
+  }
+
+  // GET /api/site/texts
+  if (method === 'GET' && parts[1] === 'site' && parts[2] === 'texts') {
+    const t = getTexts();
+    return sendJSON(res, 200, { ok: true, texts: t }, { 'Cache-Control': 'no-cache' });
+  }
+
+  // POST /api/site/texts
+  if (method === 'POST' && parts[1] === 'site' && parts[2] === 'texts') {
+    const payload = await readBody(req);
+    if (!payload || typeof payload !== 'object') {
+      return sendJSON(res, 400, { error: 'Invalid payload' });
+    }
+    const current = getTexts() || { ar: {}, en: {} };
+    if (payload.ar) current.ar = { ...(current.ar || {}), ...payload.ar };
+    if (payload.en) current.en = { ...(current.en || {}), ...payload.en };
+    saveTexts(current);
+    return sendJSON(res, 200, { ok: true, texts: current });
   }
 
   return sendJSON(res, 404, { error: 'not found' });

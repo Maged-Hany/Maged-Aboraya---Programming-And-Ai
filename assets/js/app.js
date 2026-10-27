@@ -145,9 +145,11 @@
   }
 
   /* ============ auth portal (register + login) ============ */
-  function AuthPortal({ onAuthSuccess }) {
+  function AuthPortal({ onAuthSuccess, onOpenTextsEditor }) {
     const [tab, setTab] = useState('register');
     const [lang, setLang] = useState('ar');
+    const [tv, setTv] = useState(0);
+    useEffect(() => App.subscribeTexts(() => setTv(v => v + 1)), []);
     const t = App.STR[lang];
 
     const [name, setName] = useState('');
@@ -451,12 +453,25 @@
           )
         ),
         h('div', { className: 'auth-foot' },
-          h('span', null, '© ' + new Date().getFullYear() + ' Maged Aboraya. All rights reserved.'),
-          h('button', {
-            type: 'button',
-            className: 'auth-lang-toggle',
-            onClick: () => setLang(lang === 'ar' ? 'en' : 'ar')
-          }, lang === 'ar' ? 'English Interface' : 'الواجهة العربية')
+          h('span', null, '© ' + new Date().getFullYear() + ' ' + (t.brand || 'Maged Aboraya') + '. ' + (t.footerRights || 'All rights reserved.')),
+          h('div', { className: 'auth-foot-actions' },
+            h('button', {
+              type: 'button',
+              className: 'auth-edit-texts-btn',
+              onClick: onOpenTextsEditor,
+              title: lang === 'ar' ? 'تعديل نصوص الموقع (Ctrl + Shift + E)' : 'Edit Site Texts (Ctrl + Shift + E)'
+            },
+              h('svg', { width: 13, height: 13, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+                h('path', { d: 'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7' }),
+                h('path', { d: 'M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z' })),
+              h('span', null, lang === 'ar' ? 'تعديل نصوص الموقع' : 'Edit Texts')
+            ),
+            h('button', {
+              type: 'button',
+              className: 'auth-lang-toggle',
+              onClick: () => setLang(lang === 'ar' ? 'en' : 'ar')
+            }, lang === 'ar' ? 'English Interface' : 'الواجهة العربية')
+          )
         )
       )
     );
@@ -601,14 +616,28 @@
         authUser ? h(StudentProfileMenu, { user: authUser, onLogout, lang, totalLessons: total, doneLessons: done }) : null));
   }
 
-  function Footer() {
-    const { t } = useLang();
+  function Footer({ onOpenTextsEditor }) {
+    const { t, lang } = useLang();
     return h('footer', { className: 'ftr' },
       h('div', { className: 'ftr-in' },
-        h('div', { className: 'ftr-big', 'aria-hidden': 'true' }, 'Maged Aboraya'),
+        h('div', { className: 'ftr-big', 'aria-hidden': 'true' }, t.brand || 'Maged Aboraya'),
         h('div', { className: 'ftr-row' },
           t.footerNote ? h('p', null, t.footerNote) : null,
-          h('p', { className: 'copy' }, '© ', new Date().getFullYear(), ' Maged Aboraya. ', t.footerRights, '.'))));
+          h('p', { className: 'copy' }, '© ', new Date().getFullYear(), ' ', t.brand || 'Maged Aboraya', '. ', t.footerRights, '.'),
+          h('button', {
+            type: 'button',
+            className: 'ftr-edit-texts-btn',
+            onClick: onOpenTextsEditor,
+            title: lang === 'ar' ? 'تعديل جميع نصوص الموقع (Ctrl + Shift + E)' : 'Edit Site Texts (Ctrl + Shift + E)'
+          },
+            h('svg', { width: 13, height: 13, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+              h('path', { d: 'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7' }),
+              h('path', { d: 'M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z' })),
+            h('span', null, lang === 'ar' ? 'تعديل نصوص الموقع' : 'Edit Site Texts')
+          )
+        )
+      )
+    );
   }
 
   /* ============ marquee ============ */
@@ -1196,6 +1225,304 @@
           h('span', { className: 'zen-esc-kbd' }, 'ESC'))));
   }
 
+  /* ============ visual site texts editor modal ============ */
+  const TEXT_CATEGORIES = [
+    {
+      id: 'auth',
+      nameAr: 'بوابة الدخول والتسجيل',
+      nameEn: 'Auth & Registration',
+      keys: [
+        { key: 'authHeading', labelAr: 'عنوان الصفحة الرئيسي', labelEn: 'Main Heading' },
+        { key: 'authSub', labelAr: 'الوصف والرسالة الترحيبية', labelEn: 'Welcome Subtitle', isLong: true },
+        { key: 'registerTab', labelAr: 'تبويب إنشاء حساب', labelEn: 'Register Tab' },
+        { key: 'loginTab', labelAr: 'تبويب تسجيل الدخول', labelEn: 'Login Tab' },
+        { key: 'fullName', labelAr: 'تسمية حقل الاسم', labelEn: 'Full Name Label' },
+        { key: 'fullNamePh', labelAr: 'المثال داخل حقل الاسم', labelEn: 'Full Name Placeholder' },
+        { key: 'username', labelAr: 'تسمية حقل اسم الحساب', labelEn: 'Username Label' },
+        { key: 'usernamePh', labelAr: 'المثال داخل حقل اسم الحساب', labelEn: 'Username Placeholder' },
+        { key: 'gmail', labelAr: 'تسمية حقل الجيميل', labelEn: 'Gmail Label' },
+        { key: 'phone', labelAr: 'تسمية حقل الهاتف', labelEn: 'Phone Label' },
+        { key: 'password', labelAr: 'تسمية حقل كلمة المرور', labelEn: 'Password Label' },
+        { key: 'passwordPh', labelAr: 'تنبيه شروط كلمة المرور', labelEn: 'Password Hint' },
+        { key: 'confirmPassword', labelAr: 'تسمية تأكيد كلمة المرور', labelEn: 'Confirm Password Label' },
+        { key: 'selectCountry', labelAr: 'تسمية اختيار الدولة', labelEn: 'Select Country Label' },
+        { key: 'streamHeading', labelAr: 'سؤال اختيار الشعبة/القسم', labelEn: 'Stream Heading' },
+        { key: 'streamAr', labelAr: 'خيار القسم العربي', labelEn: 'Arabic Option' },
+        { key: 'streamEn', labelAr: 'خيار قسم اللغات', labelEn: 'Languages Option' },
+        { key: 'btnRegister', labelAr: 'زر إنشاء الحساب', labelEn: 'Create Account Button' },
+        { key: 'btnLogin', labelAr: 'زر تسجيل الدخول', labelEn: 'Sign In Button' },
+        { key: 'haveAccount', labelAr: 'سؤال لديك حساب بالفعل؟', labelEn: 'Have Account Text' },
+        { key: 'noAccount', labelAr: 'سؤال ليس لديك حساب؟', labelEn: 'No Account Text' },
+        { key: 'goToLogin', labelAr: 'زر الانتقال لتسجيل الدخول', labelEn: 'Go To Login Text' },
+        { key: 'goToRegister', labelAr: 'زر الانتقال للتسجيل الجديد', labelEn: 'Go To Register Text' },
+        { key: 'regSuccess', labelAr: 'رسالة نجاح إنشاء الحساب', labelEn: 'Registration Success Notice', isLong: true }
+      ]
+    },
+    {
+      id: 'brand',
+      nameAr: 'العناوين والهيدر والفوتر',
+      nameEn: 'Brand, Header & Footer',
+      keys: [
+        { key: 'siteTitle', labelAr: 'عنوان الموقع في المتصفح (Tab Title)', labelEn: 'Browser Tab Title' },
+        { key: 'brand', labelAr: 'اسم المنصة / الأستاذ', labelEn: 'Platform Brand Name' },
+        { key: 'grade', labelAr: 'الصف الدراسي والمرحلة', labelEn: 'Grade & Stage' },
+        { key: 'heroKicker', labelAr: 'شارة رأس الصفحة الرئيسية', labelEn: 'Hero Top Kicker' },
+        { key: 'heroSub', labelAr: 'الوصف الرئيسي للمنصة', labelEn: 'Hero Description', isLong: true },
+        { key: 'heroCta', labelAr: 'زر بدء التعلم الرئيسي', labelEn: 'Hero Start Button' },
+        { key: 'manifesto', labelAr: 'فقرة رسالة المنصة وطريقة التعلم', labelEn: 'Platform Manifesto', isLong: true },
+        { key: 'chaptersKicker', labelAr: 'شارة قسم الفصول', labelEn: 'Chapters Section Kicker' },
+        { key: 'chaptersTitle', labelAr: 'عنوان قسم الفصول', labelEn: 'Chapters Section Title' },
+        { key: 'footerRights', labelAr: 'حقوق النشر في الفوتر', labelEn: 'Footer Rights Note' }
+      ]
+    },
+    {
+      id: 'guest',
+      nameAr: 'وضع الزائر (Guest Mode)',
+      nameEn: 'Guest Mode',
+      keys: [
+        { key: 'guestSignIn', labelAr: 'نص زر المتابعة كزائر', labelEn: 'Guest Button Label' },
+        { key: 'guestSubtitle', labelAr: 'الوصف تحت زر الزائر', labelEn: 'Guest Button Subtitle', isLong: true },
+        { key: 'guestBadge', labelAr: 'شارة وضع الزائر', labelEn: 'Guest Badge' },
+        { key: 'guestNoSavePill', labelAr: 'شارة مؤقت / غير محفوظ', labelEn: 'No-save Pill Tag' },
+        { key: 'guestTempWarning', labelAr: 'تنبيه عدم حفظ التقدم للزائر', labelEn: 'Guest Unsaves Notice', isLong: true },
+        { key: 'createAccountToSave', labelAr: 'زر إنشاء حساب لحفظ التقدم', labelEn: 'Save Progress Button' },
+        { key: 'exitGuest', labelAr: 'زر الخروج من وضع الزائر', labelEn: 'Exit Guest Mode Button' },
+        { key: 'orDivider', labelAr: 'كلمة الفاصل بين الدخول والزائر', labelEn: 'OR Divider Label' }
+      ]
+    },
+    {
+      id: 'lesson',
+      nameAr: 'الدروس ومحاضرات الفيديو',
+      nameEn: 'Lessons & Video Lecture',
+      keys: [
+        { key: 'lessonVideo', labelAr: 'عنوان قسم فيديو الشرح', labelEn: 'Lesson Video Heading' },
+        { key: 'lessonVideoSub', labelAr: 'وصف قسم الفيديو التفاعلي', labelEn: 'Lesson Video Subtitle', isLong: true },
+        { key: 'markVideoDone', labelAr: 'زر إنهاء الفيديو والانتقال للشرح', labelEn: 'Finish Video Button' },
+        { key: 'videoWatched', labelAr: 'شارة تمت مشاهدة المحاضرة', labelEn: 'Video Completed Badge' },
+        { key: 'continueToText', labelAr: 'زر التمرير إلى محتوى الدرس', labelEn: 'Scroll to Content Button' },
+        { key: 'objectives', labelAr: 'عنوان أهداف الدرس', labelEn: 'Objectives Heading' },
+        { key: 'keyTerms', labelAr: 'عنوان مصطلحات الدرس', labelEn: 'Key Terms Heading' },
+        { key: 'recap', labelAr: 'عنوان خلاصة الدرس', labelEn: 'Recap Heading' },
+        { key: 'practice', labelAr: 'عنوان تمارين الحل والتطبيق', labelEn: 'Practice Heading' },
+        { key: 'showSol', labelAr: 'زر إظهار الحل', labelEn: 'Show Solution Button' },
+        { key: 'hideSol', labelAr: 'زر إخفاء الحل', labelEn: 'Hide Solution Button' }
+      ]
+    },
+    {
+      id: 'quiz',
+      nameAr: 'الاختبارات والتفاعل والتركيز',
+      nameEn: 'Quizzes & Focus Mode',
+      keys: [
+        { key: 'finishTitle', labelAr: 'عنوان اكتمال القراءة', labelEn: 'Finished Reading Heading' },
+        { key: 'finishBtn', labelAr: 'زر بدء الاختبار', labelEn: 'Start Quiz Button' },
+        { key: 'quiz', labelAr: 'عنوان صندوق الاختبار', labelEn: 'Quiz Box Title' },
+        { key: 'check', labelAr: 'زر التحقق من الإجابة', labelEn: 'Check Answer Button' },
+        { key: 'next', labelAr: 'زر السؤال التالي', labelEn: 'Next Question Button' },
+        { key: 'seeResult', labelAr: 'زر عرض النتيجة', labelEn: 'See Results Button' },
+        { key: 'retry', labelAr: 'زر إعادة الاختبار', labelEn: 'Retry Quiz Button' },
+        { key: 'score', labelAr: 'تسمية النتيجة والدرجة', labelEn: 'Score Label' },
+        { key: 'msgHigh', labelAr: 'رسالة التهنئة بالدرجة العالية', labelEn: 'High Score Message' },
+        { key: 'zenMode', labelAr: 'تسمية وضع التركيز', labelEn: 'Zen Mode Label' },
+        { key: 'zenEsc', labelAr: 'تلميح الخروج من التركيز', labelEn: 'Zen Exit Hint' }
+      ]
+    }
+  ];
+
+  function SiteTextEditor({ onClose, onUpdated }) {
+    const [editLang, setEditLang] = useState('ar');
+    const [activeTab, setActiveTab] = useState('all');
+    const [searchQ, setSearchQ] = useState('');
+    const [draft, setDraft] = useState(() => ({ ...(App.STR[editLang] || {}) }));
+    const [saving, setSaving] = useState(false);
+    const [statusMsg, setStatusMsg] = useState('');
+    const [statusType, setStatusType] = useState('ok');
+
+    useEffect(() => {
+      setDraft({ ...(App.STR[editLang] || {}) });
+      setStatusMsg('');
+    }, [editLang]);
+
+    const handleFieldChange = (key, val) => {
+      setDraft(prev => ({ ...prev, [key]: val }));
+      setStatusMsg('');
+    };
+
+    const handleSave = async () => {
+      setSaving(true);
+      setStatusMsg('');
+      const res = await App.saveSiteTexts({ [editLang]: draft });
+      setSaving(false);
+      if (res && res.ok) {
+        setStatusType('ok');
+        setStatusMsg(editLang === 'ar' ? 'تم حفظ التعديلات بنجاح وتحديث الموقع فورًا!' : 'Changes saved successfully and site updated!');
+        if (onUpdated) onUpdated();
+      } else {
+        setStatusType('err');
+        setStatusMsg(editLang === 'ar' ? 'حدث خطأ أثناء حفظ التعديلات' : 'Error saving changes');
+      }
+    };
+
+    const getVisibleFields = () => {
+      let fields = [];
+      if (activeTab === 'all') {
+        TEXT_CATEGORIES.forEach(cat => {
+          cat.keys.forEach(k => {
+            if (!fields.some(f => f.key === k.key)) fields.push({ ...k, catName: editLang === 'ar' ? cat.nameAr : cat.nameEn });
+          });
+        });
+      } else {
+        const cat = TEXT_CATEGORIES.find(c => c.id === activeTab);
+        if (cat) {
+          fields = cat.keys.map(k => ({ ...k, catName: editLang === 'ar' ? cat.nameAr : cat.nameEn }));
+        }
+      }
+
+      if (searchQ.trim()) {
+        const q = searchQ.trim().toLowerCase();
+        fields = fields.filter(f => {
+          const lAr = (f.labelAr || '').toLowerCase();
+          const lEn = (f.labelEn || '').toLowerCase();
+          const kName = f.key.toLowerCase();
+          const val = String(draft[f.key] || '').toLowerCase();
+          return lAr.includes(q) || lEn.includes(q) || kName.includes(q) || val.includes(q);
+        });
+      }
+      return fields;
+    };
+
+    const visibleFields = getVisibleFields();
+
+    return h('div', { className: 'ste-overlay', onClick: e => { if (e.target === e.currentTarget) onClose(); }, dir: editLang === 'ar' ? 'rtl' : 'ltr' },
+      h('div', { className: 'ste-modal' },
+        h('div', { className: 'ste-head' },
+          h('div', { className: 'ste-title-group' },
+            h('div', { className: 'ste-title' },
+              h('svg', { width: 20, height: 20, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+                h('path', { d: 'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7' }),
+                h('path', { d: 'M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z' })),
+              h('span', null, editLang === 'ar' ? 'محرر نصوص الموقع' : 'Site Content Editor')
+            ),
+            h('p', { className: 'ste-sub' },
+              editLang === 'ar'
+                ? 'غيّر أي نص أو كلمة في الموقع هنا مباشرة واضغط حفظ بدون البحث في أي كود.'
+                : 'Edit any text or label on the website directly and click save without touching code.'
+            )
+          ),
+          h('div', { className: 'ste-head-actions' },
+            h('div', { className: 'ste-lang-switch' },
+              h('button', {
+                type: 'button',
+                className: 'ste-lang-btn' + (editLang === 'ar' ? ' active' : ''),
+                onClick: () => setEditLang('ar')
+              }, 'العربية (AR)'),
+              h('button', {
+                type: 'button',
+                className: 'ste-lang-btn' + (editLang === 'en' ? ' active' : ''),
+                onClick: () => setEditLang('en')
+              }, 'English (EN)')
+            ),
+            h('button', {
+              type: 'button',
+              className: 'ste-close-btn',
+              onClick: onClose,
+              title: editLang === 'ar' ? 'إغلاق' : 'Close'
+            },
+              h('svg', { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
+                h('line', { x1: 18, y1: 6, x2: 6, y2: 18 }),
+                h('line', { x1: 6, y1: 6, x2: 18, y2: 18 })))
+          )
+        ),
+
+        h('div', { className: 'ste-toolbar' },
+          h('div', { className: 'ste-search-wrap' },
+            h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
+              h('circle', { cx: 11, cy: 11, r: 8 }),
+              h('line', { x1: 21, y1: 21, x2: 16.65, y2: 16.65 })),
+            h('input', {
+              type: 'text',
+              className: 'ste-search-input',
+              placeholder: editLang === 'ar' ? 'ابحث عن أي نص أو كلمة لتعديلها فورًا...' : 'Search any text or label to edit instantly...',
+              value: searchQ,
+              onChange: e => setSearchQ(e.target.value)
+            })
+          ),
+          h('div', { className: 'ste-tabs' },
+            h('button', {
+              type: 'button',
+              className: 'ste-tab' + (activeTab === 'all' ? ' active' : ''),
+              onClick: () => setActiveTab('all')
+            }, editLang === 'ar' ? 'الكل' : 'All'),
+            TEXT_CATEGORIES.map(c =>
+              h('button', {
+                key: c.id,
+                type: 'button',
+                className: 'ste-tab' + (activeTab === c.id ? ' active' : ''),
+                onClick: () => setActiveTab(c.id)
+              }, editLang === 'ar' ? c.nameAr : c.nameEn)
+            )
+          )
+        ),
+
+        h('div', { className: 'ste-body' },
+          visibleFields.length === 0
+            ? h('div', { className: 'ste-empty' }, editLang === 'ar' ? 'لا توجد نصوص مطابقة للبحث' : 'No matching text fields found')
+            : visibleFields.map(f => {
+                const val = draft[f.key] != null ? draft[f.key] : '';
+                return h('div', { className: 'ste-field', key: f.key },
+                  h('div', { className: 'ste-field-meta' },
+                    h('label', { className: 'ste-field-label' }, editLang === 'ar' ? f.labelAr : f.labelEn),
+                    h('span', { className: 'ste-field-key' }, f.key),
+                    activeTab === 'all' ? h('span', { className: 'ste-field-cat' }, f.catName) : null
+                  ),
+                  f.isLong
+                    ? h('textarea', {
+                        className: 'ste-input ste-textarea',
+                        rows: 3,
+                        value: val,
+                        onChange: e => handleFieldChange(f.key, e.target.value)
+                      })
+                    : h('input', {
+                        type: 'text',
+                        className: 'ste-input',
+                        value: val,
+                        onChange: e => handleFieldChange(f.key, e.target.value)
+                      })
+                );
+              })
+        ),
+
+        h('div', { className: 'ste-foot' },
+          h('div', { className: 'ste-status-wrap' },
+            statusMsg
+              ? h('div', { className: 'ste-status-msg ' + statusType },
+                  h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
+                    h('polyline', { points: '20 6 9 17 4 12' })),
+                  h('span', null, statusMsg)
+                )
+              : h('span', { className: 'ste-hint' },
+                  editLang === 'ar'
+                    ? 'يتم حفظ التعديلات فورًا في ملف data/texts.json وتطبيقها على الموقع مباشرة.'
+                    : 'Changes are written to data/texts.json and applied live.'
+                )
+          ),
+          h('div', { className: 'ste-foot-actions' },
+            h('button', {
+              type: 'button',
+              className: 'ste-cancel-btn',
+              onClick: onClose
+            }, editLang === 'ar' ? 'إغلاق' : 'Close'),
+            h('button', {
+              type: 'button',
+              className: 'solid ste-save-btn',
+              disabled: saving,
+              onClick: handleSave
+            }, saving ? (editLang === 'ar' ? 'جارٍ الحفظ...' : 'Saving...') : (editLang === 'ar' ? 'حفظ وتطبيق التعديلات' : 'Save Changes'))
+          )
+        )
+      )
+    );
+  }
+
   /* ============ root ============ */
   function parseRoute() {
     const hash = location.hash.replace(/^#/, '') || '/';
@@ -1216,8 +1543,13 @@
     const [route, setRoute] = useState(parseRoute());
     const [meta, setMeta] = useState(null);
     const [status, setStatus] = useState(null);
+    const [textEditorOpen, setTextEditorOpen] = useState(false);
+    const [textVersion, setTextVersion] = useState(0);
 
     useEffect(() => { App.initSmoothScroll(); }, []);
+    useEffect(() => {
+      return App.subscribeTexts(() => setTextVersion(v => v + 1));
+    }, []);
     useEffect(() => {
       const f = () => setRoute(parseRoute());
       window.addEventListener('hashchange', f);
@@ -1225,11 +1557,12 @@
     }, []);
     useEffect(() => { getJSON('/api/meta').then(setMeta).catch(() => {}); getJSON('/api/status').then(setStatus).catch(() => {}); }, []);
     useEffect(() => {
-      if (!lang) return;
-      document.documentElement.lang = lang;
-      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-      document.title = 'Maged Aboraya';
-    }, [lang]);
+      const activeL = lang || 'ar';
+      document.documentElement.lang = activeL;
+      document.documentElement.dir = activeL === 'ar' ? 'rtl' : 'ltr';
+      const curT = STR[activeL];
+      document.title = (curT && (curT.siteTitle || curT.brand)) || 'Maged Aboraya';
+    }, [lang, textVersion]);
     useEffect(() => {
       document.documentElement.dataset.theme = theme;
     }, [theme]);
@@ -1243,9 +1576,14 @@
       if (route.name !== 'lesson') setZen(false);
     }, [route.name]);
 
-    // Shortcuts: Z to toggle Zen, Escape to exit Zen, Ctrl+K for search
+    // Shortcuts: Z to toggle Zen, Escape to exit Zen, Ctrl+K for search, Ctrl+Shift+E for site texts editor
     useEffect(() => {
       const onKeyDown = e => {
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'e' || e.key === 'E')) {
+          e.preventDefault();
+          setTextEditorOpen(prev => !prev);
+          return;
+        }
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
           e.preventDefault();
           setSearchOpen(prev => !prev);
@@ -1282,16 +1620,20 @@
     const authUser = App.useAuth();
 
     if (!authUser) {
-      return h(AuthPortal, {
-        onAuthSuccess: (u) => {
-          Store.loadUser(u.username);
-          Store.set({ lang: u.stream || 'ar' });
-        }
-      });
+      return h(React.Fragment, null,
+        h(AuthPortal, {
+          onAuthSuccess: (u) => {
+            Store.loadUser(u.username);
+            Store.set({ lang: u.stream || 'ar' });
+          },
+          onOpenTextsEditor: () => setTextEditorOpen(true)
+        }),
+        textEditorOpen ? h(SiteTextEditor, { onClose: () => setTextEditorOpen(false), onUpdated: () => setTextVersion(v => v + 1) }) : null
+      );
     }
 
     const currentLang = lang || (authUser && authUser.stream) || 'ar';
-    const ctx = useMemo(() => ({ lang: currentLang, t: STR[currentLang], dir: currentLang === 'ar' ? 'rtl' : 'ltr' }), [currentLang]);
+    const ctx = useMemo(() => ({ lang: currentLang, t: STR[currentLang], dir: currentLang === 'ar' ? 'rtl' : 'ltr' }), [currentLang, textVersion]);
     const switchLang = () => Store.set({ lang: currentLang === 'ar' ? 'en' : 'ar' });
     const toggleTheme = () => Store.set({ theme: theme === 'dark' ? 'light' : 'dark' });
     const toggleZen = () => setZen(prev => !prev);
@@ -1323,9 +1665,11 @@
       route.name === 'lesson'
         ? h(Lesson, { key: route.id + lang, id: route.id, meta, status, zen, onToggleZen: toggleZen })
         : h(Home, { key: 'home' + lang, meta, status, route }),
-      h(Footer),
+      h(Footer, { onOpenTextsEditor: () => setTextEditorOpen(true) }),
       h(SpotlightSearch, { open: searchOpen, onClose: () => setSearchOpen(false), lang }),
-      h(TTSPlayerBar));
+      h(TTSPlayerBar),
+      textEditorOpen ? h(SiteTextEditor, { onClose: () => setTextEditorOpen(false), onUpdated: () => setTextVersion(v => v + 1) }) : null
+    );
   }
 
   ReactDOM.createRoot(document.getElementById('root')).render(h(Root));
