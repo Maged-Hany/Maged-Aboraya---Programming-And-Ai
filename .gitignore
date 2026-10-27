@@ -6,3 +6,10 @@ Thumbs.db
 .vscode/
 .idea/
 
+# 3-Layer Architecture (AGENTS.md)
+.tmp/
+.env
+credentials.json
+token.json
+
+
