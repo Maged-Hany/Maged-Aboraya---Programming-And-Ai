@@ -99,9 +99,13 @@
         type: 'button',
         className: 'cp-btn' + (open ? ' open' : ''),
         onClick: () => setOpen(!open),
-        title: lang === 'ar' ? 'اختر الدولة' : 'Select Country'
+        title: lang === 'ar' ? selected.ar : selected.name
       },
-        h('span', { className: 'cp-badge' }, selected.code),
+        h('img', {
+          src: `./assets/img/flags/${selected.code.toLowerCase()}.svg`,
+          alt: selected.name,
+          className: 'cp-flag-img'
+        }),
         h('span', { className: 'cp-dial' }, selected.dial),
         h('svg', { width: 10, height: 10, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.5, style: { transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .2s' } },
           h('polyline', { points: '6 9 12 15 18 9' }))),
@@ -126,7 +130,11 @@
               className: 'cp-item' + (c.code === selected.code ? ' sel' : ''),
               onClick: () => { onSelect(c); setOpen(false); setQ(''); }
             },
-              h('span', { className: 'cp-item-badge' }, c.code),
+              h('img', {
+                src: `./assets/img/flags/${c.code.toLowerCase()}.svg`,
+                alt: c.name,
+                className: 'cp-flag-img'
+              }),
               h('span', { className: 'cp-item-name' }, lang === 'ar' ? c.ar : c.name),
               h('span', { className: 'cp-item-dial' }, c.dial)
             )
