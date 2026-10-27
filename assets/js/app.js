@@ -52,38 +52,447 @@
     h('line', { x1: 18, y1: 6, x2: 6, y2: 18 }),
     h('line', { x1: 6, y1: 6, x2: 18, y2: 18 }));
 
-  /* ============ language gate ============ */
-  function Gate({ onPick }) {
-    const root = useRef(null);
+  const CheckIcon = () => h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.5, strokeLinecap: 'round', strokeLinejoin: 'round' },
+    h('polyline', { points: '20 6 9 17 4 12' }));
+
+  const UserIcon = () => h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+    h('path', { d: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2' }),
+    h('circle', { cx: 12, cy: 7, r: 4 }));
+
+  const LogoutIcon = () => h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+    h('path', { d: 'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4' }),
+    h('polyline', { points: '16 17 21 12 16 7' }),
+    h('line', { x1: 21, y1: 12, x2: 9, y2: 12 }));
+
+  const EditIcon = () => h('svg', { width: 13, height: 13, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+    h('path', { d: 'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7' }),
+    h('path', { d: 'M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z' }));
+
+  const LockIcon = () => h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+    h('rect', { x: 3, y: 11, width: 18, height: 11, rx: 2, ry: 2 }),
+    h('path', { d: 'M7 11V7a5 5 0 0 1 10 0v4' }));
+
+  const MailIcon = () => h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+    h('path', { d: 'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z' }),
+    h('polyline', { points: '22,6 12,13 2,6' }));
+
+  /* ============ country picker ============ */
+  function CountryPicker({ selected, onSelect, lang }) {
+    const [open, setOpen] = useState(false);
+    const [q, setQ] = useState('');
+    const ref = useRef(null);
+
     useEffect(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
-      tl.from('.gate-k', { y: 20, opacity: 0, duration: .8 })
-        .from('.gate-t .wi', { yPercent: 110, duration: 1, stagger: .08 }, '-=.5')
-        .from('.gate-opt', { y: 60, opacity: 0, duration: 1, stagger: .15 }, '-=.6');
-    }, []);
-    const pick = lang => {
-      gsap.to(root.current, { opacity: 0, duration: .5, ease: 'power2.inOut', onComplete: () => onPick(lang) });
+      const onDoc = e => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+      if (open) document.addEventListener('pointerdown', onDoc);
+      return () => document.removeEventListener('pointerdown', onDoc);
+    }, [open]);
+
+    const filtered = useMemo(() => {
+      const s = q.trim().toLowerCase();
+      if (!s) return App.COUNTRIES;
+      return App.COUNTRIES.filter(c => c.code.toLowerCase().includes(s) || c.dial.includes(s) || c.name.toLowerCase().includes(s) || c.ar.includes(s));
+    }, [q]);
+
+    return h('div', { className: 'cp-wrap', ref },
+      h('button', {
+        type: 'button',
+        className: 'cp-btn' + (open ? ' open' : ''),
+        onClick: () => setOpen(!open),
+        title: lang === 'ar' ? 'اختر الدولة' : 'Select Country'
+      },
+        h('span', { className: 'cp-badge' }, selected.code),
+        h('span', { className: 'cp-dial' }, selected.dial),
+        h('svg', { width: 10, height: 10, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.5, style: { transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .2s' } },
+          h('polyline', { points: '6 9 12 15 18 9' }))),
+      open ? h('div', { className: 'cp-dropdown' },
+        h('div', { className: 'cp-search' },
+          h('svg', { width: 13, height: 13, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
+            h('circle', { cx: 11, cy: 11, r: 8 }),
+            h('line', { x1: 21, y1: 21, x2: 16.65, y2: 16.65 })),
+          h('input', {
+            type: 'text',
+            className: 'cp-input',
+            placeholder: lang === 'ar' ? 'ابحث بالاسم أو كود الدولة...' : 'Search country or dial code...',
+            value: q,
+            autoFocus: true,
+            onChange: e => setQ(e.target.value)
+          })),
+        h('div', { className: 'cp-list' },
+          filtered.length ? filtered.map(c =>
+            h('button', {
+              key: c.code + c.dial,
+              type: 'button',
+              className: 'cp-item' + (c.code === selected.code ? ' sel' : ''),
+              onClick: () => { onSelect(c); setOpen(false); setQ(''); }
+            },
+              h('span', { className: 'cp-item-badge' }, c.code),
+              h('span', { className: 'cp-item-name' }, lang === 'ar' ? c.ar : c.name),
+              h('span', { className: 'cp-item-dial' }, c.dial)
+            )
+          ) : h('div', { className: 'cp-empty' }, lang === 'ar' ? 'لا توجد نتائج مطابقة' : 'No countries found')
+        )
+      ) : null
+    );
+  }
+
+  /* ============ auth portal (register + login) ============ */
+  function AuthPortal({ onAuthSuccess }) {
+    const [tab, setTab] = useState('register');
+    const [lang, setLang] = useState('ar');
+    const t = App.STR[lang];
+
+    const [name, setName] = useState('');
+    const [username, setUsername] = useState('');
+    const [gmail, setGmail] = useState('');
+    const [country, setCountry] = useState(App.COUNTRIES[0]); // Egypt
+    const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [stream, setStream] = useState('ar');
+    const [showPass, setShowPass] = useState(false);
+
+    const [loginInput, setLoginInput] = useState('');
+    const [loginPassword, setLoginPassword] = useState('');
+
+    const [error, setError] = useState('');
+    const [successMsg, setSuccessMsg] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleRegister = async (e) => {
+      e.preventDefault();
+      setError('');
+      setSuccessMsg('');
+
+      const cleanUser = username.trim().toLowerCase();
+      const cleanGmail = gmail.trim().toLowerCase();
+      const cleanPhone = phone.replace(/\D/g, '');
+
+      if (!name.trim()) {
+        setError(lang === 'ar' ? 'يرجى إدخال اسمك بالكامل' : 'Please enter your full name');
+        return;
+      }
+      if (!cleanUser || !/^[a-z0-9_]{3,20}$/.test(cleanUser)) {
+        setError(lang === 'ar' ? 'اسم المستخدم يجب أن يتكون من 3-20 حرفًا إنجليزيًا أو أرقامًا أو شرطة سفلية' : 'Username must be 3-20 letters, numbers, or underscores');
+        return;
+      }
+      if (!cleanGmail || !cleanGmail.endsWith('@gmail.com') || cleanGmail.length < 12) {
+        setError(lang === 'ar' ? 'يجب إدخال بريد Gmail صالح ينتهي بـ @gmail.com' : 'Valid Gmail address (@gmail.com) is required');
+        return;
+      }
+      if (!cleanPhone || cleanPhone.length < 6 || cleanPhone.length > 15) {
+        setError(lang === 'ar' ? 'يرجى إدخال رقم هاتف صحيح' : 'Please enter a valid phone number');
+        return;
+      }
+      if (password.length < 6 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
+        setError(lang === 'ar' ? 'كلمة المرور يجب أن تكون 6 خانات على الأقل وتحتوي على حروف وأرقام' : 'Password must be at least 6 characters with letters and numbers');
+        return;
+      }
+      if (password !== confirmPassword) {
+        setError(lang === 'ar' ? 'كلمتا المرور غير متطابقتين' : 'Passwords do not match');
+        return;
+      }
+
+      setLoading(true);
+      const res = await App.Auth.register({
+        name: name.trim(),
+        username: cleanUser,
+        gmail: cleanGmail,
+        countryCode: country.dial,
+        phone: cleanPhone,
+        password,
+        stream
+      });
+      setLoading(false);
+
+      if (res.error) {
+        setError(res.error);
+      } else {
+        setSuccessMsg(t.regSuccess);
+        setLoginInput(cleanUser);
+        setLoginPassword('');
+        setTab('login');
+      }
     };
-    const Opt = ({ lang, title, sub, tag }) => h('button', { className: 'gate-opt', onClick: () => pick(lang), lang },
-      h('span', { className: 'gate-tag' }, tag),
-      h('span', { className: 'gate-big', dir: lang === 'ar' ? 'rtl' : 'ltr' }, title),
-      h('span', { className: 'gate-sub', dir: lang === 'ar' ? 'rtl' : 'ltr' }, sub),
-      h('span', { className: 'gate-arrow', 'aria-hidden': 'true' }, '→'));
-    return h('div', { className: 'gate', ref: root, role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Choose your stream' },
-      h('div', { className: 'gate-inner' },
-        h('p', { className: 'gate-k' }, 'Before we start · قبل أن نبدأ'),
-        h('h1', { className: 'gate-t' },
-          h('span', { className: 'w' }, h('span', { className: 'wi' }, 'Are you Arabic')), ' ',
-          h('span', { className: 'w' }, h('span', { className: 'wi' }, 'or Languages?'))),
-        h('p', { className: 'gate-ar', dir: 'rtl' }, 'هل أنت في القسم العربي أم قسم اللغات؟'),
-        h('div', { className: 'gate-opts' },
-          h(Opt, { lang: 'ar', title: 'عربي', sub: 'المنهج كاملًا بالعربية', tag: 'AR' }),
-          h(Opt, { lang: 'en', title: 'Languages', sub: 'Curriculum in English + ترجمة عربي', tag: 'EN' })),
-        h('p', { className: 'gate-foot' }, '© ' + new Date().getFullYear() + ' Maged Aboraya')));
+
+    const handleLogin = async (e) => {
+      e.preventDefault();
+      setError('');
+      setSuccessMsg('');
+
+      if (!loginInput.trim() || !loginPassword) {
+        setError(lang === 'ar' ? 'يرجى إدخال اسم المستخدم أو الجيميل وكلمة المرور' : 'Please enter username/Gmail and password');
+        return;
+      }
+
+      setLoading(true);
+      const res = await App.Auth.login(loginInput.trim(), loginPassword);
+      setLoading(false);
+
+      if (res.error) {
+        setError(res.error);
+      } else {
+        onAuthSuccess(res.user);
+      }
+    };
+
+    return h('div', { className: 'auth-portal-wrap', dir: lang === 'ar' ? 'rtl' : 'ltr' },
+      h('div', { className: 'auth-card' },
+        h('div', { className: 'auth-head' },
+          h('div', { className: 'auth-brand' },
+            h('span', { className: 'brand-mark' }, h('i'), h('i'), h('i')),
+            h('span', { className: 'auth-brand-name' }, 'Maged Aboraya')),
+          h('h1', { className: 'auth-title' }, t.authHeading),
+          h('p', { className: 'auth-sub' }, t.authSub),
+          h('div', { className: 'auth-tabs' },
+            h('button', {
+              type: 'button',
+              className: 'auth-tab' + (tab === 'register' ? ' active' : ''),
+              onClick: () => { setTab('register'); setError(''); }
+            }, t.registerTab),
+            h('button', {
+              type: 'button',
+              className: 'auth-tab' + (tab === 'login' ? ' active' : ''),
+              onClick: () => { setTab('login'); setError(''); }
+            }, t.loginTab)
+          )
+        ),
+        error ? h('div', { className: 'auth-alert error' },
+          h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
+            h('circle', { cx: 12, cy: 12, r: 10 }),
+            h('line', { x1: 12, y1: 8, x2: 12, y2: 12 }),
+            h('line', { x1: 12, y1: 16, x2: 12.01, y2: 16 })),
+          h('span', null, error)
+        ) : null,
+        successMsg ? h('div', { className: 'auth-alert success' },
+          h(CheckIcon),
+          h('span', null, successMsg)
+        ) : null,
+
+        tab === 'register' ? h('form', { className: 'auth-form', onSubmit: handleRegister },
+          h('div', { className: 'form-group' },
+            h('label', null, t.fullName),
+            h('input', {
+              type: 'text',
+              className: 'form-input',
+              placeholder: t.fullNamePh,
+              value: name,
+              required: true,
+              onChange: e => setName(e.target.value)
+            })
+          ),
+          h('div', { className: 'form-group' },
+            h('label', null, t.username),
+            h('input', {
+              type: 'text',
+              className: 'form-input' + (username && !/^[a-zA-Z0-9_]{3,20}$/.test(username) ? ' is-invalid' : ''),
+              placeholder: t.usernamePh,
+              value: username,
+              required: true,
+              onChange: e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))
+            }),
+            h('span', { className: 'input-hint' }, lang === 'ar' ? '3-20 حرفًا إنجليزيًا أو أرقامًا بدون مسافات' : '3-20 lowercase letters, numbers, or underscores')
+          ),
+          h('div', { className: 'form-group' },
+            h('label', null, t.gmail),
+            h('div', { className: 'input-with-icon' },
+              h(MailIcon),
+              h('input', {
+                type: 'email',
+                className: 'form-input' + (gmail && !gmail.endsWith('@gmail.com') ? ' is-invalid' : ''),
+                placeholder: t.gmailPh,
+                value: gmail,
+                required: true,
+                onChange: e => setGmail(e.target.value)
+              })
+            ),
+            h('span', { className: 'input-hint' }, lang === 'ar' ? 'بريد جيميل رسمي ينتهي بـ @gmail.com' : 'Valid Gmail account ending in @gmail.com')
+          ),
+          h('div', { className: 'form-group' },
+            h('label', null, t.phone),
+            h('div', { className: 'phone-input-row' },
+              h(CountryPicker, { selected: country, onSelect: setCountry, lang }),
+              h('input', {
+                type: 'tel',
+                className: 'form-input phone-input',
+                placeholder: t.phonePh,
+                value: phone,
+                required: true,
+                onChange: e => setPhone(e.target.value.replace(/\D/g, ''))
+              })
+            )
+          ),
+          h('div', { className: 'form-row' },
+            h('div', { className: 'form-group' },
+              h('label', null, t.password),
+              h('div', { className: 'input-with-icon' },
+                h(LockIcon),
+                h('input', {
+                  type: showPass ? 'text' : 'password',
+                  className: 'form-input',
+                  placeholder: t.passwordPh,
+                  value: password,
+                  required: true,
+                  onChange: e => setPassword(e.target.value)
+                })
+              )
+            ),
+            h('div', { className: 'form-group' },
+              h('label', null, t.confirmPassword),
+              h('div', { className: 'input-with-icon' },
+                h(LockIcon),
+                h('input', {
+                  type: showPass ? 'text' : 'password',
+                  className: 'form-input' + (confirmPassword && confirmPassword !== password ? ' is-invalid' : ''),
+                  placeholder: t.confirmPasswordPh,
+                  value: confirmPassword,
+                  required: true,
+                  onChange: e => setConfirmPassword(e.target.value)
+                })
+              )
+            )
+          ),
+          h('div', { className: 'form-group' },
+            h('label', null, t.streamHeading),
+            h('div', { className: 'stream-radio-group' },
+              h('label', { className: 'stream-radio-card' + (stream === 'ar' ? ' selected' : '') },
+                h('input', {
+                  type: 'radio',
+                  name: 'stream',
+                  value: 'ar',
+                  checked: stream === 'ar',
+                  onChange: () => setStream('ar')
+                }),
+                h('span', { className: 'src-title' }, t.streamAr),
+                h('span', { className: 'src-desc' }, lang === 'ar' ? 'المنهج والامتحانات كاملة باللغة العربية' : 'Arabic curriculum and assessments')
+              ),
+              h('label', { className: 'stream-radio-card' + (stream === 'en' ? ' selected' : '') },
+                h('input', {
+                  type: 'radio',
+                  name: 'stream',
+                  value: 'en',
+                  checked: stream === 'en',
+                  onChange: () => setStream('en')
+                }),
+                h('span', { className: 'src-title' }, t.streamEn),
+                h('span', { className: 'src-desc' }, lang === 'ar' ? 'المنهج بالإنجليزية مع ترجمة عربية مرافقة' : 'English curriculum with Arabic companion')
+              )
+            )
+          ),
+          h('button', { type: 'submit', className: 'solid auth-submit-btn', disabled: loading },
+            loading ? (lang === 'ar' ? 'جارٍ إنشاء الحساب...' : 'Creating Account...') : t.btnRegister),
+          h('p', { className: 'auth-switch-note' },
+            t.haveAccount, ' ',
+            h('button', { type: 'button', className: 'auth-link-btn', onClick: () => { setTab('login'); setError(''); } }, t.goToLogin))
+        ) : h('form', { className: 'auth-form', onSubmit: handleLogin },
+          h('div', { className: 'form-group' },
+            h('label', null, lang === 'ar' ? 'اسم المستخدم أو بريد Gmail' : 'Username or Gmail'),
+            h('div', { className: 'input-with-icon' },
+              h(UserIcon),
+              h('input', {
+                type: 'text',
+                className: 'form-input',
+                placeholder: lang === 'ar' ? 'ادخل اسم المستخدم أو بريدك' : 'Enter username or Gmail',
+                value: loginInput,
+                required: true,
+                autoFocus: true,
+                onChange: e => setLoginInput(e.target.value)
+              })
+            )
+          ),
+          h('div', { className: 'form-group' },
+            h('label', null, t.password),
+            h('div', { className: 'input-with-icon' },
+              h(LockIcon),
+              h('input', {
+                type: showPass ? 'text' : 'password',
+                className: 'form-input',
+                placeholder: lang === 'ar' ? 'ادخل كلمة المرور' : 'Enter your password',
+                value: loginPassword,
+                required: true,
+                onChange: e => setLoginPassword(e.target.value)
+              })
+            )
+          ),
+          h('button', { type: 'submit', className: 'solid auth-submit-btn', disabled: loading },
+            loading ? (lang === 'ar' ? 'جارٍ تسجيل الدخول...' : 'Signing In...') : t.btnLogin),
+          h('p', { className: 'auth-switch-note' },
+            t.noAccount, ' ',
+            h('button', { type: 'button', className: 'auth-link-btn', onClick: () => { setTab('register'); setError(''); } }, t.goToRegister))
+        ),
+        h('div', { className: 'auth-foot' },
+          h('span', null, '© ' + new Date().getFullYear() + ' Maged Aboraya. All rights reserved.'),
+          h('button', {
+            type: 'button',
+            className: 'auth-lang-toggle',
+            onClick: () => setLang(lang === 'ar' ? 'en' : 'ar')
+          }, lang === 'ar' ? 'English Interface' : 'الواجهة العربية')
+        )
+      )
+    );
+  }
+
+  /* ============ student profile menu in header ============ */
+  function StudentProfileMenu({ user, onLogout, lang, totalLessons, doneLessons }) {
+    const [open, setOpen] = useState(false);
+    const ref = useRef(null);
+
+    useEffect(() => {
+      const onDoc = e => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+      if (open) document.addEventListener('pointerdown', onDoc);
+      return () => document.removeEventListener('pointerdown', onDoc);
+    }, [open]);
+
+    const initial = (user.name || user.username || 'S')[0].toUpperCase();
+
+    return h('div', { className: 'student-profile-wrap', ref },
+      h('button', {
+        type: 'button',
+        className: 'student-profile-btn' + (open ? ' is-active' : ''),
+        onClick: () => setOpen(!open),
+        title: lang === 'ar' ? 'ملف الطالب' : 'Student Profile'
+      },
+        h('span', { className: 'student-avatar' }, initial),
+        h('span', { className: 'student-name-pill' }, user.name || user.username),
+        h('span', { className: 'student-status-dot' })
+      ),
+      open ? h('div', { className: 'student-menu-card', dir: lang === 'ar' ? 'rtl' : 'ltr' },
+        h('div', { className: 'smc-head' },
+          h('div', { className: 'smc-avatar-big' }, initial),
+          h('div', { className: 'smc-info' },
+            h('div', { className: 'smc-name' }, user.name),
+            h('div', { className: 'smc-username' }, '@' + user.username),
+            h('div', { className: 'smc-gmail' }, user.gmail)
+          )
+        ),
+        h('div', { className: 'smc-details' },
+          h('div', { className: 'smc-row' },
+            h('span', null, lang === 'ar' ? 'رقم الهاتف:' : 'Phone:'),
+            h('b', { dir: 'ltr' }, (user.countryCode || '+20') + ' ' + user.phone)
+          ),
+          h('div', { className: 'smc-row' },
+            h('span', null, lang === 'ar' ? 'القسم الدراسي:' : 'Stream:'),
+            h('b', null, user.stream === 'en' ? 'Languages' : 'عربي')
+          ),
+          h('div', { className: 'smc-row' },
+            h('span', null, lang === 'ar' ? 'الدروس المكتملة:' : 'Lessons Done:'),
+            h('b', { dir: 'ltr' }, `${doneLessons} / ${totalLessons}`)
+          )
+        ),
+        h('button', {
+          type: 'button',
+          className: 'smc-logout-btn',
+          onClick: () => { setOpen(false); onLogout(); }
+        },
+          h(LogoutIcon),
+          h('span', null, lang === 'ar' ? 'تسجيل الخروج' : 'Sign Out')
+        )
+      ) : null
+    );
   }
 
   /* ============ header / footer ============ */
-  function Header({ meta, onSwitch, route, onOpenSearch, theme, onToggleTheme, zen, onToggleZen }) {
+  function Header({ meta, onSwitch, route, onOpenSearch, theme, onToggleTheme, zen, onToggleZen, authUser, onLogout }) {
     const { t, lang } = useLang();
     const store = useStore();
     const [scrolled, setScrolled] = useState(false);
@@ -121,7 +530,8 @@
           title: theme === 'dark' ? 'الوضع النهاري / Light Mode' : 'الوضع الليلي / Dark Mode'
         }, theme === 'dark' ? h(SunIcon) : h(MoonIcon)),
         total ? h('span', { className: 'hdr-prog', title: t.progress }, h('b', { dir: 'ltr' }, done + '/' + total)) : null,
-        h('button', { className: 'lang-btn', onClick: onSwitch }, t.switchTo)));
+        h('button', { className: 'lang-btn', onClick: onSwitch }, t.switchTo),
+        authUser ? h(StudentProfileMenu, { user: authUser, onLogout, lang, totalLessons: total, doneLessons: done }) : null));
   }
 
   function Footer() {
@@ -321,6 +731,107 @@
         }))));
   }
 
+  /* ============ lesson video player section ============ */
+  function LessonVideoSection({ id, title, watched, onMarkWatched, lang }) {
+    const [editing, setEditing] = useState(false);
+    const [urlInput, setUrlInput] = useState(App.StoreVideos.get(id) || '');
+    const [currentUrl, setCurrentUrl] = useState(App.StoreVideos.get(id) || '');
+
+    useEffect(() => {
+      const v = App.StoreVideos.get(id) || '';
+      setUrlInput(v);
+      setCurrentUrl(v);
+      setEditing(false);
+    }, [id]);
+
+    const saveUrl = () => {
+      App.StoreVideos.set(id, urlInput);
+      setCurrentUrl(urlInput);
+      setEditing(false);
+    };
+
+    const ytMatch = currentUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+    const isYouTube = !!ytMatch;
+    const ytId = ytMatch ? ytMatch[1] : null;
+
+    return h('section', { className: 'lesson-video-sec' },
+      h('div', { className: 'lesson-video-card' },
+        h('div', { className: 'lesson-video-header' },
+          h('div', { className: 'lvh-meta' },
+            h('span', { className: 'lvh-tag' }, lang === 'ar' ? 'فيديو الشرح التفاعلي' : 'Lesson Video Lecture'),
+            h('h2', { className: 'lvh-title' }, lang === 'ar' ? 'محاضرة شرح الدرس بالفيديو' : 'Interactive Video Lecture'),
+            h('p', { className: 'lvh-sub' }, lang === 'ar' ? 'شاهد محاضرة الدرس أولاً لفهم الأفكار الجوهرية، ثم تابع قراءة المواد التفاعلية والتمارين أدناه.' : 'Watch the lesson video lecture first, then proceed to the detailed study materials and worked exercises below.')
+          ),
+          h('button', {
+            type: 'button',
+            className: 'lvh-edit-btn',
+            onClick: () => setEditing(!editing)
+          },
+            h(EditIcon),
+            h('span', null, editing ? (lang === 'ar' ? 'إلغاء' : 'Cancel') : (lang === 'ar' ? 'إضافة / تعديل رابط الفيديو' : 'Set Video URL'))
+          )
+        ),
+        editing ? h('div', { className: 'video-edit-bar' },
+          h('input', {
+            type: 'text',
+            className: 'video-url-input',
+            placeholder: lang === 'ar' ? 'https://www.youtube.com/watch?v=... أو رابط MP4 مباشر' : 'https://www.youtube.com/watch?v=... or direct MP4 URL',
+            value: urlInput,
+            onChange: e => setUrlInput(e.target.value)
+          }),
+          h('button', { type: 'button', className: 'solid video-save-btn', onClick: saveUrl }, lang === 'ar' ? 'حفظ الرابط' : 'Save URL')
+        ) : null,
+        h('div', { className: 'video-frame-container' },
+          isYouTube ? h('iframe', {
+            className: 'video-iframe',
+            src: `https://www.youtube-nocookie.com/embed/${ytId}?rel=0&modestbranding=1`,
+            title: 'Lesson Video',
+            allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
+            allowFullScreen: true
+          }) : (currentUrl && (currentUrl.endsWith('.mp4') || currentUrl.endsWith('.webm')) ? h('video', {
+            className: 'video-native',
+            src: currentUrl,
+            controls: true,
+            playsInline: true
+          }) : h('div', { className: 'video-placeholder' },
+            h('div', { className: 'vp-inner' },
+              h('div', { className: 'vp-play-icon' },
+                h('svg', { width: 32, height: 32, viewBox: '0 0 24 24', fill: 'currentColor' },
+                  h('polygon', { points: '5 3 19 12 5 21 5 3' }))),
+              h('h3', null, lang === 'ar' ? 'مشغل فيديو الدرس جاهز' : 'Lesson Video Player Ready'),
+              h('p', null, lang === 'ar' ? 'يمكنك وضع رابط الفيديو الخاص بك (يوتيوب أو MP4) عبر زر "إضافة / تعديل رابط الفيديو" أعلاه.' : 'You can paste your video link (YouTube or MP4) using the "Set Video URL" button above.')
+            )
+          ))
+        ),
+        h('div', { className: 'video-footer-strip' },
+          watched ? h('div', { className: 'video-done-badge' },
+            h(CheckIcon),
+            h('span', null, lang === 'ar' ? 'تم استكمال مشاهدة فيديو الشرح بنجاح' : 'Lecture Video Completed Successfully')
+          ) : h('button', {
+            type: 'button',
+            className: 'video-finish-btn',
+            onClick: onMarkWatched
+          },
+            h(CheckIcon),
+            h('span', null, lang === 'ar' ? 'أنهيت مشاهدة الفيديو — الانتقال لشرح الدرس' : 'Mark Video Finished — Jump to Reading')
+          ),
+          h('button', {
+            type: 'button',
+            className: 'video-scroll-btn',
+            onClick: () => {
+              const el = document.getElementById('sec-0') || document.querySelector('.terms') || document.querySelector('.l-body');
+              if (el) App.scrollToEl(el, 80);
+            }
+          },
+            h('span', null, lang === 'ar' ? 'المتابعة إلى محتوى الدرس' : 'Continue to Lesson Content'),
+            h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2 },
+              h('polyline', { points: '6 9 12 15 18 9' }))
+          )
+        )
+      )
+    );
+  }
+
   function Lesson({ id, meta, status, zen, onToggleZen }) {
     const { t, lang } = useLang();
     const store = useStore();
@@ -427,6 +938,13 @@
               h('p', null, o),
               arO ? h('span', { className: 'ar-sub', dir: 'rtl' }, arO) : null));
         }))),
+      h(LessonVideoSection, {
+        id,
+        title: data.title,
+        watched: !!st.videoWatched,
+        onMarkWatched: () => Store.setLesson(id, { videoWatched: true }),
+        lang
+      }),
       h(KeyTerms, { items: data.keyTerms, arItems: arData && arData.keyTerms, bilingual: isBi }),
       h('div', { className: 'l-body' }, data.sections.map((s, i) => {
         const arS = isBi && arData && arData.sections && arData.sections[i];
@@ -694,12 +1212,23 @@
       return () => killAll();
     }, [route.key, lang]);
 
-    const ctx = useMemo(() => ({ lang: lang || 'en', t: STR[lang || 'en'], dir: lang === 'ar' ? 'rtl' : 'ltr' }), [lang]);
-    const switchLang = () => Store.set({ lang: lang === 'ar' ? 'en' : 'ar' });
+    const authUser = App.useAuth();
+
+    if (!authUser) {
+      return h(AuthPortal, {
+        onAuthSuccess: (u) => {
+          Store.loadUser(u.username);
+          Store.set({ lang: u.stream || 'ar' });
+        }
+      });
+    }
+
+    const currentLang = lang || (authUser && authUser.stream) || 'ar';
+    const ctx = useMemo(() => ({ lang: currentLang, t: STR[currentLang], dir: currentLang === 'ar' ? 'rtl' : 'ltr' }), [currentLang]);
+    const switchLang = () => Store.set({ lang: currentLang === 'ar' ? 'en' : 'ar' });
     const toggleTheme = () => Store.set({ theme: theme === 'dark' ? 'light' : 'dark' });
     const toggleZen = () => setZen(prev => !prev);
 
-    if (!lang) return h(Gate, { onPick: l => Store.set({ lang: l }) });
     return h(LangCtx.Provider, { value: ctx },
       h('a', { className: 'skip', href: '#main' }, ctx.lang === 'ar' ? 'تخطَّ إلى المحتوى' : 'Skip to content'),
       h(Header, {
@@ -710,7 +1239,9 @@
         theme,
         onToggleTheme: toggleTheme,
         zen,
-        onToggleZen: toggleZen
+        onToggleZen: toggleZen,
+        authUser,
+        onLogout: () => App.Auth.logout()
       }),
       zen && route.name === 'lesson'
         ? h(ZenToolbar, {

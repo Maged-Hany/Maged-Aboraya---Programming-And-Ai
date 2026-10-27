@@ -5,6 +5,7 @@
   gsap.registerPlugin(ScrollTrigger);
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduced) document.documentElement.classList.add('js-anim');
 
   /* ---------- UI strings ---------- */
   const STR = {
@@ -87,39 +88,47 @@
       zenEsc: 'ESC للخروج',
       zenFontNormal: 'خط عادي',
       zenFontBig: 'خط كبير',
-      siteTitle: 'البرمجة والذكاء الاصطناعي',
-      siteSub: 'شرح مبسّط لكل درس، أمثلة وصور حقيقية، تمارين محلولة، واختبار قصير في نهاية كل درس.',
-      startFirst: 'ابدأ الدرس الأول',
-      continueLesson: 'كمّل من حيث توقفت',
-      allDone: 'خلّصت كل الدروس! راجع أي درس',
-      browse: 'تصفّح الفصول',
-      yourProgress: 'تقدّمك',
-      lessonsDone: 'درس مكتمل',
-      avgScore: 'متوسط الاختبارات',
-      stream: 'القسم',
-      chaptersTitle2: 'الفصول والدروس',
-      chaptersSub: 'اختر أي درس وابدأ مباشرة.',
-      inChapter: 'شخصيات وأجهزة في هذا الفصل',
-      allChapters: 'كل الفصول',
-      onThisPage: 'في هذا الدرس',
-      minRead: 'دقيقة قراءة',
-      prevLesson: 'الدرس السابق',
-      textSize: 'حجم الخط',
-      youWillLearn: 'ستتعلم في هذا الدرس',
-      showAll: 'اعرض الكل',
-      hideAll: 'أخفِ الكل',
-      translationOn: 'الترجمة العربية: ظاهرة',
-      translationOff: 'إظهار الترجمة العربية',
-      listen: 'استمع',
-      stop: 'إيقاف',
-      pause: 'إيقاف مؤقت',
-      resume: 'استئناف',
-      speed: 'السرعة',
-      close: 'إغلاق',
-      searchPh: 'ابحث عن درس أو مصطلح أو شخصية…',
-      search: 'بحث',
-      lightMode: 'الوضع النهاري',
-      darkMode: 'الوضع الليلي'
+      authHeading: 'بوابة تسجيل الطلاب',
+      authSub: 'سجّل حسابك لمتابعة تقدمك في الدروس، حفظ نتائج الاختبارات، ومشاهدة محاضرات الفيديو.',
+      registerTab: 'إنشاء حساب جديد',
+      loginTab: 'تسجيل الدخول',
+      fullName: 'الاسم بالكامل',
+      fullNamePh: 'مثال: أحمد محمد علي',
+      username: 'اسم المستخدم',
+      usernamePh: 'مثال: ahmed_2026',
+      gmail: 'بريد Gmail',
+      gmailPh: 'example@gmail.com',
+      phone: 'رقم الهاتف',
+      phonePh: '10 1234 5678',
+      password: 'كلمة المرور',
+      passwordPh: '6 أحرف على الأقل (حروف وأرقام)',
+      confirmPassword: 'تأكيد كلمة المرور',
+      confirmPasswordPh: 'أعد إدخال كلمة المرور',
+      selectCountry: 'اختر الدولة',
+      searchCountryPh: 'ابحث عن الدولة أو الرمز...',
+      streamHeading: 'القسم الدراسي:',
+      streamAr: 'القسم العربي',
+      streamEn: 'قسم اللغات (Languages)',
+      btnRegister: 'إنشاء الحساب وبدء الدراسة',
+      btnLogin: 'تسجيل الدخول',
+      haveAccount: 'لديك حساب بالفعل؟',
+      noAccount: 'ليس لديك حساب؟',
+      goToLogin: 'سجّل دخولك الآن',
+      goToRegister: 'أنشئ حسابك الجديد مجانًا',
+      regSuccess: 'تم إنشاء الحساب بنجاح! سجّل الدخول الآن بحسابك الجديد للمتابعة.',
+      student: 'طالب',
+      logout: 'تسجيل الخروج',
+      accountInfo: 'بيانات الطالب',
+      coursesCompleted: 'الدروس المكتملة',
+      lessonVideo: 'فيديو شرح الدرس',
+      lessonVideoSub: 'شاهد الشرح التفاعلي بالفيديو قبل متابعة القراءة والتمارين.',
+      markVideoDone: 'أنهيت مشاهدة الفيديو — الانتقال للشرح',
+      videoWatched: 'تمت مشاهدة فيديو المحاضرة بنجاح',
+      continueToText: 'المتابعة إلى محتوى الدرس',
+      setVideoBtn: 'إضافة / تعديل رابط الفيديو',
+      saveVideoBtn: 'حفظ الرابط',
+      videoUrlLabel: 'رابط فيديو يوتيوب أو ملف MP4 مباشر:',
+      videoUrlPlaceholder: 'https://www.youtube.com/watch?v=...'
     },
     en: {
       brand: 'Maged Aboraya',
@@ -200,52 +209,245 @@
       zenEsc: 'ESC to exit',
       zenFontNormal: 'Normal font',
       zenFontBig: 'Large font',
-      siteTitle: 'Programming & AI',
-      siteSub: 'Clear explanations for every lesson, real photos and examples, worked exercises, and a short quiz at the end of each lesson.',
-      startFirst: 'Start the first lesson',
-      continueLesson: 'Continue where you left off',
-      allDone: 'You finished every lesson! Review any of them',
-      browse: 'Browse chapters',
-      yourProgress: 'Your progress',
-      lessonsDone: 'lessons completed',
-      avgScore: 'Average quiz score',
-      stream: 'Stream',
-      chaptersTitle2: 'Chapters & lessons',
-      chaptersSub: 'Pick any lesson and jump straight in.',
-      inChapter: 'People and devices in this chapter',
-      allChapters: 'All chapters',
-      onThisPage: 'In this lesson',
-      minRead: 'min read',
-      prevLesson: 'Previous lesson',
-      textSize: 'Text size',
-      youWillLearn: 'In this lesson you will',
-      showAll: 'Show all',
-      hideAll: 'Hide all',
-      translationOn: 'Arabic translation: on',
-      translationOff: 'Show Arabic translation',
-      listen: 'Listen',
-      stop: 'Stop',
-      pause: 'Pause',
-      resume: 'Resume',
-      speed: 'Speed',
-      close: 'Close',
-      searchPh: 'Search lessons, key terms, people…',
-      search: 'Search',
-      lightMode: 'Light mode',
-      darkMode: 'Dark mode'
+      authHeading: 'Student Portal Access',
+      authSub: 'Register to track your individual lesson progress, quiz grades, and lecture video completions.',
+      registerTab: 'Create Account',
+      loginTab: 'Sign In',
+      fullName: 'Full Name',
+      fullNamePh: 'e.g. Ahmed Ali',
+      username: 'Username',
+      usernamePh: 'e.g. ahmed_2026',
+      gmail: 'Gmail Address',
+      gmailPh: 'example@gmail.com',
+      phone: 'Phone Number',
+      phonePh: '10 1234 5678',
+      password: 'Password',
+      passwordPh: 'Minimum 6 characters (letters & numbers)',
+      confirmPassword: 'Confirm Password',
+      confirmPasswordPh: 'Re-enter your password',
+      selectCountry: 'Select Country',
+      searchCountryPh: 'Search country or dial code...',
+      streamHeading: 'Curriculum Stream:',
+      streamAr: 'Arabic Stream',
+      streamEn: 'Languages Stream (English + Arabic)',
+      btnRegister: 'Create Account & Start Learning',
+      btnLogin: 'Sign In',
+      haveAccount: 'Already have an account?',
+      noAccount: 'Don’t have an account?',
+      goToLogin: 'Sign in here',
+      goToRegister: 'Create a free account',
+      regSuccess: 'Account created successfully! Please sign in with your credentials.',
+      student: 'Student',
+      logout: 'Sign Out',
+      accountInfo: 'Student Profile',
+      coursesCompleted: 'Completed Lessons',
+      lessonVideo: 'Lesson Video Lecture',
+      lessonVideoSub: 'Watch the video lecture before diving into the detailed lesson content and quizzes.',
+      markVideoDone: 'Finished Video — Jump to Reading',
+      videoWatched: 'Lecture video completed',
+      continueToText: 'Continue to Lesson Content',
+      setVideoBtn: 'Set Video URL',
+      saveVideoBtn: 'Save URL',
+      videoUrlLabel: 'YouTube URL or direct MP4 video link:',
+      videoUrlPlaceholder: 'https://www.youtube.com/watch?v=...'
     }
   };
 
-  /* ---------- persistent state ---------- */
-  const KEY = 'mabook:v1';
-  const readStore = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } };
-  const Store = {
-    data: readStore(),
+  /* ---------- countries database for phone country picker ---------- */
+  const COUNTRIES = [
+    { code: 'EG', dial: '+20', name: 'Egypt', ar: 'مصر' },
+    { code: 'SA', dial: '+966', name: 'Saudi Arabia', ar: 'المملكة العربية السعودية' },
+    { code: 'AE', dial: '+971', name: 'United Arab Emirates', ar: 'الإمارات العربية المتحدة' },
+    { code: 'KW', dial: '+965', name: 'Kuwait', ar: 'الكويت' },
+    { code: 'QA', dial: '+974', name: 'Qatar', ar: 'قطر' },
+    { code: 'OM', dial: '+968', name: 'Oman', ar: 'سلطنة عُمان' },
+    { code: 'BH', dial: '+973', name: 'Bahrain', ar: 'البحرين' },
+    { code: 'JO', dial: '+962', name: 'Jordan', ar: 'الأردن' },
+    { code: 'IQ', dial: '+964', name: 'Iraq', ar: 'العراق' },
+    { code: 'PS', dial: '+970', name: 'Palestine', ar: 'فلسطين' },
+    { code: 'LB', dial: '+961', name: 'Lebanon', ar: 'لبنان' },
+    { code: 'SY', dial: '+963', name: 'Syria', ar: 'سوريا' },
+    { code: 'YE', dial: '+967', name: 'Yemen', ar: 'اليمن' },
+    { code: 'LY', dial: '+218', name: 'Libya', ar: 'ليبيا' },
+    { code: 'SD', dial: '+249', name: 'Sudan', ar: 'السودان' },
+    { code: 'MA', dial: '+212', name: 'Morocco', ar: 'المغرب' },
+    { code: 'DZ', dial: '+213', name: 'Algeria', ar: 'الجزائر' },
+    { code: 'TN', dial: '+216', name: 'Tunisia', ar: 'تونس' },
+    { code: 'MR', dial: '+222', name: 'Mauritania', ar: 'موريتانيا' },
+    { code: 'US', dial: '+1', name: 'United States', ar: 'الولايات المتحدة' },
+    { code: 'GB', dial: '+44', name: 'United Kingdom', ar: 'المملكة المتحدة' },
+    { code: 'CA', dial: '+1', name: 'Canada', ar: 'كندا' },
+    { code: 'DE', dial: '+49', name: 'Germany', ar: 'ألمانيا' },
+    { code: 'FR', dial: '+33', name: 'France', ar: 'فرنسا' },
+    { code: 'TR', dial: '+90', name: 'Turkey', ar: 'تركيا' },
+    { code: 'IT', dial: '+39', name: 'Italy', ar: 'إيطاليا' },
+    { code: 'ES', dial: '+34', name: 'Spain', ar: 'إسبانيا' },
+    { code: 'SE', dial: '+46', name: 'Sweden', ar: 'السويد' },
+    { code: 'NL', dial: '+31', name: 'Netherlands', ar: 'هولندا' },
+    { code: 'CH', dial: '+41', name: 'Switzerland', ar: 'سويسرا' },
+    { code: 'MY', dial: '+60', name: 'Malaysia', ar: 'ماليزيا' },
+    { code: 'IN', dial: '+91', name: 'India', ar: 'الهند' }
+  ];
+
+  /* ---------- auth & multi-user session state ---------- */
+  const AUTH_USER_KEY = 'mabook:auth:user';
+  const AUTH_USERS_KEY = 'mabook:auth:users';
+  const getLocalUsers = () => { try { return JSON.parse(localStorage.getItem(AUTH_USERS_KEY)) || {}; } catch (e) { return {}; } };
+  const saveLocalUsers = (u) => { try { localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(u)); } catch (e) {} };
+  const getStoredUser = () => { try { return JSON.parse(localStorage.getItem(AUTH_USER_KEY)) || null; } catch (e) { return null; } };
+
+  const Auth = {
+    user: getStoredUser(),
     subs: new Set(),
+    getUser() { return Auth.user; },
+    subscribe(fn) { Auth.subs.add(fn); return () => Auth.subs.delete(fn); },
+    notify() { Auth.subs.forEach(fn => fn(Auth.user)); },
+
+    async register(data) {
+      const cleanUser = String(data.username || '').trim().toLowerCase();
+      const cleanGmail = String(data.gmail || '').trim().toLowerCase();
+      const cleanPhone = String(data.phone || '').replace(/\D/g, '');
+      const pass = String(data.password || '');
+
+      if (!cleanUser || !/^[a-z0-9_]{3,20}$/.test(cleanUser)) {
+        return { error: 'اسم المستخدم يجب أن يكون من 3 إلى 20 حرفًا أو رقمًا إنجليزيًا / Username must be 3-20 characters' };
+      }
+      if (!cleanGmail || !cleanGmail.endsWith('@gmail.com') || cleanGmail.length < 12) {
+        return { error: 'يجب إدخال بريد Gmail صالح ينتهي بـ @gmail.com / Valid Gmail address is required' };
+      }
+      if (!cleanPhone || cleanPhone.length < 6 || cleanPhone.length > 15) {
+        return { error: 'رقم الهاتف غير صالح / Valid phone number is required' };
+      }
+      if (pass.length < 6 || !/[A-Za-z]/.test(pass) || !/[0-9]/.test(pass)) {
+        return { error: 'كلمة المرور يجب أن تكون 6 خانات على الأقل وتحتوي حروفًا وأرقامًا / Password must be >= 6 chars with letters & numbers' };
+      }
+
+      // Try server API first
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...data, username: cleanUser, gmail: cleanGmail, phone: cleanPhone })
+        });
+        const resData = await res.json();
+        if (!res.ok) return { error: resData.error || 'فشل التسجيل / Registration failed' };
+      } catch (e) {
+        // Local storage fallback
+        const local = getLocalUsers();
+        if (local[cleanUser]) return { error: 'اسم المستخدم مسجّل بالفعل / Username already registered' };
+        for (const k in local) {
+          if (local[k].gmail === cleanGmail) return { error: 'بريد Gmail هذا مسجّل بالفعل / Gmail already registered' };
+        }
+        local[cleanUser] = {
+          username: cleanUser,
+          name: String(data.name || cleanUser).trim(),
+          gmail: cleanGmail,
+          countryCode: data.countryCode || '+20',
+          phone: cleanPhone,
+          password: pass,
+          stream: data.stream === 'en' ? 'en' : 'ar',
+          registeredAt: new Date().toISOString()
+        };
+        saveLocalUsers(local);
+      }
+      return { ok: true, username: cleanUser };
+    },
+
+    async login(loginInput, password) {
+      const cleanLogin = String(loginInput || '').trim().toLowerCase();
+      if (!cleanLogin || !password) return { error: 'يرجى إدخال اسم المستخدم أو الجيميل وكلمة المرور' };
+
+      let user = null;
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ login: cleanLogin, password })
+        });
+        const resData = await res.json();
+        if (res.ok && resData.user) {
+          user = resData.user;
+        } else if (!res.ok) {
+          return { error: resData.error || 'بيانات الدخول غير صحيحة' };
+        }
+      } catch (e) {
+        const local = getLocalUsers();
+        let found = local[cleanLogin];
+        if (!found) {
+          for (const u in local) {
+            if (local[u].gmail === cleanLogin) { found = local[u]; break; }
+          }
+        }
+        if (found && found.password === String(password)) {
+          const { password: _, ...safe } = found;
+          user = safe;
+        } else {
+          return { error: 'اسم المستخدم أو كلمة المرور غير صحيحة / Invalid credentials' };
+        }
+      }
+
+      if (user) {
+        Auth.user = user;
+        try { localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user)); } catch (e) {}
+        Store.loadUser(user.username);
+        Auth.notify();
+        return { ok: true, user };
+      }
+      return { error: 'تعذّر تسجيل الدخول' };
+    },
+
+    logout() {
+      Auth.user = null;
+      try { localStorage.removeItem(AUTH_USER_KEY); } catch (e) {}
+      Store.loadUser('guest');
+      Auth.notify();
+    }
+  };
+
+  function useAuth() {
+    const [u, setU] = useState(Auth.user);
+    useEffect(() => Auth.subscribe(setU), []);
+    return u;
+  }
+
+  /* ---------- per-account isolated progress store ---------- */
+  const getUserKey = (uname) => 'mabook:user:' + (uname || (Auth.user ? Auth.user.username : 'guest'));
+  const readUserStore = (uname) => {
+    try { return JSON.parse(localStorage.getItem(getUserKey(uname))) || {}; } catch (e) { return {}; }
+  };
+
+  const Store = {
+    activeUser: Auth.user ? Auth.user.username : 'guest',
+    data: readUserStore(Auth.user ? Auth.user.username : 'guest'),
+    subs: new Set(),
+    loadUser(username) {
+      Store.activeUser = username || 'guest';
+      Store.data = readUserStore(Store.activeUser);
+      if (username && username !== 'guest') {
+        fetch('/api/user/progress/' + encodeURIComponent(username))
+          .then(r => r.ok ? r.json() : null)
+          .then(res => {
+            if (res && res.progress && res.progress.lessons) {
+              Store.data = { ...Store.data, lessons: { ...(Store.data.lessons || {}), ...res.progress.lessons } };
+              try { localStorage.setItem(getUserKey(Store.activeUser), JSON.stringify(Store.data)); } catch (e) {}
+              Store.subs.forEach(fn => fn(Store.data));
+            }
+          })
+          .catch(() => {});
+      }
+      Store.subs.forEach(fn => fn(Store.data));
+    },
     set(patch) {
       Store.data = { ...Store.data, ...patch };
-      try { localStorage.setItem(KEY, JSON.stringify(Store.data)); } catch (e) { /* private mode */ }
+      try { localStorage.setItem(getUserKey(Store.activeUser), JSON.stringify(Store.data)); } catch (e) {}
       Store.subs.forEach(fn => fn(Store.data));
+      if (Auth.user && Auth.user.username && patch.lessons) {
+        fetch('/api/user/progress', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: Auth.user.username, progress: { lessons: Store.data.lessons } })
+        }).catch(() => {});
+      }
     },
     setLesson(id, patch) {
       const lessons = { ...(Store.data.lessons || {}) };
@@ -258,6 +460,41 @@
     useEffect(() => { Store.subs.add(setData); return () => Store.subs.delete(setData); }, []);
     return data;
   }
+
+  /* ---------- lesson video player store ---------- */
+  const VIDEOS_KEY = 'mabook:videos';
+  const getLocalVideos = () => { try { return JSON.parse(localStorage.getItem(VIDEOS_KEY)) || {}; } catch (e) { return {}; } };
+  const StoreVideos = {
+    data: getLocalVideos(),
+    subs: new Set(),
+    async init() {
+      try {
+        const res = await fetch('/api/lesson/videos');
+        if (res.ok) {
+          const v = await res.json();
+          StoreVideos.data = { ...StoreVideos.data, ...v };
+          try { localStorage.setItem(VIDEOS_KEY, JSON.stringify(StoreVideos.data)); } catch (e) {}
+          StoreVideos.subs.forEach(fn => fn(StoreVideos.data));
+        }
+      } catch (e) {}
+    },
+    get(lessonId) {
+      return StoreVideos.data[lessonId] || '';
+    },
+    async set(lessonId, url) {
+      StoreVideos.data = { ...StoreVideos.data, [lessonId]: String(url || '').trim() };
+      try { localStorage.setItem(VIDEOS_KEY, JSON.stringify(StoreVideos.data)); } catch (e) {}
+      StoreVideos.subs.forEach(fn => fn(StoreVideos.data));
+      try {
+        await fetch('/api/lesson/video', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lessonId, videoUrl: url })
+        });
+      } catch (e) {}
+    }
+  };
+  StoreVideos.init();
 
   /* ---------- language context ---------- */
   const LangCtx = createContext({ lang: 'en', t: STR.en, dir: 'ltr' });
@@ -275,32 +512,71 @@
     return cache.get(url);
   }
 
-  /* ---------- scrolling (native: fast and predictable on every device) ---------- */
-  function initSmoothScroll() { /* native scrolling is used on purpose */ }
-  const HEADER_OFFSET = 76;
+  /* ---------- smooth scroll (Lenis driven by GSAP ticker) ---------- */
+  let lenis = null;
+  function initSmoothScroll() {
+    if (reduced || lenis || typeof Lenis === 'undefined') return;
+    lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 0.95, smoothWheel: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+  }
   function scrollToY(y, immediate) {
-    window.scrollTo({ top: Math.max(0, y), behavior: immediate || reduced ? 'auto' : 'smooth' });
+    if (lenis) lenis.scrollTo(y, { immediate: !!immediate, duration: 1.4, easing: x => 1 - Math.pow(1 - x, 4) });
+    else window.scrollTo({ top: y, behavior: immediate ? 'auto' : 'smooth' });
   }
   function scrollToEl(el, offset) {
     if (!el) return;
-    scrollToY(el.getBoundingClientRect().top + window.scrollY - (offset == null ? HEADER_OFFSET : offset));
+    scrollToY(el.getBoundingClientRect().top + window.scrollY - (offset || 0));
   }
-  const getLenis = () => null;
+  const getLenis = () => lenis;
 
-  /* ---------- reveal engine ----------
-     Content is always visible immediately (no blank areas while scrolling).
-     Only the timeline progress line is animated. */
+  /* ---------- scroll reveal engine ---------- */
   const made = [];
+  let refreshTimer = 0;
   function scan(root) {
-    if (reduced || typeof ScrollTrigger === 'undefined') return;
+    if (reduced) return;
     const scope = root || document;
+    scope.querySelectorAll('[data-reveal]:not([data-r])').forEach(el => {
+      el.dataset.r = '1';
+      const kind = el.dataset.reveal;
+      const from = kind === 'fade' ? { opacity: 0 } : kind === 'left' ? { opacity: 0, x: -40 } : kind === 'scale' ? { opacity: 0, scale: .94 } : { opacity: 0, y: 40 };
+      const tw = gsap.fromTo(el, from, { opacity: 1, x: 0, y: 0, scale: 1, duration: 1, ease: 'power3.out', delay: +(el.dataset.delay || 0), scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
+      made.push(tw);
+    });
+    scope.querySelectorAll('[data-stagger]:not([data-r])').forEach(el => {
+      el.dataset.r = '1';
+      const kids = Array.from(el.children);
+      const tw = gsap.fromTo(kids, { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', stagger: .09, scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
+      made.push(tw);
+    });
+    scope.querySelectorAll('[data-words]:not([data-r])').forEach(el => {
+      el.dataset.r = '1';
+      const words = el.querySelectorAll('.wi');
+      const tw = gsap.fromTo(words, { yPercent: 115 }, { yPercent: 0, duration: 1.1, ease: 'power4.out', stagger: .07, delay: +(el.dataset.delay || 0), scrollTrigger: { trigger: el, start: 'top 92%', once: true } });
+      made.push(tw);
+    });
+    scope.querySelectorAll('[data-scrub-words]:not([data-r])').forEach(el => {
+      el.dataset.r = '1';
+      const words = el.querySelectorAll('.sw');
+      const tw = gsap.fromTo(words, { opacity: .14 }, { opacity: 1, ease: 'none', stagger: .12, scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 45%', scrub: true } });
+      made.push(tw);
+    });
     scope.querySelectorAll('[data-draw]:not([data-r])').forEach(el => {
       el.dataset.r = '1';
       const fill = el.querySelector('.tl-fill');
       if (!fill) return;
-      const tw = gsap.fromTo(fill, { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 75%', end: 'bottom 60%', scrub: true } });
+      const tw = gsap.fromTo(fill, { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 70%', end: 'bottom 60%', scrub: true } });
       made.push(tw);
     });
+    scope.querySelectorAll('[data-parallax]:not([data-r])').forEach(el => {
+      el.dataset.r = '1';
+      const amt = +el.dataset.parallax;
+      const tw = gsap.fromTo(el, { y: -amt }, { y: amt, ease: 'none', scrollTrigger: { trigger: el.parentElement || el, start: 'top bottom', end: 'bottom top', scrub: true } });
+      made.push(tw);
+    });
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 250);
   }
   function killAll() {
     while (made.length) {
@@ -318,9 +594,11 @@
   }
 
   /* ---------- tiny components ---------- */
-  function Words({ text, tag, className }) {
+  function Words({ text, tag, className, delay }) {
     const T = tag || 'span';
-    return h(T, { className: className || '' }, Array.isArray(text) ? text.join(' ') : text);
+    return h(T, { className: 'words ' + (className || ''), 'data-words': '', 'data-delay': delay || 0, 'aria-label': Array.isArray(text) ? text.join(' ') : text },
+      (Array.isArray(text) ? text : String(text).split(' ')).map((w, i) =>
+        h('span', { className: 'w', key: i, 'aria-hidden': 'true' }, h('span', { className: 'wi' }, w), ' ')));
   }
   function ScrubWords({ text, className }) {
     return h('p', { className: 'scrub ' + (className || ''), 'data-scrub-words': '' },
@@ -558,7 +836,8 @@
 
   window.App = {
     h, STR, Store, useStore, LangCtx, useLang, getJSON, initSmoothScroll, scrollToY, scrollToEl, getLenis,
-    scan, killAll, useScan, Words, ScrubWords, reduced, TTS, search, SEARCH_ITEMS
+    scan, killAll, useScan, Words, ScrubWords, reduced, TTS, search, SEARCH_ITEMS,
+    Auth, useAuth, COUNTRIES, StoreVideos
   };
 })();
 
