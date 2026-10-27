@@ -1136,6 +1136,81 @@ ol.b-list li::before { content: counter(li); position: absolute; inset-inline-st
   font: inherit;
   padding: 0;
 }
+/* Guest sign in button & divider */
+.auth-guest-box {
+  margin-top: 6px;
+}
+.auth-guest-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 16px 0 14px;
+  color: var(--mute);
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.auth-guest-divider::before,
+.auth-guest-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1.5px solid var(--line);
+}
+.auth-guest-divider span {
+  padding: 0 12px;
+}
+.auth-guest-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1.5px dashed var(--line);
+  border-radius: 14px;
+  background: var(--paper-2);
+  color: var(--ink);
+  cursor: pointer;
+  text-align: start;
+  transition: all .2s;
+  box-sizing: border-box;
+}
+.auth-guest-btn:hover {
+  border-color: var(--accent);
+  border-style: solid;
+  background: color-mix(in srgb, var(--accent) 7%, var(--paper));
+  transform: translateY(-1px);
+}
+.ag-icon {
+  color: var(--accent);
+  flex: none;
+}
+.ag-btn-content {
+  display: grid;
+  gap: 2px;
+  flex: 1;
+}
+.ag-btn-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+}
+.ag-btn-desc {
+  font-size: 12px;
+  color: var(--mute);
+  line-height: 1.35;
+}
+.ag-badge {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(217, 119, 6, 0.12);
+  color: #b45309;
+  font-weight: 600;
+  flex: none;
+  white-space: nowrap;
+}
 .auth-foot {
   margin-top: 24px;
   padding-top: 18px;
@@ -1296,6 +1371,72 @@ ol.b-list li::before { content: counter(li); position: absolute; inset-inline-st
 .smc-logout-btn:hover {
   background: rgba(220, 38, 38, 0.08);
   border-color: var(--no);
+}
+
+/* Guest header profile & menu */
+.student-profile-btn.is-guest {
+  border-color: rgba(217, 119, 6, 0.35);
+  background: color-mix(in srgb, #f59e0b 6%, var(--paper-2));
+}
+.student-avatar.guest-avatar {
+  background: #d97706;
+}
+.guest-pill-tag {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(217, 119, 6, 0.12);
+  color: #b45309;
+  font-weight: 600;
+}
+.student-status-dot.is-guest {
+  background: #f59e0b;
+}
+.student-menu-card.is-guest {
+  border-color: rgba(217, 119, 6, 0.3);
+}
+.guest-menu-banner {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  display: grid;
+  gap: 8px;
+}
+.guest-banner-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #b45309;
+  font-size: 13px;
+  font-weight: 700;
+}
+.guest-banner-text {
+  font-size: 12px;
+  color: var(--mute);
+  line-height: 1.5;
+  margin: 0;
+}
+.guest-register-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 0;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .2s;
+  margin-top: 2px;
+}
+.guest-register-btn:hover {
+  opacity: 0.9;
 }
 
 /* ==========================================================================
@@ -1574,4 +1715,45 @@ ol.b-list li::before { content: counter(li); position: absolute; inset-inline-st
   background: #151922;
   border-color: rgba(240, 246, 252, 0.14);
   color: #f0f6fc;
+}
+
+/* Dark mode for guest mode */
+[data-theme="dark"] .auth-guest-btn {
+  background: #11141c;
+  border-color: rgba(240, 246, 252, 0.14);
+  color: #f0f6fc;
+}
+[data-theme="dark"] .auth-guest-btn:hover {
+  border-color: var(--accent);
+  background: #181d28;
+}
+[data-theme="dark"] .ag-btn-title {
+  color: #f0f6fc;
+}
+[data-theme="dark"] .ag-badge {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+}
+[data-theme="dark"] .student-profile-btn.is-guest {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.08);
+  color: #f0f6fc;
+}
+[data-theme="dark"] .guest-pill-tag {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+[data-theme="dark"] .student-menu-card.is-guest {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+[data-theme="dark"] .guest-menu-banner {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+[data-theme="dark"] .guest-banner-head {
+  color: #fbbf24;
+}
+[data-theme="dark"] .guest-register-btn {
+  background: var(--accent);
+  color: #fff;
 }

@@ -88,15 +88,15 @@
       zenEsc: 'ESC للخروج',
       zenFontNormal: 'خط عادي',
       zenFontBig: 'خط كبير',
-      authHeading: 'بوابة تسجيل الطلاب',
-      authSub: 'سجّل حسابك لمتابعة تقدمك في الدروس، حفظ نتائج الاختبارات، ومشاهدة محاضرات الفيديو.',
+      authHeading: 'سجل دخولك',
+      authSub: 'سجّل حسابك معانا دلوقتي واتعلم البرمجة بأحسن وابسط طريقة!',
       registerTab: 'إنشاء حساب جديد',
       loginTab: 'تسجيل الدخول',
-      fullName: 'الاسم بالكامل',
-      fullNamePh: 'مثال: أحمد محمد علي',
-      username: 'اسم المستخدم',
-      usernamePh: 'مثال: ahmed_2026',
-      gmail: 'بريد Gmail',
+      fullName: 'اسمك رباعي',
+      fullNamePh: 'مثال: ماجد هاني فتحي ابو ريا',
+      username: 'اسم حسابك',
+      usernamePh: 'مثال: maged_2026',
+      gmail: 'بريدك الالكتروني',
       gmailPh: 'example@gmail.com',
       phone: 'رقم الهاتف',
       phonePh: '10 1234 5678',
@@ -104,11 +104,11 @@
       passwordPh: '6 أحرف على الأقل (حروف وأرقام)',
       confirmPassword: 'تأكيد كلمة المرور',
       confirmPasswordPh: 'أعد إدخال كلمة المرور',
-      selectCountry: 'اختر الدولة',
+      selectCountry: 'بلدك',
       searchCountryPh: 'ابحث عن الدولة أو الرمز...',
-      streamHeading: 'القسم الدراسي:',
-      streamAr: 'القسم العربي',
-      streamEn: 'قسم اللغات (Languages)',
+      streamHeading: 'لغات ولا عربي؟',
+      streamAr: 'عربي',
+      streamEn: 'طالب لغات',
       btnRegister: 'إنشاء الحساب وبدء الدراسة',
       btnLogin: 'تسجيل الدخول',
       haveAccount: 'لديك حساب بالفعل؟',
@@ -128,7 +128,15 @@
       setVideoBtn: 'إضافة / تعديل رابط الفيديو',
       saveVideoBtn: 'حفظ الرابط',
       videoUrlLabel: 'رابط فيديو يوتيوب أو ملف MP4 مباشر:',
-      videoUrlPlaceholder: 'https://www.youtube.com/watch?v=...'
+      videoUrlPlaceholder: 'https://www.youtube.com/watch?v=...',
+      guestSignIn: 'المتابعة كزائر',
+      guestSubtitle: 'تصفح المنصة مباشرة دون حفظ للتقدم أو الدرجات',
+      guestBadge: 'وضع الزائر',
+      guestTempWarning: 'أنت تتصفح المنصة حاليًا كزائر مؤقت. لن يتم حفظ الدروس المكتملة أو نتائج الاختبارات بعد إغلاق المتصفح.',
+      guestNoSavePill: 'مؤقت · غير محفوظ',
+      createAccountToSave: 'إنشاء حساب لحفظ التقدم',
+      exitGuest: 'الخروج من وضع الزائر',
+      orDivider: 'أو'
     },
     en: {
       brand: 'Maged Aboraya',
@@ -249,7 +257,15 @@
       setVideoBtn: 'Set Video URL',
       saveVideoBtn: 'Save URL',
       videoUrlLabel: 'YouTube URL or direct MP4 video link:',
-      videoUrlPlaceholder: 'https://www.youtube.com/watch?v=...'
+      videoUrlPlaceholder: 'https://www.youtube.com/watch?v=...',
+      guestSignIn: 'Continue as Guest',
+      guestSubtitle: 'Browse freely without saving progress or scores',
+      guestBadge: 'Guest Mode',
+      guestTempWarning: 'You are browsing as a temporary guest. Completed lessons and quiz scores are not saved after closing the browser.',
+      guestNoSavePill: 'Temporary · Not Saved',
+      createAccountToSave: 'Create Account to Save Progress',
+      exitGuest: 'Exit Guest Mode',
+      orDivider: 'OR'
     }
   };
 
@@ -291,10 +307,19 @@
 
   /* ---------- auth & multi-user session state ---------- */
   const AUTH_USER_KEY = 'mabook:auth:user';
+  const AUTH_GUEST_KEY = 'mabook:auth:guest';
   const AUTH_USERS_KEY = 'mabook:auth:users';
   const getLocalUsers = () => { try { return JSON.parse(localStorage.getItem(AUTH_USERS_KEY)) || {}; } catch (e) { return {}; } };
   const saveLocalUsers = (u) => { try { localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(u)); } catch (e) {} };
-  const getStoredUser = () => { try { return JSON.parse(localStorage.getItem(AUTH_USER_KEY)) || null; } catch (e) { return null; } };
+  const getStoredUser = () => {
+    try {
+      const reg = JSON.parse(localStorage.getItem(AUTH_USER_KEY));
+      if (reg) return reg;
+      const guest = JSON.parse(sessionStorage.getItem(AUTH_GUEST_KEY));
+      if (guest) return guest;
+      return null;
+    } catch (e) { return null; }
+  };
 
   const Auth = {
     user: getStoredUser(),
@@ -388,6 +413,7 @@
 
       if (user) {
         Auth.user = user;
+        try { sessionStorage.removeItem(AUTH_GUEST_KEY); } catch (e) {}
         try { localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user)); } catch (e) {}
         Store.loadUser(user.username);
         Auth.notify();
@@ -396,9 +422,29 @@
       return { error: 'تعذّر تسجيل الدخول' };
     },
 
+    loginAsGuest(stream = 'ar') {
+      const guest = {
+        isGuest: true,
+        username: 'guest',
+        name: stream === 'en' ? 'Guest Student' : 'طالب زائر',
+        gmail: 'guest@session',
+        phone: '—',
+        countryCode: '+20',
+        stream: stream === 'en' ? 'en' : 'ar'
+      };
+      Auth.user = guest;
+      try { sessionStorage.setItem(AUTH_GUEST_KEY, JSON.stringify(guest)); } catch (e) {}
+      Store.activeUser = 'guest';
+      Store.data = { lessons: {} };
+      Store.subs.forEach(fn => fn(Store.data));
+      Auth.notify();
+      return { ok: true, user: guest };
+    },
+
     logout() {
       Auth.user = null;
       try { localStorage.removeItem(AUTH_USER_KEY); } catch (e) {}
+      try { sessionStorage.removeItem(AUTH_GUEST_KEY); } catch (e) {}
       Store.loadUser('guest');
       Auth.notify();
     }
@@ -413,15 +459,22 @@
   /* ---------- per-account isolated progress store ---------- */
   const getUserKey = (uname) => 'mabook:user:' + (uname || (Auth.user ? Auth.user.username : 'guest'));
   const readUserStore = (uname) => {
+    if (!uname || uname === 'guest') return { lessons: {} };
     try { return JSON.parse(localStorage.getItem(getUserKey(uname))) || {}; } catch (e) { return {}; }
   };
 
   const Store = {
-    activeUser: Auth.user ? Auth.user.username : 'guest',
-    data: readUserStore(Auth.user ? Auth.user.username : 'guest'),
+    activeUser: (Auth.user && !Auth.user.isGuest) ? Auth.user.username : 'guest',
+    data: (Auth.user && !Auth.user.isGuest) ? readUserStore(Auth.user.username) : { lessons: {} },
     subs: new Set(),
     loadUser(username) {
       Store.activeUser = username || 'guest';
+      const isGuest = Store.activeUser === 'guest' || (Auth.user && Auth.user.isGuest);
+      if (isGuest) {
+        Store.data = { lessons: {} };
+        Store.subs.forEach(fn => fn(Store.data));
+        return;
+      }
       Store.data = readUserStore(Store.activeUser);
       if (username && username !== 'guest') {
         fetch('/api/user/progress/' + encodeURIComponent(username))
@@ -439,15 +492,18 @@
     },
     set(patch) {
       Store.data = { ...Store.data, ...patch };
-      try { localStorage.setItem(getUserKey(Store.activeUser), JSON.stringify(Store.data)); } catch (e) {}
-      Store.subs.forEach(fn => fn(Store.data));
-      if (Auth.user && Auth.user.username && patch.lessons) {
-        fetch('/api/user/progress', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: Auth.user.username, progress: { lessons: Store.data.lessons } })
-        }).catch(() => {});
+      const isGuest = Store.activeUser === 'guest' || (Auth.user && Auth.user.isGuest);
+      if (!isGuest) {
+        try { localStorage.setItem(getUserKey(Store.activeUser), JSON.stringify(Store.data)); } catch (e) {}
+        if (Auth.user && Auth.user.username && patch.lessons) {
+          fetch('/api/user/progress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: Auth.user.username, progress: { lessons: Store.data.lessons } })
+          }).catch(() => {});
+        }
       }
+      Store.subs.forEach(fn => fn(Store.data));
     },
     setLesson(id, patch) {
       const lessons = { ...(Store.data.lessons || {}) };

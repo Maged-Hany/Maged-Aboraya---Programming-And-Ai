@@ -428,6 +428,28 @@
             t.noAccount, ' ',
             h('button', { type: 'button', className: 'auth-link-btn', onClick: () => { setTab('register'); setError(''); } }, t.goToRegister))
         ),
+        h('div', { className: 'auth-guest-box' },
+          h('div', { className: 'auth-guest-divider' },
+            h('span', null, t.orDivider || (lang === 'ar' ? 'أو' : 'OR'))
+          ),
+          h('button', {
+            type: 'button',
+            className: 'auth-guest-btn',
+            onClick: () => {
+              const res = App.Auth.loginAsGuest(stream || lang);
+              onAuthSuccess(res.user);
+            }
+          },
+            h('svg', { className: 'ag-icon', width: 20, height: 20, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+              h('path', { d: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2' }),
+              h('circle', { cx: 12, cy: 7, r: 4 })),
+            h('div', { className: 'ag-btn-content' },
+              h('span', { className: 'ag-btn-title' }, t.guestSignIn || (lang === 'ar' ? 'المتابعة كزائر' : 'Continue as Guest')),
+              h('span', { className: 'ag-btn-desc' }, t.guestSubtitle || (lang === 'ar' ? 'تصفح المنصة مباشرة دون حفظ للتقدم أو الدرجات' : 'Browse without saving progress or scores'))
+            ),
+            h('span', { className: 'ag-badge' }, t.guestNoSavePill || (lang === 'ar' ? 'بدون حفظ' : 'No Save'))
+          )
+        ),
         h('div', { className: 'auth-foot' },
           h('span', null, '© ' + new Date().getFullYear() + ' Maged Aboraya. All rights reserved.'),
           h('button', {
@@ -451,21 +473,58 @@
       return () => document.removeEventListener('pointerdown', onDoc);
     }, [open]);
 
-    const initial = (user.name || user.username || 'S')[0].toUpperCase();
+    const isGuest = !!user.isGuest;
+    const initial = isGuest ? (lang === 'ar' ? 'ز' : 'G') : (user.name || user.username || 'S')[0].toUpperCase();
+    const displayName = isGuest ? (lang === 'ar' ? 'زائر' : 'Guest') : (user.name || user.username);
 
     return h('div', { className: 'student-profile-wrap', ref },
       h('button', {
         type: 'button',
-        className: 'student-profile-btn' + (open ? ' is-active' : ''),
+        className: 'student-profile-btn' + (open ? ' is-active' : '') + (isGuest ? ' is-guest' : ''),
         onClick: () => setOpen(!open),
-        title: lang === 'ar' ? 'ملف الطالب' : 'Student Profile'
+        title: isGuest ? (lang === 'ar' ? 'وضع الزائر (التقدم غير محفوظ)' : 'Guest Mode (Progress not saved)') : (lang === 'ar' ? 'ملف الطالب' : 'Student Profile')
       },
-        h('span', { className: 'student-avatar' }, initial),
-        h('span', { className: 'student-name-pill' }, user.name || user.username),
-        h('span', { className: 'student-status-dot' })
+        h('span', { className: 'student-avatar' + (isGuest ? ' guest-avatar' : '') },
+          isGuest
+            ? h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+                h('path', { d: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2' }),
+                h('circle', { cx: 12, cy: 7, r: 4 }))
+            : initial
+        ),
+        h('span', { className: 'student-name-pill' }, displayName),
+        isGuest ? h('span', { className: 'guest-pill-tag' }, lang === 'ar' ? 'غير محفوظ' : 'No Save') : null,
+        h('span', { className: 'student-status-dot' + (isGuest ? ' is-guest' : '') })
       ),
-      open ? h('div', { className: 'student-menu-card', dir: lang === 'ar' ? 'rtl' : 'ltr' },
-        h('div', { className: 'smc-head' },
+      open ? h('div', { className: 'student-menu-card' + (isGuest ? ' is-guest' : ''), dir: lang === 'ar' ? 'rtl' : 'ltr' },
+        isGuest ? h('div', { className: 'guest-menu-banner' },
+          h('div', { className: 'guest-banner-head' },
+            h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+              h('circle', { cx: 12, cy: 12, r: 10 }),
+              h('line', { x1: 12, y1: 8, x2: 12, y2: 12 }),
+              h('line', { x1: 12, y1: 16, x2: 12.01, y2: 16 })),
+            h('strong', null, lang === 'ar' ? 'وضع الزائر المؤقت' : 'Temporary Guest Mode')
+          ),
+          h('p', { className: 'guest-banner-text' },
+            lang === 'ar'
+              ? 'تتصفح المنصة كزائر مؤقت. لن يتم حفظ الدروس المكتملة أو درجاتك بعد إغلاق المتصفح أو الخروج.'
+              : 'Browsing as a temporary guest. Completed lessons and quiz scores are not saved after closing or leaving.'
+          ),
+          h('button', {
+            type: 'button',
+            className: 'guest-register-btn',
+            onClick: () => {
+              setOpen(false);
+              onLogout();
+            }
+          },
+            h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+              h('path', { d: 'M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2' }),
+              h('circle', { cx: 8.5, cy: 7, r: 4 }),
+              h('line', { x1: 20, y1: 8, x2: 20, y2: 14 }),
+              h('line', { x1: 23, y1: 11, x2: 17, y2: 11 })),
+            h('span', null, lang === 'ar' ? 'إنشاء حساب لحفظ تقدمك' : 'Create Account to Save Progress')
+          )
+        ) : h('div', { className: 'smc-head' },
           h('div', { className: 'smc-avatar-big' }, initial),
           h('div', { className: 'smc-info' },
             h('div', { className: 'smc-name' }, user.name),
@@ -474,17 +533,17 @@
           )
         ),
         h('div', { className: 'smc-details' },
-          h('div', { className: 'smc-row' },
+          !isGuest ? h('div', { className: 'smc-row' },
             h('span', null, lang === 'ar' ? 'رقم الهاتف:' : 'Phone:'),
             h('b', { dir: 'ltr' }, (user.countryCode || '+20') + ' ' + user.phone)
-          ),
+          ) : null,
           h('div', { className: 'smc-row' },
             h('span', null, lang === 'ar' ? 'القسم الدراسي:' : 'Stream:'),
             h('b', null, user.stream === 'en' ? 'Languages' : 'عربي')
           ),
           h('div', { className: 'smc-row' },
-            h('span', null, lang === 'ar' ? 'الدروس المكتملة:' : 'Lessons Done:'),
-            h('b', { dir: 'ltr' }, `${doneLessons} / ${totalLessons}`)
+            h('span', null, isGuest ? (lang === 'ar' ? 'دروس الجلسة الحالية:' : 'Session Lessons:') : (lang === 'ar' ? 'الدروس المكتملة:' : 'Lessons Done:')),
+            h('b', { dir: 'ltr' }, `${doneLessons} / ${totalLessons}` + (isGuest ? (lang === 'ar' ? ' (مؤقت)' : ' (temp)') : ''))
           )
         ),
         h('button', {
@@ -493,7 +552,7 @@
           onClick: () => { setOpen(false); onLogout(); }
         },
           h(LogoutIcon),
-          h('span', null, lang === 'ar' ? 'تسجيل الخروج' : 'Sign Out')
+          h('span', null, isGuest ? (lang === 'ar' ? 'الخروج من وضع الزائر' : 'Exit Guest Mode') : (lang === 'ar' ? 'تسجيل الخروج' : 'Sign Out'))
         )
       ) : null
     );
