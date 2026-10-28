@@ -1,4 +1,4 @@
-/* quiz.js — one-question-at-a-time quiz with instant feedback and bilingual support */
+/* quiz.js — one-question-at-a-time timed quiz with instant feedback and bilingual support */
 (function () {
   const { h, useLang } = App;
   const { useState, useMemo, useEffect, useRef } = React;
@@ -10,6 +10,13 @@
       if (out.some((v, i) => v !== arr[i])) break;
     }
     return out;
+  }
+
+  function formatQuizTimer(secs) {
+    const s = Math.max(0, Math.floor(secs || 0));
+    const m = Math.floor(s / 60);
+    const rem = s % 60;
+    return `${m < 10 ? '0' : ''}${m}:${rem < 10 ? '0' : ''}${rem}`;
   }
 
   function Ring({ pct, color }) {
@@ -25,7 +32,7 @@
       h('circle', { ref, cx: 64, cy: 64, r, className: 'ring-fg', style: { stroke: color, strokeDasharray: c, strokeDashoffset: c }, transform: 'rotate(-90 64 64)' }));
   }
 
-  function Question({ q, arQ, bilingual, n, total, onResult, isLast }) {
+  function Question({ q, arQ, bilingual, n, total, timeLeft, onResult, isLast }) {
     const { t } = useLang();
     const [sel, setSel] = useState(null);           // mcq index | tf boolean
     const [pairs, setPairs] = useState({});         // match: leftIdx -> right text
@@ -59,7 +66,14 @@
     };
 
     return h('div', { className: 'q-card' },
-      h('div', { className: 'q-meta' }, h('span', null, `${t.question} ${n} / ${total}`), h('i', { className: 'q-bar' }, h('b', { style: { width: ((n - (checked ? 0 : 1)) / total * 100) + '%' } }))),
+      h('div', { className: 'q-meta' },
+        h('span', null, `${t.question} ${n} / ${total}`),
+        h('i', { className: 'q-bar' }, h('b', { style: { width: ((n - (checked ? 0 : 1)) / total * 100) + '%' } })),
+        typeof timeLeft === 'number' ? h('span', {
+          className: 'q-timer-pill' + (timeLeft <= 60 ? ' is-low' : ''),
+          dir: 'ltr'
+        }, formatQuizTimer(timeLeft)) : null
+      ),
       h('div', { style: { marginBottom: '18px' } },
         h('h3', { className: 'q-text', style: { marginBottom: '4px' } }, q.q),
         bilingual && arQ && arQ.q ? h('span', { className: 'ar-sub', style: { fontSize: '15px', fontWeight: 500 }, dir: 'rtl' }, arQ.q) : null),
@@ -83,8 +97,8 @@
             bad ? h('span', { className: 'm-fix' }, p[1] + (bilingual && arRightMap[p[1]] ? ' (' + arRightMap[p[1]] + ')' : '')) : null);
         })) : null,
       checked ? h('div', { className: 'q-fb ' + (isCorrect ? 'ok' : 'no'), role: 'status' },
-        h('b', null, isCorrect ? (bilingual ? 'Correct! · إجابة صح ومظبوطة!' : t.correct) : (bilingual ? 'Not quite · مش مظبوطة، راجع النقطة دي' : t.wrong)),
-        h('p', null, h('em', null, t.explanation + ': '), q.explain),
+        h('b', null, isCorrect ? (bilingual ? 'Correct · صحيح' : t.correct) : (bilingual ? 'Incorrect · خطأ' : t.wrong)),
+        h('p', null, q.explain),
         bilingual && arQ && arQ.explain ? h('p', { className: 'ar-sub', style: { margin: '4px 0 0', background: 'rgba(0,0,0,0.04)' }, dir: 'rtl' }, arQ.explain) : null) : null,
       h('div', { className: 'q-actions' },
         !checked
@@ -99,11 +113,29 @@
     const [done, setDone] = useState(false);
     const [run, setRun] = useState(0);
     const total = lesson.quiz.length;
+    const initialSeconds = Math.max(180, total * 60);
+    const [timeLeft, setTimeLeft] = useState(initialSeconds);
     const wrap = useRef(null);
 
     useEffect(() => {
       if (wrap.current) gsap.fromTo(wrap.current, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .55, ease: 'power3.out' });
     }, [i, done, run]);
+
+    useEffect(() => {
+      if (done) return;
+      const timer = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setDone(true);
+            onDone(score, total);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }, [done, run, score, total]);
 
     const answer = ok => {
       const s = score + (ok ? 1 : 0);
@@ -114,6 +146,7 @@
       setI(0);
       setScore(0);
       setDone(false);
+      setTimeLeft(initialSeconds);
       setRun(run + 1);
       setTimeout(() => {
         const el = document.querySelector('.quiz-box') || wrap.current;
@@ -131,7 +164,7 @@
           h('div', { className: 'res-actions' },
             h('button', { type: 'button', className: 'ghost', onClick: retry }, t.retry),
             nextLesson ? h('a', { className: 'solid', href: '#/lesson/' + nextLesson }, t.nextLesson) : null,
-            h('a', { className: 'ghost', href: '#/chapters' }, t.backChapter))));
+            h('a', { className: 'ghost', href: '#/course/students' }, t.backChapter))));
     }
     return h('div', { ref: wrap, key: run + '-' + i },
       h(Question, {
@@ -141,6 +174,7 @@
         bilingual,
         n: i + 1,
         total,
+        timeLeft,
         onResult: answer,
         isLast: i + 1 >= total
       }));

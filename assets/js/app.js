@@ -117,172 +117,36 @@
   const COURSES_DATA = [
     {
       id: 'students',
-      featured: true,
+      featured: false,
       accent: '#2563eb',
       chapterIds: [1, 2, 3, 4],
       labsCount: 6,
-      image: './assets/img/hero_students.png',
-      rating: '4.9',
-      reviewsCount: '3,600+ طالب',
-      priceText: {
-        ar: 'مجاني 100%',
-        en: '100% Free'
-      },
-      tag: {
-        ar: 'طلاب المدارس · مجاني 100%',
-        en: 'School Students · 100% Free'
-      },
-      badge: {
-        ar: 'منحة مجانية لطلاب المدارس',
-        en: 'Free Student Scholarship'
-      },
-      title: {
-        ar: 'كورس البرمجة والذكاء الاصطناعي لطلاب المدارس: الدليل الشامل من الصفر',
-        en: 'Programming & AI for School Students: Complete Guide from Scratch'
-      },
-      blurb: {
-        ar: 'اتعلم تفكر كمبرمج وتبني تطبيقات ومواقع حقيقية بنفسك خطوة بخطوة باللغة المصرية السهلة ومن الصفر تماماً. كورس عملي ممتع ومصمم خصيصاً لطلاب المدارس بدون أي تعقيد.',
-        en: 'Learn to think like a programmer and build real apps step by step from scratch. Designed specifically for school students in natural Arabic.'
-      },
-      highlights: {
-        ar: ['تفكير منطقي وحل مشكلات برمجية', 'بناء وتصميم أول موقع ويب ليك', 'استخدام الذكاء الاصطناعي في الكود', 'معامل كود حية وتجارب تفاعلية'],
-        en: ['Logical Thinking & Problem Solving', 'Building Your First Web App', 'AI in Practical Coding', 'Hands-on Interactive Labs']
-      }
-    },
-    {
-      id: 'web',
-      featured: false,
-      accent: '#0f9d8a',
-      chapterIds: [3, 4],
-      labsCount: 3,
-      image: './assets/img/lessons/web_devtools.png',
-      rating: '4.8',
-      reviewsCount: '2,140+ طالب',
-      priceText: {
-        ar: 'مجاني 100%',
-        en: '100% Free'
-      },
-      tag: {
-        ar: 'تطوير الويب و UX · مجاني 100%',
-        en: 'Web Dev & UX · 100% Free'
-      },
-      badge: {
-        ar: 'تطوير الويب و UX',
-        en: 'Web Dev & UX'
-      },
-      title: {
-        ar: 'تطوير الويب وتصميم تجربة المستخدم (HTML, CSS, JS, UX)',
-        en: 'Full-Stack Web Engineering & UX Design (HTML, CSS, JS, UX)'
-      },
-      blurb: {
-        ar: 'افهم شبكة الإنترنت وبروتوكول HTTP شغالين إزاي في الحقيقة، وابنِ واجهات ومواقع سريعة ومتجاوبة بـ HTML5 و CSS3 و JavaScript مع أفضل ممارسات تجربة المستخدم.',
-        en: 'Master how the internet and HTTP work, build responsive interactive web apps with HTML5, CSS3, and JavaScript, and apply human-centered UX and WCAG accessibility standards.'
-      },
-      highlights: {
-        ar: ['إزاي الويب والـ HTTP شغالين', 'بناء الصفحات بـ HTML5 وتنسيقات CSS3', 'برمجة التفاعل بلغة JavaScript', 'أصول الـ UX وتناسق الألوان'],
-        en: ['HTTP Protocol & Web Architecture', 'Semantic HTML5 & Modern CSS3', 'Interactive JavaScript DOM', 'UX Heuristics & WCAG Contrast']
-      }
-    },
-    {
-      id: 'ai',
-      featured: false,
-      accent: '#6d28d9',
-      chapterIds: [1],
-      labsCount: 1,
       image: './assets/img/lessons/alan_turing.jpg',
-      rating: '4.9',
-      reviewsCount: '1,890+ طالب',
+      rating: '0',
+      reviewsCount: '0 طالب',
       priceText: {
-        ar: 'مجاني 100%',
-        en: '100% Free'
+        ar: 'مجاني',
+        en: 'Free'
       },
       tag: {
-        ar: 'الذكاء الاصطناعي · مجاني 100%',
-        en: 'AI & Computing · 100% Free'
+        ar: 'لطلاب البكالوريا',
+        en: 'For Baccalaureate Students'
       },
       badge: {
-        ar: 'الذكاء الاصطناعي',
-        en: 'AI & Computing'
+        ar: 'لطلاب البكالوريا',
+        en: 'For Baccalaureate Students'
       },
       title: {
-        ar: 'أساسيات الحوسبة والذكاء الاصطناعي وتعلم الآلة',
-        en: 'Computing Foundations, Artificial Intelligence & Machine Learning'
+        ar: 'كورس برمجة وذكاء اصطناعي لطلاب تانية بكالوريا',
+        en: 'Programming & AI Course for 2nd Secondary Baccalaureate'
       },
       blurb: {
-        ar: 'من أول فيزياء المعالجات والترانزستور وقانون مور، لحد خوارزميات الـ Machine Learning والشبكات العصبية العميقة وتطبيقات الذكاء الاصطناعي في بيئة العمل الحقيقية.',
-        en: 'Journey from microprocessor hardware and Moore’s Law to machine learning paradigms, deep neural networks, and responsible AI engineering.'
+        ar: 'كورس البرمجة والذكاء الاصطناعي للصف الثاني الثانوي - البكالوريا. شرح مبسط لكل درس، ملازم الحصة والواجب، واجب إلكتروني وحله بالتفصيل، وكويز إلكتروني بوقت بعد كل حصة.',
+        en: 'Complete Programming & Artificial Intelligence curriculum for 2nd Secondary Baccalaureate students with video explanations, study handouts, homework solutions, and timed quizzes.'
       },
       highlights: {
-        ar: ['تطور أجهزة الكمبيوتر وقانون مور', 'تعلم الآلة والشبكات العصبية', 'أخلاقيات وقواعد استخدام الـ AI'],
-        en: ['Hardware Scaling & Moore’s Law', 'Machine Learning & Neural Nets', 'AI Ethics, Bias & Governance']
-      }
-    },
-    {
-      id: 'cyber',
-      featured: false,
-      accent: '#e5484d',
-      chapterIds: [2],
-      labsCount: 2,
-      image: './assets/img/lessons/firewall.png',
-      rating: '4.9',
-      reviewsCount: '1,420+ طالب',
-      priceText: {
-        ar: 'مجاني 100%',
-        en: '100% Free'
-      },
-      tag: {
-        ar: 'الأمن السيبراني · مجاني 100%',
-        en: 'Cybersecurity · 100% Free'
-      },
-      badge: {
-        ar: 'الأمن السيبراني',
-        en: 'Cybersecurity'
-      },
-      title: {
-        ar: 'الأمن السيبراني والتشفير وحماية البيانات',
-        en: 'Cybersecurity, Cryptography & Network Defense'
-      },
-      blurb: {
-        ar: 'افهم ألاعيب الهاكرز وحيل الهندسة الاجتماعية، وجرب بنفسك عملياً خوارزميات التشفير الكلاسيكية والحديثة، وشوف إزاي تقيس قوة الباسورد وتأمن أي نظام.',
-        en: 'Analyze cyber threats and social engineering, experiment hands-on with classical and modern encryption, password entropy, and defense-in-depth security.'
-      },
-      highlights: {
-        ar: ['مثلث أمن المعلومات CIA والتهديدات', 'خوارزميات التشفير السري والعلني', 'تأكيد الهوية MFA وجدران الحماية'],
-        en: ['CIA Triad & Threat Landscape', 'Symmetric & Public-Key Crypto', 'Multi-Factor Auth & Firewalls']
-      }
-    },
-    {
-      id: 'baccalaureate',
-      featured: false,
-      accent: '#2f5bff',
-      chapterIds: [1, 2, 3, 4],
-      labsCount: 6,
-      image: './assets/img/lessons/data_center.jpg',
-      rating: '4.9',
-      reviewsCount: '4,850+ طالب',
-      priceText: {
-        ar: 'مجاني 100%',
-        en: '100% Free'
-      },
-      tag: {
-        ar: 'الكورس الشامل · مجاني 100%',
-        en: 'Complete Track · 100% Free'
-      },
-      badge: {
-        ar: 'المنهج الكامل من الصفر',
-        en: 'Full Baccalaureate Track'
-      },
-      title: {
-        ar: 'كورس البرمجة والذكاء الاصطناعي الشامل — خطوة بخطوة',
-        en: 'Complete Programming & AI Course — Baccalaureate'
-      },
-      blurb: {
-        ar: 'المنهج الكامل للبرمجة والذكاء الاصطناعي والأمن السيبراني وتطوير الويب وتصميم الواجهات — 4 فصول عملية بشرح مفصل وممتع، ومعامل كود حية تجرب فيها بإيدك، وأكتر من 171 تمرين يثبت المعلومة في دماغك.',
-        en: 'The complete 4-chapter curriculum covering Computing & AI, Cybersecurity, Web Engineering, and UX Design — with all 14 interactive lessons, 6 live labs, and 171+ assessment questions.'
-      },
-      highlights: {
-        ar: ['01 الحوسبة والذكاء الاصطناعي', '02 التشفير والأمن السيبراني', '03 هندسة وتطوير الويب', '04 تصميم وتجربة المستخدم UX'],
-        en: ['01 Computing & AI', '02 Cybersecurity & Crypto', '03 Web Engineering', '04 Interface & UX Design']
+        ar: ['فيديوهات شرح لكل درس', 'ملازم الحصة والواجب', 'واجب الكتروني بعد كل حصة', 'كويز الكتروني بوقت بعد كل حصة'],
+        en: ['Detailed Video Lectures', 'Study & Homework Handouts', 'Online Homework After Every Class', 'Timed Quizzes After Every Lesson']
       }
     }
   ];
@@ -1063,21 +927,46 @@
         null));
   }
 
-  /* ============ Custom Video Player (Brutalist style - Image 4) ============ */
-  function CustomVideoPlayer({ title, src, poster, duration = 152 }) {
+  /* ============ Custom Video Player ============ */
+  function extractYouTubeEmbed(url) {
+    if (!url) return null;
+    const m = String(url).match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+    return m ? `https://www.youtube.com/embed/${m[1]}?rel=0` : null;
+  }
+
+  function CustomVideoPlayer({ title, src, duration: initialDuration = 152 }) {
     const { lang } = useLang();
     const [playing, setPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(initialDuration || 152);
     const [volume, setVolume] = useState(1);
     const [rate, setRate] = useState(1);
+    const [quality, setQuality] = useState('720p');
+    const [settingsOpen, setSettingsOpen] = useState(false);
+    const [settingsView, setSettingsView] = useState('main'); // main | speed | quality
     const videoRef = useRef(null);
     const containerRef = useRef(null);
+    const settingsRef = useRef(null);
+
+    const ytEmbed = extractYouTubeEmbed(src);
+
+    useEffect(() => {
+      if (!settingsOpen) return;
+      const onDoc = e => {
+        if (settingsRef.current && !settingsRef.current.contains(e.target)) {
+          setSettingsOpen(false);
+          setSettingsView('main');
+        }
+      };
+      document.addEventListener('pointerdown', onDoc);
+      return () => document.removeEventListener('pointerdown', onDoc);
+    }, [settingsOpen]);
 
     const formatTime = (secs) => {
-      const s = Math.floor(secs || 0);
+      const s = Math.max(0, Math.floor(secs || 0));
       const m = Math.floor(s / 60);
       const rem = s % 60;
-      return `${m}:${rem < 10 ? '0' : ''}${rem}`;
+      return `${m < 10 ? '0' : ''}${m}:${rem < 10 ? '0' : ''}${rem}`;
     };
 
     const togglePlay = () => {
@@ -1086,30 +975,32 @@
         videoRef.current.pause();
         setPlaying(false);
       } else {
-        videoRef.current.play().then(() => setPlaying(true)).catch(() => setPlaying(true));
+        videoRef.current.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
       }
     };
 
     const skip = (delta) => {
       if (!videoRef.current) return;
-      const target = Math.max(0, Math.min(duration, (videoRef.current.currentTime || currentTime) + delta));
+      const maxDur = duration || 152;
+      const target = Math.max(0, Math.min(maxDur, (videoRef.current.currentTime || currentTime) + delta));
       videoRef.current.currentTime = target;
       setCurrentTime(target);
     };
 
     const handleSeek = (e) => {
       const rect = e.currentTarget.getBoundingClientRect();
-      const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-      const target = pos * duration;
+      const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / (rect.width || 1)));
+      const maxDur = duration || 152;
+      const target = pos * maxDur;
       if (videoRef.current) videoRef.current.currentTime = target;
       setCurrentTime(target);
     };
 
-    const cycleRate = () => {
-      const rates = [1, 1.25, 1.5, 2];
-      const next = rates[(rates.indexOf(rate) + 1) % rates.length];
-      setRate(next);
-      if (videoRef.current) videoRef.current.playbackRate = next;
+    const selectRate = (nextRate) => {
+      setRate(nextRate);
+      if (videoRef.current) videoRef.current.playbackRate = nextRate;
+      setSettingsView('main');
+      setSettingsOpen(false);
     };
 
     const toggleFullscreen = () => {
@@ -1121,17 +1012,58 @@
       }
     };
 
+    const RewindSvg = () => h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+      h('polyline', { points: '11 17 6 12 11 7' }),
+      h('polyline', { points: '18 17 13 12 18 7' }));
+
+    const ForwardSvg = () => h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+      h('polyline', { points: '13 17 18 12 13 7' }),
+      h('polyline', { points: '6 17 11 12 6 7' }));
+
+    const VolumeOnSvg = () => h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+      h('polygon', { points: '11 5 6 9 2 9 2 15 6 15 11 19 11 5' }),
+      h('path', { d: 'M15.54 8.46a5 5 0 0 1 0 7.07' }),
+      h('path', { d: 'M19.07 4.93a10 10 0 0 1 0 14.14' }));
+
+    const VolumeOffSvg = () => h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+      h('polygon', { points: '11 5 6 9 2 9 2 15 6 15 11 19 11 5' }),
+      h('line', { x1: 23, y1: 9, x2: 17, y2: 15 }),
+      h('line', { x1: 17, y1: 9, x2: 23, y2: 15 }));
+
+    const GearSvg = () => h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+      h('circle', { cx: 12, cy: 12, r: 3 }),
+      h('path', { d: 'M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z' }));
+
+    const FullscreenSvg = () => h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+      h('path', { d: 'M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3' }));
+
+    const pct = Math.min(100, Math.max(0, (currentTime / (duration || 1)) * 100));
+
     return h('div', { className: 'custom-video-player', ref: containerRef },
-      h('div', { className: 'cvp-header-strip' },
-        h('span', { className: 'cvp-header-title' }, title || (lang === 'ar' ? 'مقدمة وما الذي ستتعلمه | Introduction & What to Expect' : 'Introduction & What to Expect'))
-      ),
-      h('div', { className: 'cvp-stage' },
+      ytEmbed ? h('div', { className: 'cvp-stage' },
+        h('iframe', {
+          className: 'cvp-video-el',
+          src: ytEmbed,
+          title: title || 'Lesson Video',
+          frameBorder: '0',
+          allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
+          allowFullScreen: true,
+          style: { width: '100%', height: '100%', border: 0 }
+        })
+      ) : h('div', { className: 'cvp-stage' },
         h('video', {
           ref: videoRef,
           className: 'cvp-video-el',
           src: src || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-          poster: poster || './assets/img/hero_students.png',
+          preload: 'metadata',
+          onLoadedMetadata: () => {
+            if (videoRef.current && videoRef.current.duration && isFinite(videoRef.current.duration)) {
+              setDuration(videoRef.current.duration);
+            }
+          },
           onTimeUpdate: () => videoRef.current && setCurrentTime(videoRef.current.currentTime),
+          onPlay: () => setPlaying(true),
+          onPause: () => setPlaying(false),
           onEnded: () => setPlaying(false),
           playsInline: true,
           onClick: togglePlay
@@ -1142,28 +1074,69 @@
           onClick: togglePlay,
           'aria-label': lang === 'ar' ? 'تشغيل الفيديو' : 'Play video'
         },
-          h('svg', { width: 32, height: 32, viewBox: '0 0 24 24', fill: 'currentColor' },
+          h('svg', { width: 30, height: 30, viewBox: '0 0 24 24', fill: '#111111', style: { marginLeft: '3px' } },
             h('polygon', { points: '6 3 20 12 6 21 6 3' }))
         ) : null,
-        h('div', { className: 'cvp-subtitle-demo' }, lang === 'ar' ? 'أهلاً بك' : 'Welcome'),
-        h('div', { className: 'cvp-controls' },
+
+        settingsOpen ? h('div', { className: 'cvp-settings-menu', ref: settingsRef, dir: 'ltr', onClick: e => e.stopPropagation() },
+          settingsView === 'main' ? h(React.Fragment, null,
+            h('div', { className: 'cvp-sm-header' }, 'Settings'),
+            h('button', { type: 'button', className: 'cvp-sm-row', onClick: () => setSettingsView('quality') },
+              h('span', { className: 'cvp-sm-label' }, 'Quality'),
+              h('span', { className: 'cvp-sm-val' }, quality + ' ›')
+            ),
+            h('button', { type: 'button', className: 'cvp-sm-row', onClick: () => setSettingsView('speed') },
+              h('span', { className: 'cvp-sm-label' }, 'Playback Speed'),
+              h('span', { className: 'cvp-sm-val' }, (rate === 1 ? 'Normal' : rate + 'x') + ' ›')
+            )
+          ) : settingsView === 'speed' ? h(React.Fragment, null,
+            h('button', { type: 'button', className: 'cvp-sm-header cvp-sm-back', onClick: () => setSettingsView('main') }, '‹ Playback Speed'),
+            [0.75, 1, 1.25, 1.5, 2].map(r =>
+              h('button', {
+                key: r,
+                type: 'button',
+                className: 'cvp-sm-row' + (rate === r ? ' is-selected' : ''),
+                onClick: () => selectRate(r)
+              },
+                h('span', { className: 'cvp-sm-label' }, r === 1 ? 'Normal' : r + 'x'),
+                rate === r ? h('span', { className: 'cvp-sm-val' }, '✓') : null
+              )
+            )
+          ) : h(React.Fragment, null,
+            h('button', { type: 'button', className: 'cvp-sm-header cvp-sm-back', onClick: () => setSettingsView('main') }, '‹ Quality'),
+            ['1080p', '720p', '480p', 'Auto'].map(q =>
+              h('button', {
+                key: q,
+                type: 'button',
+                className: 'cvp-sm-row' + (quality === q ? ' is-selected' : ''),
+                onClick: () => { setQuality(q); setSettingsView('main'); setSettingsOpen(false); }
+              },
+                h('span', { className: 'cvp-sm-label' }, q),
+                quality === q ? h('span', { className: 'cvp-sm-val' }, '✓') : null
+              )
+            )
+          )
+        ) : null,
+
+        h('div', { className: 'cvp-controls', dir: 'ltr' },
           h('div', { className: 'cvp-scrub-wrap', onClick: handleSeek },
             h('div', { className: 'cvp-scrub-track' },
-              h('div', { className: 'cvp-scrub-fill', style: { width: `${(currentTime / duration) * 100}%` } })
+              h('div', { className: 'cvp-scrub-fill', style: { width: `${pct}%` } }),
+              h('span', { className: 'cvp-scrub-thumb', style: { left: `${pct}%` } })
             )
           ),
           h('div', { className: 'cvp-controls-row' },
             h('div', { className: 'cvp-ctrl-left' },
+              h('button', { type: 'button', className: 'cvp-btn', onClick: () => skip(-10), title: 'Rewind 10s' }, h(RewindSvg)),
               h('button', { type: 'button', className: 'cvp-btn cvp-play-btn', onClick: togglePlay, title: playing ? 'Pause' : 'Play' },
                 playing
-                  ? h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'currentColor' },
+                  ? h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'currentColor' },
                       h('rect', { x: 6, y: 4, width: 4, height: 16 }),
                       h('rect', { x: 14, y: 4, width: 4, height: 16 }))
-                  : h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'currentColor' },
+                  : h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'currentColor' },
                       h('polygon', { points: '6 3 20 12 6 21 6 3' }))
               ),
-              h('button', { type: 'button', className: 'cvp-btn cvp-skip-btn', onClick: () => skip(-10), title: lang === 'ar' ? 'رجوع 10 ثواني' : 'Rewind 10s' }, '◂10'),
-              h('button', { type: 'button', className: 'cvp-btn cvp-skip-btn', onClick: () => skip(10), title: lang === 'ar' ? 'تقديم 10 ثواني' : 'Forward 10s' }, '10▸'),
+              h('button', { type: 'button', className: 'cvp-btn', onClick: () => skip(10), title: 'Forward 10s' }, h(ForwardSvg)),
               h('span', { className: 'cvp-time-display', dir: 'ltr' }, `${formatTime(currentTime)} / ${formatTime(duration)}`),
               h('button', {
                 type: 'button',
@@ -1174,12 +1147,16 @@
                   if (videoRef.current) videoRef.current.volume = next;
                 },
                 title: volume > 0 ? 'Mute' : 'Unmute'
-              }, volume > 0 ? '🔊' : '🔇')
+              }, volume > 0 ? h(VolumeOnSvg) : h(VolumeOffSvg))
             ),
             h('div', { className: 'cvp-ctrl-right' },
-              h('span', { className: 'cvp-pill cvp-quality' }, 'Auto · 720p'),
-              h('button', { type: 'button', className: 'cvp-pill cvp-rate-btn', onClick: cycleRate, title: 'Speed' }, `${rate}x`),
-              h('button', { type: 'button', className: 'cvp-btn cvp-fs-btn', onClick: toggleFullscreen, title: 'Fullscreen' }, '⛶')
+              h('button', {
+                type: 'button',
+                className: 'cvp-btn',
+                onClick: () => { setSettingsOpen(prev => !prev); setSettingsView('main'); },
+                title: 'Settings'
+              }, h(GearSvg)),
+              h('button', { type: 'button', className: 'cvp-btn cvp-fs-btn', onClick: toggleFullscreen, title: 'Fullscreen' }, h(FullscreenSvg))
             )
           )
         )
@@ -1187,28 +1164,39 @@
     );
   }
 
-  /* ============ Courses Catalog Section on Home (Image 3) ============ */
+  /* ============ Courses Catalog Section on Home ============ */
   function CoursesCatalog({ meta, store, lang, t }) {
+    const [ratingSnap, setRatingSnap] = useState(() => App.StoreRatings.getCourse('students'));
+    useEffect(() => {
+      return App.StoreRatings.subscribe(() => {
+        setRatingSnap(App.StoreRatings.getCourse('students'));
+      });
+    }, []);
+
     return h('section', { className: 'courses-sec', id: 'courses' },
       h('div', { className: 'courses-head' },
-        h('p', { className: 'kicker', 'data-reveal': '' }, lang === 'ar' ? 'مسارات تعلّم مجانية لطلاب المدارس' : 'Free Learning Tracks for Students'),
-        h(Words, { tag: 'h2', className: 'section-title', text: lang === 'ar' ? 'كورسات البرمجة والذكاء الاصطناعي' : 'Programming & AI Courses' }),
+        h('p', { className: 'kicker', 'data-reveal': '' }, (t && t.coursesKicker) || 'Syntax'),
+        h(Words, { tag: 'h2', className: 'section-title', text: (t && t.coursesTitle) || (lang === 'ar' ? 'كورسات Syntax' : 'Syntax Courses') }),
         h('p', { className: 'courses-sub', 'data-reveal': '' },
-          lang === 'ar'
-            ? 'اتعلم البرمجة وتطوير الويب والذكاء الاصطناعي والأمن السيبراني من الصفر. شروحات عملية وتطبيقات كود حية خطوة بخطوة بطريقة مصرية ممتعة، ومجانية 100% لجميع طلاب المدارس.'
-            : 'Learn programming, web dev, AI, and cybersecurity hands-on. Practical interactive tutorials designed for school students, 100% free.')
+          (t && t.coursesSub) || (lang === 'ar'
+            ? 'اتعلم البرمجة وتطوير الويب والذكاء الاصطناعي والأمن السيبراني وحاجات تانية كتير.'
+            : 'Learn programming, web development, artificial intelligence, cybersecurity, and much more.'))
       ),
       h('div', { className: 'courses-grid', 'data-stagger': '' },
-        COURSES_DATA.map((crs, idx) =>
-          h('a', {
+        COURSES_DATA.map((crs) => {
+          const avgDisplay = ratingSnap.count > 0 ? ratingSnap.average.toFixed(1) : '0';
+          const studentsDisplay = lang === 'ar'
+            ? `${ratingSnap.studentsCount || 0} طالب`
+            : `${ratingSnap.studentsCount || 0} students`;
+          return h('a', {
             key: crs.id,
             href: '#/course/' + crs.id,
-            className: 'course-card' + (crs.featured ? ' is-featured' : ''),
+            className: 'course-card',
             style: { '--c-accent': crs.accent }
           },
             h('div', { className: 'cc-banner' },
               h('img', {
-                src: crs.image || './assets/img/hero_students.png',
+                src: crs.image || './assets/img/lessons/alan_turing.jpg',
                 alt: lt(crs.title, lang),
                 loading: 'lazy'
               })
@@ -1219,21 +1207,21 @@
               h('p', { className: 'cc-blurb' }, lt(crs.blurb, lang)),
               h('div', { className: 'cc-rating' },
                 h('span', { className: 'cc-star' }, '★'),
-                h('span', { className: 'cc-score' }, crs.rating || '4.9'),
-                h('span', { className: 'cc-count' }, `(${crs.reviewsCount || '126 تقييم'})`)
+                h('span', { className: 'cc-score' }, avgDisplay),
+                h('span', { className: 'cc-count' }, `(${studentsDisplay})`)
               )
             ),
             h('div', { className: 'cc-bottom' },
               h('span', { className: 'cc-btn-solid' }, lang === 'ar' ? 'شوف محتوى الكورس ←' : 'Explore Course →'),
-              h('span', { className: 'cc-price-txt' }, lt(crs.priceText, lang) || (lang === 'ar' ? 'مجاني 100%' : '100% Free'))
+              h('span', { className: 'cc-price-txt' }, lt(crs.priceText, lang) || (lang === 'ar' ? 'مجاني' : 'Free'))
             )
-          )
-        )
+          );
+        })
       )
     );
   }
 
-  /* ============ Dedicated Course Intro View (yehia.tech style) ============ */
+  /* ============ Dedicated Course Intro View ============ */
   function CourseView({ courseId, targetChapter, meta, status }) {
     const { t, lang } = useLang();
     const store = useStore();
@@ -1245,30 +1233,76 @@
       return meta.chapters.filter(c => course.chapterIds.includes(c.id));
     }, [meta, course]);
 
-    const totalLessons = chapters.reduce((n, c) => n + c.lessons.length, 0);
-    const doneLessons = chapters.reduce((n, c) => n + c.lessons.filter(l => (store.lessons || {})[l.id] && store.lessons[l.id].best != null).length, 0);
+    const [openChapters, setOpenChapters] = useState(() => {
+      if (targetChapter) return { [targetChapter]: true };
+      return { 1: true };
+    });
 
+    useEffect(() => {
+      if (targetChapter) {
+        setOpenChapters(prev => ({ ...prev, [targetChapter]: true }));
+        const timer = setTimeout(() => {
+          const el = document.getElementById('cip-chapter-' + targetChapter);
+          if (el) scrollToEl(el, 90);
+        }, 120);
+        return () => clearTimeout(timer);
+      }
+    }, [targetChapter, meta]);
+
+    const toggleChapter = (chId) => {
+      setOpenChapters(prev => ({ ...prev, [chId]: !prev[chId] }));
+    };
+
+    const allExpanded = chapters.length > 0 && chapters.every(ch => !!openChapters[ch.id]);
+    const toggleAllChapters = () => {
+      if (allExpanded) {
+        setOpenChapters({});
+      } else {
+        const next = {};
+        chapters.forEach(ch => { next[ch.id] = true; });
+        setOpenChapters(next);
+      }
+    };
+
+    const [ratingInfo, setRatingInfo] = useState(() => App.StoreRatings.getCourse(course.id));
+    const [hoverStar, setHoverStar] = useState(0);
+    const [ratingSavedNotice, setRatingSavedNotice] = useState(false);
+
+    useEffect(() => {
+      App.StoreRatings.load(course.id);
+      return App.StoreRatings.subscribe(() => {
+        setRatingInfo(App.StoreRatings.getCourse(course.id));
+      });
+    }, [course.id]);
+
+    const handleRate = async (stars) => {
+      await App.StoreRatings.rate(course.id, stars);
+      setRatingInfo(App.StoreRatings.getCourse(course.id));
+      setRatingSavedNotice(true);
+      setTimeout(() => setRatingSavedNotice(false), 2500);
+    };
+
+    const totalLessons = chapters.reduce((n, c) => n + c.lessons.length, 0) || 14;
     const firstLessonId = chapters.length && chapters[0].lessons.length ? chapters[0].lessons[0].id : '1-1';
 
     const learnItemsAr = [
-      'فهم التفكير المنطقي وأساسيات البرمجة من الصفر وبدون أي تعقيد.',
-      'بناء وتصميم أول موقع ويب تفاعلي ليك باستخدام HTML5 و CSS3 و JavaScript.',
-      'إزاي تستخدم الذكاء الاصطناعي كمساعد شخصي ليك في فهم وكتابة الكود وتصحيح الأخطاء.',
-      'حماية بياناتك وأجهزتك وفهم أساسيات الأمن السيبراني والتشفير وطرق تفكير الهاكرز.',
-      'حل المشكلات البرمجية والتطبيق العملي في معامل كود حية تفاعلية.',
-      'مشروع تخرج حقيقي تطبقه بنفسك وشهادة إتمام معتمدة بعد الانتهاء من الكورس.'
+      'فيديوهات شرح لكل درس هنفهم فيها كل حاجة وهنحل كتيير',
+      'ملازم الحصة والواجب لكل درس',
+      'واجب الكتروني بعد كل حصة',
+      'فيديو حل الواجب بالتفصيل + المودل انسر',
+      'كويز الكتروني بوقت بعد كل حصة عشان نضمن انك فهمت الدرس كويس وبتعرف تحل عليه'
     ];
 
     const learnItemsEn = [
-      'Understand logical thinking and core programming principles from scratch without confusion.',
-      'Build and design your first interactive website using semantic HTML5, modern CSS3, and JavaScript.',
-      'Leverage Artificial Intelligence as your personal coding companion to write, understand, and debug code.',
-      'Secure your personal data and devices with cybersecurity fundamentals, encryption, and threat models.',
-      'Tackle programming problems hands-on with live code labs and interactive assessments.',
-      'Build a real graduation project and earn a verified certificate of completion upon finishing.'
+      'Detailed video explanations for every lesson where we understand everything and solve plenty of problems',
+      'Study notes and homework handouts for every lesson',
+      'Electronic homework assignment after every class',
+      'Detailed homework solution video + model answer',
+      'Timed electronic quiz after every class to ensure you understood the lesson and can solve problems on it'
     ];
 
     const learnList = lang === 'ar' ? learnItemsAr : learnItemsEn;
+    const avgScoreStr = ratingInfo.count > 0 ? ratingInfo.average.toFixed(1) : '0';
 
     return h('main', { id: 'main', className: 'course-intro-view' },
       /* 1. Breadcrumb */
@@ -1282,17 +1316,47 @@
 
       /* 2. Course Header */
       h('header', { className: 'cip-header' },
-        h('div', { className: 'cip-badge' }, lt(course.badge, lang)),
         h('h1', { className: 'cip-title' }, lt(course.title, lang)),
         h('p', { className: 'cip-sub' }, lt(course.blurb, lang)),
         h('div', { className: 'cip-meta-strip' },
-          h('span', null, `★ ${course.rating || '4.9'} (${course.reviewsCount || '3,600+ طالب'})`),
+          h('span', { className: 'cip-meta-rating-pill' },
+            `★ ${avgScoreStr} (${ratingInfo.count} ${lang === 'ar' ? 'تقييم' : 'ratings'})`
+          ),
           h('span', null, '•'),
-          h('span', null, `${totalLessons} ${lang === 'ar' ? 'درس عملي' : 'practical lessons'}`),
+          h('span', null, `${ratingInfo.studentsCount || 0} ${lang === 'ar' ? 'طالب' : 'students'}`),
           h('span', null, '•'),
-          h('span', null, lang === 'ar' ? 'معامل كود حية تفاعلية' : 'Hands-on Coding Labs'),
+          h('span', null, `${totalLessons} ${lang === 'ar' ? 'درس' : 'lessons'}`),
           h('span', null, '•'),
-          h('span', { style: { color: '#16a34a', fontWeight: 800 } }, lang === 'ar' ? 'مجاني 100% لطلاب المدارس' : '100% Free')
+          h('span', { style: { color: '#16a34a', fontWeight: 800 } }, lang === 'ar' ? 'مجاني' : 'Free')
+        ),
+
+        /* Student Interactive Rating Bar */
+        h('div', { className: 'cip-student-rating-box' },
+          h('span', { className: 'cip-sr-label' },
+            ratingInfo.myRating > 0
+              ? (lang === 'ar' ? `تقييمك للكورس (${ratingInfo.myRating}/5):` : `Your course rating (${ratingInfo.myRating}/5):`)
+              : (lang === 'ar' ? 'قيّم الكورس:' : 'Rate this course:')
+          ),
+          h('div', {
+            className: 'cip-sr-stars',
+            onMouseLeave: () => setHoverStar(0)
+          },
+            [1, 2, 3, 4, 5].map(stNum => {
+              const active = (hoverStar || ratingInfo.myRating) >= stNum;
+              return h('button', {
+                key: stNum,
+                type: 'button',
+                className: 'cip-sr-star-btn' + (active ? ' is-lit' : ''),
+                onMouseEnter: () => setHoverStar(stNum),
+                onClick: () => handleRate(stNum),
+                title: lang === 'ar' ? `تقييم ${stNum} من 5` : `Rate ${stNum} of 5`,
+                'aria-label': lang === 'ar' ? `تقييم ${stNum} من 5` : `Rate ${stNum} of 5`
+              }, '★');
+            })
+          ),
+          ratingSavedNotice ? h('span', { className: 'cip-sr-saved' },
+            lang === 'ar' ? 'تم تسجيل تقييمك بنجاح' : 'Rating saved'
+          ) : null
         )
       ),
 
@@ -1300,44 +1364,94 @@
       h('div', { className: 'cip-layout' },
         /* Main Column */
         h('div', { className: 'cip-main' },
-          /* Custom Video Player (Image 4) */
+          /* Custom Video Player */
           h(CustomVideoPlayer, {
-            title: lang === 'ar' ? 'مقدمة وما الذي ستتعلمه | Introduction & What to Expect' : 'Introduction & What to Expect',
+            title: lang === 'ar' ? 'مقدمة الكورس' : 'Course Introduction',
             src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-            poster: course.image || './assets/img/hero_students.png',
             duration: 152
           }),
 
-          /* Section: What you will learn */
+          /* Section: Course Description & What You Will Find */
           h('div', { className: 'cip-card' },
-            h('h2', { className: 'cip-card-title' },
-              h('span', null, '🎯'),
-              h('span', null, lang === 'ar' ? 'ماذا ستتعلم في هذا الكورس؟' : 'What You Will Learn in This Course')
+            h('div', { className: 'cip-welcome-block' },
+              h('p', { className: 'cip-welcome-greeting' }, lang === 'ar' ? 'اهلا يا بشمهندسين' : 'Welcome Engineers'),
+              h('p', { className: 'cip-welcome-course' },
+                lang === 'ar'
+                  ? 'كورس البرمجة والذكاء الاصطناعي ان شاء الله للصف الثاني الثانوي - البكالوريا'
+                  : 'Programming & Artificial Intelligence Course for 2nd Secondary - Baccalaureate'
+              ),
+              h('h2', { className: 'cip-card-title', style: { marginTop: '6px' } },
+                lang === 'ar' ? 'طيب هنلاقي ايه في الكورس ده ؟' : 'What will we find in this course?'
+              )
             ),
-            h('div', { className: 'cip-learn-grid' },
+            h('div', { className: 'cip-learn-list' },
               learnList.map((item, idx) =>
                 h('div', { key: idx, className: 'cip-learn-item' },
                   h('span', { className: 'cip-check' }, '✓'),
                   h('span', null, item)
                 )
               )
+            ),
+            h('div', { className: 'cip-quiz-rule-note' },
+              lang === 'ar'
+                ? 'عشان تضمن انك فهمت الاول حل الكويز بعدين خش على اللي بعده'
+                : 'To make sure you understood first, solve the quiz and then move on to the next lesson'
             )
           ),
 
-          /* Section: Curriculum & Lessons */
+          /* Section: Collapsible Curriculum Categories */
           h('div', { className: 'cip-card' },
-            h('h2', { className: 'cip-card-title' },
-              h('span', null, '📚'),
-              h('span', null, lang === 'ar' ? 'منهج الكورس وقائمة الدروس' : 'Curriculum & Course Content')
+            h('div', { className: 'cip-curr-top-row' },
+              h('h2', { className: 'cip-card-title' },
+                lang === 'ar' ? 'منهج الكورس وقائمة الدروس' : 'Curriculum & Course Content'
+              ),
+              h('button', {
+                type: 'button',
+                className: 'cip-expand-all-btn',
+                onClick: toggleAllChapters
+              }, allExpanded
+                ? (lang === 'ar' ? 'إغلاق الكل' : 'Collapse All')
+                : (lang === 'ar' ? 'فتح الكل' : 'Expand All'))
             ),
             h('div', { className: 'cip-curriculum-list' },
-              chapters.map((ch, idx) =>
-                h('div', { key: ch.id, className: 'cip-chapter-box' },
-                  h('div', { className: 'cip-ch-head' },
-                    h('span', null, `${lang === 'ar' ? 'الفصل' : 'Chapter'} ${pad(ch.id)}: ${lt(ch.title, lang)}`),
-                    h('span', { style: { fontSize: '13px', color: '#666' } }, `${ch.lessons.length} ${lang === 'ar' ? 'دروس' : 'lessons'}`)
+              chapters.map((ch) => {
+                const isOpen = !!openChapters[ch.id];
+                const doneInCh = ch.lessons.filter(ls => (store.lessons || {})[ls.id] && store.lessons[ls.id].best != null).length;
+                return h('div', {
+                  key: ch.id,
+                  id: 'cip-chapter-' + ch.id,
+                  className: 'cip-chapter-box' + (isOpen ? ' is-open' : '')
+                },
+                  h('button', {
+                    type: 'button',
+                    className: 'cip-ch-head',
+                    onClick: () => toggleChapter(ch.id),
+                    'aria-expanded': isOpen
+                  },
+                    h('div', { className: 'cip-ch-head-title' },
+                      h('span', { className: 'cip-ch-num-pill' }, pad(ch.id)),
+                      h('span', null, `${lang === 'ar' ? 'الفصل' : 'Chapter'} ${pad(ch.id)}: ${lt(ch.title, lang)}`)
+                    ),
+                    h('div', { className: 'cip-ch-head-meta' },
+                      h('span', { className: 'cip-ch-count' },
+                        doneInCh > 0
+                          ? `${doneInCh}/${ch.lessons.length} ${lang === 'ar' ? 'مكتمل' : 'done'}`
+                          : `${ch.lessons.length} ${lang === 'ar' ? 'دروس' : 'lessons'}`
+                      ),
+                      h('svg', {
+                        className: 'cip-ch-chevron',
+                        width: 18,
+                        height: 18,
+                        viewBox: '0 0 24 24',
+                        fill: 'none',
+                        stroke: 'currentColor',
+                        strokeWidth: 2.5,
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round'
+                      }, h('polyline', { points: '6 9 12 15 18 9' }))
+                    )
                   ),
-                  h('div', { className: 'cip-ch-lessons' },
+                  isOpen ? h('div', { className: 'cip-ch-lessons' },
                     ch.lessons.map(ls => {
                       const st = (store.lessons || {})[ls.id] || {};
                       const isDone = st.best != null;
@@ -1361,35 +1475,9 @@
                         )
                       );
                     })
-                  )
-                )
-              )
-            )
-          ),
-
-          /* Section: Prerequisites */
-          h('div', { className: 'cip-card' },
-            h('h2', { className: 'cip-card-title' },
-              h('span', null, '💡'),
-              h('span', null, lang === 'ar' ? 'متطلبات الكورس' : 'Prerequisites')
-            ),
-            h('ul', { style: { margin: 0, paddingRight: '20px', lineHeight: 1.8 } },
-              h('li', null, lang === 'ar' ? 'لا تحتاج أي خبرة مسبقة في البرمجة نهائياً — نبدأ معك خطوة بخطوة من الصفر.' : 'No prior coding experience required — we start together from zero.'),
-              h('li', null, lang === 'ar' ? 'جهاز كمبيوتر أو لابتوب واتصال بالإنترنت لتجربة الأكواد والمعامل.' : 'A computer or laptop with internet access to run code and labs.'),
-              h('li', null, lang === 'ar' ? 'فضول وشغف للتعلّم وبناء أشياء جديدة بيدك!' : 'Curiosity and passion to learn and build real things hands-on!')
-            )
-          ),
-
-          /* Section: About Instructor */
-          h('div', { className: 'cip-card' },
-            h('h2', { className: 'cip-card-title' },
-              h('span', null, '👨‍🏫'),
-              h('span', null, lang === 'ar' ? 'عن المدرب والمنصة' : 'About Instructor & Platform')
-            ),
-            h('p', { style: { margin: 0, lineHeight: 1.75, color: '#333' } },
-              lang === 'ar'
-                ? 'منصة Syntax بقيادة ماجد أبو راية صُممت لتقديم محتوى برمجي عصري وعالي الجودة باللغة المصرية البسيطة، لنمكن كل طالب وطالبة من دخول عالم البرمجة والذكاء الاصطناعي وبناء مشاريعهم الحقيقية بالمجان وبدون أي عوائق.'
-                : 'Syntax Academy by Maged Aboraya delivers world-class coding education in accessible, clear language — empowering every school student to master programming and AI for free.'
+                  ) : null
+                );
+              })
             )
           )
         ),
@@ -1399,42 +1487,36 @@
           h('div', { className: 'cip-side-card' },
             h('img', {
               className: 'cip-side-img',
-              src: course.image || './assets/img/hero_students.png',
+              src: course.image || './assets/img/lessons/alan_turing.jpg',
               alt: lt(course.title, lang)
             }),
             h('div', { className: 'cip-side-body' },
               h('div', { className: 'cip-price-block' },
-                h('span', { className: 'cip-price-main' }, lang === 'ar' ? 'مجاني 100%' : '100% Free'),
-                h('span', { className: 'cip-price-old' }, lang === 'ar' ? '899.99 ج.م' : '899.99 EGP'),
-                h('span', { className: 'cip-scholarship-tag' }, lang === 'ar' ? 'منحة لطلاب المدارس' : 'Student Scholarship')
+                h('span', { className: 'cip-price-main' }, lang === 'ar' ? 'مجاني' : 'Free')
               ),
               h('a', {
                 href: '#/lesson/' + firstLessonId,
                 className: 'cip-cta-btn'
               },
-                h('span', null, lang === 'ar' ? 'ابدأ التعلّم مجاناً الآن' : 'Start Learning Free Now'),
+                h('span', null, lang === 'ar' ? 'ابدأ التعلّم الآن' : 'Start Learning Now'),
                 h('span', { 'aria-hidden': 'true' }, '←')
               ),
               h('ul', { className: 'cip-perks' },
                 h('li', { className: 'cip-perk-item' },
                   h('span', { style: { color: '#16a34a', fontWeight: 800 } }, '✓'),
-                  h('span', null, `${totalLessons} ${lang === 'ar' ? 'درس تطبيقي وشرح مفصل' : 'detailed interactive lessons'}`)
+                  h('span', null, lang === 'ar' ? 'فيديوهات شرح لكل درس' : 'Video explanation for every lesson')
                 ),
                 h('li', { className: 'cip-perk-item' },
                   h('span', { style: { color: '#16a34a', fontWeight: 800 } }, '✓'),
-                  h('span', null, lang === 'ar' ? '6 معامل كود حية تفاعلية' : '6 Live interactive code labs')
+                  h('span', null, lang === 'ar' ? 'ملازم الحصة والواجب لكل درس' : 'Class & homework handouts')
                 ),
                 h('li', { className: 'cip-perk-item' },
                   h('span', { style: { color: '#16a34a', fontWeight: 800 } }, '✓'),
-                  h('span', null, lang === 'ar' ? '171 تمرين واختبار شامل' : '171+ assessment challenges')
+                  h('span', null, lang === 'ar' ? 'واجب الكتروني + فيديو حل الواجب بالتفصيل' : 'Online homework + detailed video solutions')
                 ),
                 h('li', { className: 'cip-perk-item' },
                   h('span', { style: { color: '#16a34a', fontWeight: 800 } }, '✓'),
-                  h('span', null, lang === 'ar' ? 'شهادة إتمام رسمية معتمدة' : 'Official Certificate of Completion')
-                ),
-                h('li', { className: 'cip-perk-item' },
-                  h('span', { style: { color: '#16a34a', fontWeight: 800 } }, '✓'),
-                  h('span', null, lang === 'ar' ? 'وصول دائم مدى الحياة مجاناً 100%' : 'Lifetime Free Access')
+                  h('span', null, lang === 'ar' ? 'كويز الكتروني بوقت بعد كل حصة' : 'Timed online quiz after every class')
                 )
               )
             )
@@ -1653,7 +1735,6 @@
         h('div', { className: 'hero-stats', 'data-reveal': 'fade', 'data-delay': .75 },
           [[COURSES_DATA.length, t.stats[0]], [meta ? meta.chapters.reduce((n, c) => n + c.lessons.length, 0) : 14, t.stats[1]], [questions ? questions + '+' : '171+', t.stats[2]]].map(([n, l], i) =>
             h('div', { key: i }, h('b', { dir: 'ltr' }, n), h('span', null, l))))),
-      h('section', { className: 'manifesto' }, h(ScrubWords, { text: t.manifesto })),
       h(Marquee),
       h(CoursesCatalog, { meta, store, lang, t }));
   }
@@ -1707,40 +1788,37 @@
   }
 
   /* ============ lesson video player section ============ */
-  function LessonVideoSection({ id, title, watched, onMarkWatched, lang }) {
-    const { t } = useLang();
+  function LessonVideoSection({ id, title, lang }) {
     const currentUrl = App.StoreVideos.get(id) || '';
 
     return h('section', { className: 'lesson-video-sec' },
       h(CustomVideoPlayer, {
-        title: title || (lang === 'ar' ? 'مقدمة وما الذي ستتعلمه | Introduction & What to Expect' : 'Introduction & What to Expect'),
+        title: title || (lang === 'ar' ? 'فيديو الشرح' : 'Lesson Video'),
         src: currentUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        poster: './assets/img/hero_students.png',
         duration: 152
       }),
-      h('div', { className: 'video-footer-strip', style: { marginTop: '12px' } },
-        watched ? h('div', { className: 'video-done-badge' },
-          h(CheckIcon),
-          h('span', null, t.videoWatched || (lang === 'ar' ? 'تم إتمام مشاهدة محاضرة الفيديو بنجاح' : 'Lecture Video Completed Successfully'))
-        ) : h('button', {
-          type: 'button',
-          className: 'video-finish-btn',
-          onClick: onMarkWatched
+      h('button', {
+        type: 'button',
+        className: 'video-to-explanation-indicator',
+        onClick: () => {
+          const el = document.querySelector('.terms') || document.getElementById('sec-0') || document.querySelector('.l-body');
+          if (el) App.scrollToEl(el, 80);
+        }
+      },
+        h('span', { className: 'vtei-text' }, lang === 'ar' ? 'الشرح' : 'Explanation'),
+        h('svg', {
+          className: 'vtei-arrow',
+          width: 24,
+          height: 24,
+          viewBox: '0 0 24 24',
+          fill: 'none',
+          stroke: 'currentColor',
+          strokeWidth: 2.5,
+          strokeLinecap: 'round',
+          strokeLinejoin: 'round'
         },
-          h(CheckIcon),
-          h('span', null, t.markVideoDone || (lang === 'ar' ? 'أنهيت مشاهدة الفيديو — الانتقال إلى الشرح' : 'Mark Video Finished — Jump to Reading'))
-        ),
-        h('button', {
-          type: 'button',
-          className: 'video-scroll-btn',
-          onClick: () => {
-            const el = document.querySelector('.terms') || document.getElementById('sec-0') || document.querySelector('.l-body');
-            if (el) App.scrollToEl(el, 80);
-          }
-        },
-          h('span', null, t.continueToText || (lang === 'ar' ? 'المتابعة إلى محتوى الدرس' : 'Continue to Lesson Content')),
-          h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2 },
-            h('polyline', { points: '6 9 12 15 18 9' }))
+          h('line', { x1: 12, y1: 5, x2: 12, y2: 19 }),
+          h('polyline', { points: '19 12 12 19 5 12' })
         )
       )
     );
@@ -1818,8 +1896,8 @@
       Store.setLesson(id, { read: true, best: Math.max(prev, score), total });
     };
 
-    if (err === 'prep') return h('main', { id: 'main', className: 'lesson-state', style: { '--accent': accent } }, h('h1', null, t.prepTitle), h('p', null, t.prepText), h('a', { className: 'solid', href: '#/course/baccalaureate' }, t.backChapter));
-    if (err) return h('main', { id: 'main', className: 'lesson-state' }, h('p', null, t.error), h('a', { className: 'solid', href: '#/course/baccalaureate' }, t.backChapter));
+    if (err === 'prep') return h('main', { id: 'main', className: 'lesson-state', style: { '--accent': accent } }, h('h1', null, t.prepTitle), h('p', null, t.prepText), h('a', { className: 'solid', href: '#/course/students' }, t.backChapter));
+    if (err) return h('main', { id: 'main', className: 'lesson-state' }, h('p', null, t.error), h('a', { className: 'solid', href: '#/course/students' }, t.backChapter));
     if (!data) return h('main', { id: 'main', className: 'lesson-state' }, h('p', { className: 'loading' }, t.loading));
 
     const isBi = lang === 'en' && bilingual && !!arData;
@@ -1949,7 +2027,7 @@
     const badgeLabel = type => {
       if (type === 'course') return lang === 'en' ? 'Course' : 'كورس';
       if (type === 'lesson') return lang === 'en' ? 'Lesson' : 'درس';
-      if (type === 'demo') return lang === 'en' ? 'Interactive Lab' : 'معمل تفاعلي';
+      if (type === 'demo') return lang === 'en' ? 'Simulator' : 'محاكي';
       if (type === 'figure') return lang === 'en' ? 'Pioneer / Device' : 'شخصية / جهاز';
       return lang === 'en' ? 'Key Term' : 'مصطلح أساسي';
     };
@@ -1963,7 +2041,7 @@
             className: 'spotlight-input',
             value: query,
             onChange: e => setQuery(e.target.value),
-            placeholder: lang === 'en' ? 'Search courses, lessons, key terms, labs... (Ctrl+K)' : 'ابحث في الكورسات والدروس والمصطلحات والمعامل التفاعلية... (Ctrl+K)'
+            placeholder: lang === 'en' ? 'Search courses, lessons, key terms... (Ctrl+K)' : 'ابحث في الكورسات والدروس والمصطلحات... (Ctrl+K)'
           }),
           h('span', { className: 'spotlight-esc' }, 'ESC')),
         h('div', { className: 'spotlight-list' },
@@ -2131,7 +2209,7 @@
     let m;
     if ((m = hash.match(/^\/lesson\/(\d-\d)$/))) return { name: 'lesson', id: m[1], key: hash, chapter: +m[1][0] };
     if ((m = hash.match(/^\/course\/([a-z0-9_-]+)$/i))) return { name: 'course', courseId: m[1].toLowerCase(), key: 'course-' + m[1].toLowerCase() };
-    if ((m = hash.match(/^\/chapter\/(\d)$/))) return { name: 'course', courseId: 'baccalaureate', targetChapter: +m[1], key: 'course-baccalaureate', chapter: +m[1] };
+    if ((m = hash.match(/^\/chapter\/(\d)$/))) return { name: 'course', courseId: 'students', targetChapter: +m[1], key: 'course-students', chapter: +m[1] };
     if (hash === '/courses' || hash === '/chapters') return { name: 'home', target: 'courses', key: 'home' };
     return { name: 'home', key: 'home' };
   }

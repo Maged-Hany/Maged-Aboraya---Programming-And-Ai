@@ -33,25 +33,18 @@
       h('span', null, speaking ? (isAr ? 'جارٍ القراءة…' : 'Playing…') : (isAr ? 'استمع' : 'Listen')));
   };
 
-  /* Paragraph with Text-to-Speech */
+  /* Paragraph */
   const Para = ({ b, arB, bilingual }) => {
     const text = typeof b === 'string' ? b : b.text;
     const arText = arB ? (typeof arB === 'string' ? arB : arB.text) : null;
-    const pid = useRef('p-' + Math.random().toString(36).slice(2, 8)).current;
 
     if (bilingual && arText) {
       return h('div', { className: 'b-p-wrap', 'data-reveal': '' },
-        h('div', { className: 'b-p-row' },
-          h('p', { className: 'b-p', style: { flex: 1 } }, text),
-          h(TTSButton, { text, langHint: 'en', id: pid })),
-        h('div', { className: 'b-p-row' },
-          h('p', { className: 'ar-sub', dir: 'rtl', style: { flex: 1 } }, arText),
-          h(TTSButton, { text: arText, langHint: 'ar', id: pid + '-ar' })));
+        h('p', { className: 'b-p' }, text),
+        h('p', { className: 'ar-sub', dir: 'rtl' }, arText));
     }
     return h('div', { className: 'b-p-wrap', 'data-reveal': '' },
-      h('div', { className: 'b-p-row' },
-        h('p', { className: 'b-p', style: { flex: 1 } }, text),
-        h(TTSButton, { text, langHint: 'auto', id: pid })));
+      h('p', { className: 'b-p' }, text));
   };
 
   /* List */
@@ -275,7 +268,12 @@
               title: lang === 'ar' ? 'اضغط لتكبير الصورة' : 'Click to expand photo'
             },
               h('img', { className: 'fig-img', src: imgSrc, alt: fig.title, loading: 'lazy' }),
-              h('span', { className: 'fig-zoom-hint' }, lang === 'ar' ? 'تكبير' : 'Expand')),
+              h('span', { className: 'fig-zoom-hint', 'aria-hidden': 'true' },
+                h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.3, strokeLinecap: 'round', strokeLinejoin: 'round' },
+                  h('circle', { cx: 11, cy: 11, r: 7 }),
+                  h('line', { x1: 21, y1: 21, x2: 16.35, y2: 16.35 }),
+                  h('line', { x1: 11, y1: 8, x2: 11, y2: 14 }),
+                  h('line', { x1: 8, y1: 11, x2: 14, y2: 11 })))),
             h('figcaption', { className: 'fig-content' },
               h('span', { className: 'fig-badge' }, fig.badge + (arFig ? ' · ' + arFig.badge : '')),
               h('h4', { className: 'fig-title' }, fig.title),

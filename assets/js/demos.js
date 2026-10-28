@@ -7,7 +7,7 @@
   const Box = ({ title, children, note }) => {
     const { lang } = useLang();
     return h('div', { className: 'demo', 'data-reveal': '' },
-      h('div', { className: 'demo-head' }, h('span', { className: 'demo-tag' }, L(lang, 'معمل تفاعلي', 'LAB')), h('strong', null, title)),
+      h('div', { className: 'demo-head' }, h('span', { className: 'demo-tag' }, L(lang, 'محاكي', 'SIMULATOR')), h('strong', null, title)),
       h('div', { className: 'demo-body' }, children),
       note ? h('p', { className: 'demo-note' }, note) : null);
   };
@@ -46,7 +46,7 @@
     const [shift, setShift] = useState(3);
     const [mode, setMode] = useState('enc');
     const out = caesar(text, mode === 'enc' ? shift : -shift);
-    return h(Box, { title: L(lang, 'مختبر شفرة قيصر التفاعلي', 'Caesar cipher'), note: L(lang, 'تدعم الحروف الإنجليزية (A–Z). جرّب تشفير النص أو فكّ تشفيره بتغيير مقدار الإزاحة.', 'Latin letters only. Try decrypting by changing the shift.') },
+    return h(Box, { title: L(lang, 'محاكي شفرة قيصر', 'Caesar cipher simulator'), note: L(lang, 'تدعم الحروف الإنجليزية (A–Z). جرّب تشفير النص أو فكّ تشفيره بتغيير مقدار الإزاحة.', 'Latin letters only. Try decrypting by changing the shift.') },
       h('div', { className: 'caesar' },
         h('div', { className: 'seg' },
           ['enc', 'dec'].map(m => h('button', { type: 'button', key: m, className: mode === m ? 'on' : '', onClick: () => setMode(m) }, m === 'enc' ? L(lang, 'تشفير النص', 'Encrypt') : L(lang, 'فكّ التشفير', 'Decrypt')))),
@@ -90,7 +90,7 @@
       [/\d/.test(pw), L(lang, 'أرقام (0–9)', 'Numbers')],
       [/[^A-Za-z0-9]/.test(pw), L(lang, 'رموز خاصة (@ # $ %)', 'Symbols')]
     ];
-    return h(Box, { title: L(lang, 'مختبر قياس قوة كلمة المرور', 'Password strength lab'), note: t.sensitiveNote + L(lang, ' لا تكتب كلمة مرورك الحقيقية هنا.', ' Do not type your real password.') },
+    return h(Box, { title: L(lang, 'محاكي قياس قوة كلمة المرور', 'Password strength simulator'), note: t.sensitiveNote + L(lang, ' لا تكتب كلمة مرورك الحقيقية هنا.', ' Do not type your real password.') },
       h('div', { className: 'pw' },
         h('div', { className: 'pw-row' },
           h('input', { dir: 'ltr', type: show ? 'text' : 'password', value: pw, placeholder: L(lang, 'اكتب كلمة مرور تجريبية لاختبارها...', 'Try a password'), onChange: e => setPw(e.target.value), autoComplete: 'off' }),
@@ -163,7 +163,7 @@
       const id = setTimeout(() => setDoc(`<!doctype html><html><head><meta charset="utf-8"><style>${src.css}</style></head><body>${src.html}<script>try{${src.js}}catch(e){document.body.insertAdjacentHTML('beforeend','<pre style="color:#c00">'+e.message+'</pre>')}<\/script></body></html>`), 350);
       return () => clearTimeout(id);
     }, [src]);
-    return h(Box, { title: L(lang, 'ساحة التجربة الحية: HTML وCSS وJavaScript', 'Playground: HTML, CSS and JavaScript'), note: L(lang, 'يعمل الكود مباشرة داخل إطار معزول وآمن في متصفحك.', 'Your code runs inside a sandboxed frame in your browser.') },
+    return h(Box, { title: L(lang, 'محاكي الكود: HTML وCSS وJavaScript', 'Code simulator: HTML, CSS and JavaScript'), note: L(lang, 'يعمل الكود مباشرة داخل إطار معزول وآمن في متصفحك.', 'Your code runs inside a sandboxed frame in your browser.') },
       h('div', { className: 'pg' },
         h('div', { className: 'pg-edit' },
           h('div', { className: 'seg' }, ['html', 'css', 'js'].map(k => h('button', { type: 'button', key: k, className: tab === k ? 'on' : '', onClick: () => setTab(k) }, k.toUpperCase()))),
@@ -183,7 +183,7 @@
     const a = lum(fg), b = lum(bg);
     const ratio = (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
     const badge = (ok, label) => h('span', { className: 'badge ' + (ok ? 'ok' : 'no') }, label + ' · ' + (ok ? L(lang, 'متوافق', 'Pass') : L(lang, 'غير متوافق', 'Fail')));
-    return h(Box, { title: L(lang, 'فاحص تباين الألوان ومعايير الإتاحة (WCAG)', 'Colour contrast checker'), note: L(lang, 'معيار WCAG العالمي: نسبة 4.5:1 على الأقل للنص العادي، و3:1 للنص الكبير (لتحقيق المستوى القياسي AA).', 'WCAG guideline: at least 4.5 for normal text and 3 for large text (level AA).') },
+    return h(Box, { title: L(lang, 'محاكي فحص تباين الألوان (WCAG)', 'Colour contrast simulator'), note: L(lang, 'معيار WCAG العالمي: نسبة 4.5:1 على الأقل للنص العادي، و3:1 للنص الكبير (لتحقيق المستوى القياسي AA).', 'WCAG guideline: at least 4.5 for normal text and 3 for large text (level AA).') },
       h('div', { className: 'contrast' },
         h('div', { className: 'ct-pick' },
           h('label', null, L(lang, 'لون النص', 'Text colour'), h('input', { type: 'color', value: fg, onChange: e => setFg(e.target.value) })),

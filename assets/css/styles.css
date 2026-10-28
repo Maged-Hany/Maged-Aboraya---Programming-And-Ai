@@ -4621,7 +4621,8 @@ ol.b-list li::before { content: counter(li); position: absolute; inset-inline-st
 /* Image 3: Course Cards */
 .courses-grid {
   display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 370px)) !important;
+  justify-content: start !important;
   gap: 28px !important;
 }
 .course-card {
@@ -5199,4 +5200,655 @@ ol.b-list li::before { content: counter(li); position: absolute; inset-inline-st
   font-size: 13.5px;
   font-weight: 600;
   color: #333333;
+}
+
+
+/* ==========================================================================
+   SYNTAX UPDATES: COMPACT COURSE CARD, COLLAPSIBLE CHAPTERS, STUDENT RATING & QUIZ TIMER
+   ========================================================================== */
+.course-card {
+  max-width: 375px !important;
+  width: 100% !important;
+}
+@media (max-width: 640px) {
+  .courses-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .course-card {
+    max-width: 100% !important;
+  }
+}
+
+/* Interactive Student Rating Bar in Course Header */
+.cip-student-rating-box {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+  padding: 10px 16px;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 10px;
+  box-shadow: 3px 3px 0 #000000;
+  width: fit-content;
+}
+.cip-sr-label {
+  font-size: 14px;
+  font-weight: 800;
+  color: #111111;
+}
+.cip-sr-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  direction: ltr;
+}
+.cip-sr-star-btn {
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  font-size: 22px;
+  line-height: 1;
+  color: #d1d5db;
+  cursor: pointer;
+  transition: transform 0.14s ease, color 0.14s ease;
+}
+.cip-sr-star-btn.is-lit {
+  color: #f59e0b;
+}
+.cip-sr-star-btn:hover {
+  transform: scale(1.18);
+  color: #f59e0b;
+}
+.cip-sr-saved {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #16a34a;
+  background: #dcfce7;
+  border: 1.5px solid #16a34a;
+  padding: 2px 10px;
+  border-radius: 6px;
+}
+
+/* Course Description Welcome & Quiz Rule Styling */
+.cip-welcome-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cip-welcome-greeting {
+  font-size: 18px;
+  font-weight: 800;
+  color: #2563eb;
+  margin: 0;
+}
+.cip-welcome-course {
+  font-size: 16.5px;
+  font-weight: 700;
+  color: #111111;
+  margin: 0;
+  line-height: 1.6;
+}
+.cip-learn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cip-quiz-rule-note {
+  margin-top: 4px;
+  padding: 12px 16px;
+  background: #faf4e6;
+  border: 2px solid #000000;
+  border-radius: 8px;
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #111111;
+  box-shadow: 2px 2px 0 #000000;
+}
+
+/* Collapsible Curriculum Categories */
+.cip-curr-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.cip-expand-all-btn {
+  background: #faf4e6;
+  color: #111111;
+  border: 2px solid #000000;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 #000000;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease;
+}
+.cip-expand-all-btn:hover {
+  background: #ffd233;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 #000000;
+}
+.cip-ch-head {
+  width: 100%;
+  text-align: start;
+  font-family: inherit;
+  border: none;
+  border-bottom: 0 solid #000000;
+  transition: background 0.15s ease;
+}
+.cip-chapter-box.is-open .cip-ch-head {
+  border-bottom: 2px solid #000000;
+  background: #f3ead3;
+}
+.cip-ch-head:hover {
+  background: #f3ead3;
+}
+.cip-ch-head-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 16px;
+  color: #000000;
+}
+.cip-ch-num-pill {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  font-weight: 800;
+  background: #2563eb;
+  color: #ffffff;
+  border: 1.5px solid #000000;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.cip-ch-head-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cip-ch-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: #444444;
+}
+.cip-ch-chevron {
+  transition: transform 0.22s ease;
+  color: #111111;
+  flex-shrink: 0;
+}
+.cip-chapter-box.is-open .cip-ch-chevron {
+  transform: rotate(180deg);
+}
+
+/* Timed Quiz Pill */
+.q-timer-pill {
+  font-family: var(--f-mono);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: #faf4e6;
+  color: #111111;
+  border: 1.5px solid #000000;
+  box-shadow: 2px 2px 0 #000000;
+}
+.q-timer-pill.is-low {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #dc2626;
+}
+
+
+/* ==========================================================================
+   SYNTAX V11 OVERHAUL: MODERN CENTERED VIDEO PLAYER, LARGE FIGURE CARDS,
+   VISIBLE RECAP TEXT, AND FULL MULTI-DEVICE RESPONSIVENESS
+   ========================================================================== */
+
+/* 1. Fix invisible text in .recap-in (Screenshot 6) and .cmp-side.s1 */
+.recap-in {
+  background: #ffffff !important;
+  color: #111111 !important;
+  border: 2.5px solid #000000 !important;
+  box-shadow: 5px 5px 0px #000000 !important;
+  border-radius: 18px !important;
+  padding: clamp(24px, 4vw, 44px) !important;
+}
+.recap-in h2 {
+  color: #000000 !important;
+  font-size: clamp(24px, 3vw, 34px) !important;
+  font-weight: 800 !important;
+  margin: 0 !important;
+}
+.recap-in li,
+.recap-in li span {
+  color: #1f2937 !important;
+  font-weight: 600 !important;
+}
+.recap-in li::before {
+  filter: none !important;
+  border-left-color: #2563eb !important;
+  border-bottom-color: #2563eb !important;
+}
+.cmp-side.s1 {
+  background: #111827 !important;
+  color: #ffffff !important;
+}
+.cmp-side.s1 h4,
+.cmp-side.s1 li,
+.cmp-side.s1 span {
+  color: #ffffff !important;
+}
+
+/* 2. Modern Centered Video Player (Screenshot 1) */
+.custom-video-player {
+  width: 100% !important;
+  max-width: 820px !important;
+  margin: 0 auto !important;
+  background: #0f172a !important;
+  border: none !important;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.22), 0 4px 14px rgba(15, 23, 42, 0.12) !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+.cip-main .custom-video-player {
+  max-width: 100% !important;
+  margin-bottom: 8px !important;
+}
+.cvp-stage {
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 16 / 9 !important;
+  background: #0b0f19 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+.cvp-video-el {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  background: #0b0f19 !important;
+  display: block !important;
+}
+.cvp-overlay-play-btn {
+  position: absolute !important;
+  width: 74px !important;
+  height: 74px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  color: #111111 !important;
+  border: none !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.38) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: transform 0.2s cubic-bezier(.22, 1, .36, 1), background 0.2s ease, box-shadow 0.2s ease !important;
+  z-index: 5 !important;
+}
+.cvp-overlay-play-btn:hover {
+  transform: scale(1.08) !important;
+  background: #ffffff !important;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.48) !important;
+}
+.cvp-controls {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.68) 45%, rgba(0, 0, 0, 0.9) 100%) !important;
+  padding: 12px 18px 12px !important;
+  z-index: 6 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+.cvp-scrub-wrap {
+  width: 100% !important;
+  height: 14px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+}
+.cvp-scrub-track {
+  width: 100% !important;
+  height: 4px !important;
+  background: rgba(255, 255, 255, 0.35) !important;
+  border-radius: 999px !important;
+  position: relative !important;
+  transition: height 0.15s ease !important;
+}
+.cvp-scrub-wrap:hover .cvp-scrub-track {
+  height: 6px !important;
+}
+.cvp-scrub-fill {
+  height: 100% !important;
+  background: #ffffff !important;
+  border-radius: 999px !important;
+}
+.cvp-scrub-thumb {
+  position: absolute !important;
+  top: 50% !important;
+  width: 13px !important;
+  height: 13px !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+  transform: translate(-50%, -50%) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5) !important;
+  pointer-events: none !important;
+}
+.cvp-controls-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  color: #ffffff !important;
+}
+.cvp-ctrl-left,
+.cvp-ctrl-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.cvp-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background 0.15s ease, transform 0.12s ease !important;
+}
+.cvp-btn:hover {
+  background: rgba(255, 255, 255, 0.16) !important;
+}
+.cvp-time-display {
+  font-family: var(--f-mono) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #f8fafc !important;
+  padding: 0 4px !important;
+  white-space: nowrap !important;
+}
+
+/* Settings Popover Menu inside Video Player (Screenshot 1) */
+.cvp-settings-menu {
+  position: absolute !important;
+  bottom: 58px !important;
+  right: 16px !important;
+  width: 230px !important;
+  background: rgba(28, 30, 36, 0.94) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55) !important;
+  color: #ffffff !important;
+  z-index: 12 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.cvp-sm-header {
+  padding: 10px 14px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  color: #f1f5f9 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: transparent !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  width: 100% !important;
+}
+.cvp-sm-back {
+  text-align: left !important;
+  cursor: pointer !important;
+}
+.cvp-sm-back:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+.cvp-sm-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  padding: 10px 14px !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+  color: #f8fafc !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  text-align: left !important;
+  transition: background 0.15s ease !important;
+}
+.cvp-sm-row:last-child {
+  border-bottom: none !important;
+}
+.cvp-sm-row:hover,
+.cvp-sm-row.is-selected {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+.cvp-sm-val {
+  color: #cbd5e1 !important;
+  font-size: 12.5px !important;
+}
+
+/* 3. Lesson Video Section Spacing & "الشرح" + Down Arrow Indicator */
+.lesson-video-sec {
+  padding: 36px clamp(16px, 5vw, 64px) 56px !important;
+  max-width: 1040px !important;
+  margin: 0 auto 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 32px !important;
+  border-bottom: 1.5px solid var(--line) !important;
+}
+.video-to-explanation-indicator {
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  color: #111111 !important;
+  padding: 8px 24px !important;
+  transition: transform 0.2s ease, color 0.2s ease !important;
+}
+.video-to-explanation-indicator:hover {
+  color: #2563eb !important;
+  transform: translateY(3px) !important;
+}
+.vtei-text {
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.01em !important;
+}
+.vtei-arrow {
+  animation: vteiBounce 1.8s ease-in-out infinite !important;
+}
+@keyframes vteiBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* 4. Larger Figure Cards & Search Icon Zoom Button (Screenshot 4) */
+.b-figures {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)) !important;
+  gap: 24px !important;
+  margin: 30px 0 36px !important;
+}
+.fig-card {
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.fig-img-wrap {
+  position: relative !important;
+  width: 100% !important;
+  height: 280px !important;
+  background: #f1f5f9 !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+  border-bottom: 2px solid #000000 !important;
+}
+.fig-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+}
+.fig-zoom-hint {
+  position: absolute !important;
+  bottom: 12px !important;
+  right: 12px !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  background: rgba(17, 24, 39, 0.82) !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 0.92 !important;
+  transition: transform 0.2s ease, background 0.2s ease !important;
+  pointer-events: none !important;
+}
+.fig-img-wrap:hover .fig-zoom-hint {
+  transform: scale(1.1) !important;
+  background: #2563eb !important;
+}
+.fig-content {
+  padding: 18px 20px 22px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  flex: 1 !important;
+}
+.fig-title {
+  font-size: 18.5px !important;
+  font-weight: 800 !important;
+  color: #000000 !important;
+}
+.fig-caption {
+  font-size: 15px !important;
+  line-height: 1.65 !important;
+  color: #333333 !important;
+}
+
+/* 5. Multi-Device Responsive Polish (Mobile & Tablet) */
+@media (max-width: 768px) {
+  .lesson-video-sec {
+    padding: 20px 14px 36px !important;
+    gap: 22px !important;
+    margin-bottom: 12px !important;
+  }
+  .custom-video-player {
+    border-radius: 12px !important;
+  }
+  .cvp-overlay-play-btn {
+    width: 56px !important;
+    height: 56px !important;
+  }
+  .cvp-overlay-play-btn svg {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  .cvp-controls {
+    padding: 8px 10px 8px !important;
+    gap: 4px !important;
+  }
+  .cvp-btn {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  .cvp-time-display {
+    font-size: 11.5px !important;
+  }
+  .cvp-settings-menu {
+    width: 195px !important;
+    bottom: 48px !important;
+    right: 10px !important;
+  }
+  .b-figures {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+  .fig-img-wrap {
+    height: 240px !important;
+  }
+  .course-intro-view {
+    padding: 22px 14px 56px !important;
+  }
+  .cip-title {
+    font-size: clamp(22px, 6.5vw, 30px) !important;
+  }
+  .cip-sub {
+    font-size: 15px !important;
+  }
+  .cip-meta-strip {
+    gap: 10px !important;
+    font-size: 13px !important;
+  }
+  .cip-student-rating-box {
+    width: 100% !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+  }
+  .cip-card {
+    padding: 18px 16px !important;
+  }
+  .cip-ch-head {
+    padding: 12px 14px !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  .cip-ch-head-title {
+    font-size: 14.5px !important;
+  }
+  .cip-lesson-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    padding: 12px !important;
+  }
+  .cip-lesson-row-right {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .cvp-ctrl-left {
+    gap: 4px !important;
+  }
+  .cvp-btn {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  .vtei-text {
+    font-size: 19px !important;
+  }
 }

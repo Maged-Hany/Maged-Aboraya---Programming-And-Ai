@@ -22,6 +22,7 @@ const LANGS = new Set(['ar', 'en']);
 const USERS_FILE = path.join(ROOT, 'data', 'users.json');
 const VIDEOS_FILE = path.join(ROOT, 'data', 'videos.json');
 const TEXTS_FILE = path.join(ROOT, 'data', 'texts.json');
+const RATINGS_FILE = path.join(ROOT, 'data', 'ratings.json');
 
 const send = (res, code, body, type = 'application/json; charset=utf-8', extra = {}) => {
   res.writeHead(code, { 'Content-Type': type, 'X-Content-Type-Options': 'nosniff', ...extra });
@@ -47,6 +48,33 @@ function getUsers() {
 
 function saveUsers(data) {
   fs.writeFileSync(USERS_FILE, JSON.stringify(data, null, 2), 'utf8');
+}
+
+function getRatings() {
+  if (!fs.existsSync(RATINGS_FILE)) {
+    try { fs.writeFileSync(RATINGS_FILE, JSON.stringify({ courses: {} }, null, 2), 'utf8'); } catch (e) {}
+    return { courses: {} };
+  }
+  try {
+    return JSON.parse(fs.readFileSync(RATINGS_FILE, 'utf8').replace(/^\uFEFF/, ''));
+  } catch (e) {
+    return { courses: {} };
+  }
+}
+
+function saveRatings(data) {
+  fs.writeFileSync(RATINGS_FILE, JSON.stringify(data, null, 2), 'utf8');
+}
+
+function computeCourseStats(courseId) {
+  const rdb = getRatings();
+  const cRatings = (rdb.courses && rdb.courses[courseId]) || {};
+  const vals = Object.values(cRatings).map(Number).filter(n => n >= 1 && n <= 5);
+  const count = vals.length;
+  const avg = count > 0 ? Number((vals.reduce((a, b) => a + b, 0) / count).toFixed(1)) : 0;
+  const udb = getUsers();
+  const studentsCount = Object.keys((udb && udb.users) || {}).length;
+  return { average: avg, count, studentsCount, ratings: cRatings };
 }
 
 function getVideos() {
@@ -125,6 +153,31 @@ async function handleApi(req, url, res) {
       }, 0);
     }
     return sendJSON(res, 200, out, { 'Cache-Control': 'no-cache' });
+  }
+
+  // GET /api/course/ratings/:courseId
+  if (method === 'GET' && parts[1] === 'course' && parts[2] === 'ratings') {
+    const courseId = (parts[3] || 'students').toLowerCase();
+    const stats = computeCourseStats(courseId);
+    return sendJSON(res, 200, { ok: true, courseId, ...stats }, { 'Cache-Control': 'no-cache' });
+  }
+
+  // POST /api/course/ratings
+  if (method === 'POST' && parts[1] === 'course' && parts[2] === 'ratings') {
+    const payload = await readBody(req);
+    const courseId = String(payload.courseId || 'students').trim().toLowerCase();
+    const userKey = String(payload.userKey || 'anon').trim().toLowerCase();
+    const stars = Math.round(Number(payload.stars || 0));
+    if (!userKey || stars < 1 || stars > 5) {
+      return sendJSON(res, 400, { error: 'Invalid rating value' });
+    }
+    const rdb = getRatings();
+    if (!rdb.courses) rdb.courses = {};
+    if (!rdb.courses[courseId]) rdb.courses[courseId] = {};
+    rdb.courses[courseId][userKey] = stars;
+    saveRatings(rdb);
+    const stats = computeCourseStats(courseId);
+    return sendJSON(res, 200, { ok: true, courseId, userStars: stars, ...stats });
   }
 
   // POST /api/auth/register

@@ -14,7 +14,7 @@
       brand: 'Syntax',
       copyrightOwner: 'AborayaTechnologies',
       coursesNav: 'الكورسات',
-      grade: 'كورسات برمجية عملية من الصفر',
+      grade: 'الصف الثاني الثانوي - البكالوريا',
       chapter: 'الفصل',
       lesson: 'الدرس',
       lessons: 'دروس',
@@ -28,16 +28,16 @@
       switchTo: 'EN',
       heroKicker: 'اتعلم بجد ومن غير تعقيد',
       heroTitle: ['اتعلم', 'البرمجة', 'وافهم', 'التكنولوجيا', 'صح.'],
-      heroSub: 'منصة تفاعلية بتشرحلك البرمجة، وتطوير الويب، والأمن السيبراني، والذكاء الاصطناعي بشكل عملي وممتع — دروس مباشرة، معامل كود حية تجرب فيها بإيدك، واختبارات تثبت المعلومة في دماغك بعد كل درس.',
+      heroSub: 'تعلم البرمجة وتطوير الويب والأمن السيبراني والذكاء الاصطناعي من خلال دروس مشروحة وتمارين واختبارات بعد كل درس.',
       heroCta: 'شوف الكورسات',
       scrollHint: 'انزل شوف الكورسات',
       stats: ['مسارات وكورسات', 'درس تفاعلي', 'تمرين وتطبيق عملي'],
-      manifesto: 'كل درس ومسار هنا مبني عشان تجربه بنفسك: دوس، حرك، اقلب الكروت، وجرب الكود في المعامل الحية، واختبر فهمك خطوة بخطوة. مفيش دش كلام نظري، ولا حفظ من غير ما تفهم الدنيا ماشية إزاي.',
+      manifesto: 'تصفح الدروس، وجرب المحاكيات التفاعلية، وحل الاختبارات بعد كل درس.',
       chaptersKicker: 'مسارات التعلّم',
       chaptersTitle: 'اختر الكورس وابدأ فوراً',
-      coursesKicker: 'دليل الكورسات',
-      coursesTitle: 'كورسات ومسارات برمجية عملية تجهزك صح',
-      coursesSub: 'اختر الكورس اللي يناسبك، واتعلم خطوة بخطوة من الصفر لحد الاحتراف مع مشاريع وتطبيقات حقيقية.',
+      coursesKicker: 'Syntax',
+      coursesTitle: 'كورسات Syntax',
+      coursesSub: 'اتعلم البرمجة وتطوير الويب والذكاء الاصطناعي والأمن السيبراني وحاجات تانية كتير.',
       openCourse: 'ادخل على الكورس',
       backToCourses: 'ارجع لكل الكورسات',
       allChapters: 'فصول الكورس الأربعة',
@@ -51,26 +51,26 @@
       footerRights: 'جميع الحقوق محفوظة',
       footerNote: '',
       home: 'الرئيسية',
-      objectives: 'هتتعلم إيه في الدرس ده؟',
-      keyTerms: 'مصطلحات مهمة تفهمها',
-      keyTermsHint: 'اضغط على أي مصطلح عشان تشوف معناه ببساطة',
-      recap: 'الزتونة وخلاصة الدرس',
-      practice: 'تمارين وتطبيقات عملية',
-      practiceSub: 'فكر في حل كل سؤال وجرب بنفسك الأول، وبعدين شوف الإجابة النموذجية وقارن.',
-      showSol: 'شوف الإجابة النموذجية',
-      hideSol: 'خبي الإجابة',
-      finishTitle: 'فهمت الدرس ومستعد؟',
-      finishText: 'اتأكد إنك عديت على كل نقطة في الشرح وجربت المعامل الحية، ودوس على الزرار اللي تحت عشان تختبر فهمك.',
-      finishBtn: 'قريت وفهمت — يلا نبدأ الكويز',
-      readFirst: 'كمّل قراءة الدرس للآخر عشان يفتحلك الاختبار',
+      objectives: 'أهداف الدرس',
+      keyTerms: 'مصطلحات الدرس',
+      keyTermsHint: 'اضغط على المصطلح لعرض التعريف',
+      recap: 'ملخص الدرس',
+      practice: 'تمارين الدرس',
+      practiceSub: 'فكر في الحل الأول ثم اعرض الإجابة النموذجية.',
+      showSol: 'عرض الإجابة',
+      hideSol: 'إخفاء الإجابة',
+      finishTitle: 'اختبار الدرس',
+      finishText: 'ابدأ الكويز لاختبار فهمك للدرس.',
+      finishBtn: 'ابدأ الكويز',
+      readFirst: 'أكمل قراءة الدرس لفتح الاختبار',
       quiz: 'اختبار الدرس',
       question: 'السؤال',
       check: 'تأكد من إجابتك',
       next: 'السؤال اللي بعده',
       seeResult: 'شوف النتيجة',
-      correct: 'إجابة صح ومظبوطة! 🎯',
-      wrong: 'مش مظبوطة، راجع النقطة دي',
-      explanation: 'ليه الإجابة كده؟ (الشرح العملي)',
+      correct: 'صحيح',
+      wrong: 'خطأ',
+      explanation: 'التوضيح',
       tTrue: 'صح',
       tFalse: 'غلط',
       choose: 'اختر الإجابة الصح…',
@@ -80,15 +80,15 @@
       best: 'أعلى سكور حققته',
       nextLesson: 'ادخل على الدرس الجاي',
       backChapter: 'ارجع لفهرس الكورس',
-      msgHigh: 'عاش جداً! بجد استيعابك للدرس ده ممتاز وفاهم الفكرة صح.',
-      msgMid: 'أداء حلو! راجع النقط البسيطة اللي وقعت منك وجرب تاني وهتجيب الدرجة النهائية.',
-      msgLow: 'ولا تشيل هم! خدلك بصة هادية على الشرح تاني وجرب، الموضوع بيثبت بالممارسة.',
+      msgHigh: 'ممتاز، إجاباتك صحيحة.',
+      msgMid: 'جيد، راجع النقاط التي أخطأت فيها وحاول مرة أخرى.',
+      msgLow: 'راجع شرح الدرس وحاول مرة أخرى.',
       loading: 'ثواني بنحمّل…',
       prepTitle: 'الدرس ده شغالين عليه حالياً',
       prepText: 'هيكون متاح هنا قريب جداً.',
       error: 'حصلت مشكلة في تحميل الدرس، معلش جرب تاني.',
       copy: 'نسخ الكود',
-      copied: 'اتنسخ تمام!',
+      copied: 'تم النسخ',
       section: 'القسم',
       sensitiveNote: 'كل حاجة بتكتبها هنا بتفضل في جهازك ومش بتتسجل على أي سيرفر خارجي.',
       zenMode: 'روقان وتركيز (Zen)',
@@ -97,8 +97,8 @@
       zenEsc: 'زرار ESC للخروج',
       zenFontNormal: 'خط عادي',
       zenFontBig: 'خط كبير وواضح',
-      authHeading: 'منور في Syntax 👋',
-      authSub: 'اعمل حسابك المجاني عشان تتابع تقدمك في كل كورس وتحفظ درجاتك في الكويزات.',
+      authHeading: 'منور في Syntax',
+      authSub: 'اعمل حسابك المجاني عشان تتابع تقدمك في الكورس وتحفظ درجاتك في الكويزات.',
       registerTab: 'حساب جديد',
       loginTab: 'تسجيل الدخول',
       fullName: 'اسمك بالكامل',
@@ -121,7 +121,7 @@
       btnRegister: 'اعمل حسابك ويلا نبدأ',
       btnLogin: 'سجل دخولك',
       haveAccount: 'عندك حساب معانا بالفعل؟',
-      noAccount: 'لسه معملتش حساب؟',
+      noAccount: 'ليس لديك حساب؟',
       goToLogin: 'سجل دخول من هنا',
       goToRegister: 'اعمل حساب جديد ببلاش',
       regSuccess: 'حسابك اتعمل بنجاح! تقدر تسجل دخولك دلوقتي وتبدأ تتعلم.',
@@ -129,17 +129,17 @@
       logout: 'تسجيل الخروج',
       accountInfo: 'بيانات حسابك',
       coursesCompleted: 'الدروس اللي خلصتها',
-      lessonVideo: 'شرح الفيديو مع المستر',
+      lessonVideo: 'فيديو الشرح',
       lessonVideoSub: 'اتفرج على المحاضرة الأول عشان تفهم الفكرة العامة، وبعدها انزل اقرأ الشرح وحل التمارين.',
-      markVideoDone: 'خلصت الفيديو — يلا على الشرح والتمارين',
-      videoWatched: 'تمام! خلصت مشاهدة الفيديو بنجاح',
-      continueToText: 'كمّل مع الشرح المكتوب',
+      markVideoDone: 'الانتقال إلى الشرح',
+      videoWatched: 'تمت المشاهدة',
+      continueToText: 'الشرح',
       setVideoBtn: 'تعديل رابط الفيديو',
       saveVideoBtn: 'حفظ الرابط',
       videoUrlLabel: 'رابط فيديو يوتيوب أو ملف MP4:',
       videoUrlPlaceholder: 'https://www.youtube.com/watch?v=...',
       guestSignIn: 'تصفح كزائر على السريع',
-      guestSubtitle: 'ادخل اتفرج على الدروس وجرب المعامل الحية من غير تسجيل (بس مش هيحفظ تقدمك)',
+      guestSubtitle: 'ادخل اتفرج على الدروس والتطبيقات من غير تسجيل (بس مش هيحفظ تقدمك)',
       guestBadge: 'وضع الزائر',
       guestTempWarning: 'أنت دلوقتي داخل كزائر مؤقت. لو قفلت المتصفح، تقدمك في الدروس ودرجاتك في الاختبارات مش هتتحفظ.',
       guestNoSavePill: 'زائر · مؤقت',
@@ -173,9 +173,9 @@
       manifesto: 'Every course and lesson here is built to be explored: move, tap, flip, experiment in live labs, then test yourself. No static pages, and no memorising without deep understanding.',
       chaptersKicker: 'Course Modules',
       chaptersTitle: 'Four modules, one complete journey',
-      coursesKicker: 'Course Catalog',
-      coursesTitle: 'Programming & AI Learning Tracks',
-      coursesSub: 'Select a course below to explore interactive lessons, live coding sandboxes, and hands-on assessments.',
+      coursesKicker: 'Syntax',
+      coursesTitle: 'Syntax Courses',
+      coursesSub: 'Learn programming, web development, artificial intelligence, cybersecurity, and much more.',
       openCourse: 'Open Course',
       backToCourses: 'Back to Courses',
       allChapters: 'All 4 Course Chapters',
@@ -207,8 +207,8 @@
       next: 'Next',
       seeResult: 'See result',
       correct: 'Correct',
-      wrong: 'Not quite',
-      explanation: 'Why',
+      wrong: 'Incorrect',
+      explanation: 'Explanation',
       tTrue: 'True',
       tFalse: 'False',
       choose: 'Choose…',
@@ -271,7 +271,7 @@
       lessonVideoSub: 'Watch the video lecture before diving into the detailed lesson content and quizzes.',
       markVideoDone: 'Finished Video — Jump to Reading',
       videoWatched: 'Lecture video completed',
-      continueToText: 'Continue to Lesson Content',
+      continueToText: 'Explanation',
       setVideoBtn: 'Set Video URL',
       saveVideoBtn: 'Save URL',
       videoUrlLabel: 'YouTube URL or direct MP4 video link:',
@@ -958,10 +958,7 @@
   /* ---------- Comprehensive Search Index Database ---------- */
   const SEARCH_ITEMS = [
     // Courses
-    { type: 'lesson', id: '1-1', target: '#/course/baccalaureate', title: 'Programming & AI Complete Course (Baccalaureate)', titleAr: 'كورس البرمجة والذكاء الاصطناعي المتكامل (البكالوريا)', ch: 1, keywords: 'course baccalaureate programming ai full track كورس البكالوريا البرمجة والذكاء الاصطناعي مسار شامل' },
-    { type: 'lesson', id: '3-1', target: '#/course/web', title: 'Web Engineering & Front-End Development Track', titleAr: 'كورس هندسة وتطوير الويب المتكامل (Web & UX)', ch: 3, keywords: 'course web html css javascript http ux ui كورس تطوير الويب واجهات المستخدم' },
-    { type: 'lesson', id: '1-2', target: '#/course/ai', title: 'Artificial Intelligence & Machine Learning Track', titleAr: 'كورس الذكاء الاصطناعي وتعلّم الآلة (AI & ML)', ch: 1, keywords: 'course ai machine learning deep learning neural networks كورس الذكاء الاصطناعي تعلم الآلة' },
-    { type: 'lesson', id: '2-1', target: '#/course/cyber', title: 'Cybersecurity & Network Defense Track', titleAr: 'كورس الأمن السيبراني وحماية الشبكات (Cybersecurity)', ch: 2, keywords: 'course cybersecurity encryption firewall network security كورس الأمن السيبراني التشفير الشبكات' },
+    { type: 'course', id: 'students', target: '#/course/students', title: 'Programming & AI Course for 2nd Secondary Baccalaureate', titleAr: 'كورس برمجة وذكاء اصطناعي لطلاب تانية بكالوريا', ch: 1, keywords: 'course baccalaureate students programming ai كورس برمجة وذكاء اصطناعي لطلاب تانية بكالوريا لطلاب البكالوريا' },
 
     // Lessons
     { type: 'lesson', id: '1-1', title: 'The Evolution of IT and Social Transformation', titleAr: 'تطور تكنولوجيا المعلومات والتحول الاجتماعي', ch: 1, keywords: 'computer eniac moore vacuum tubes microprocessors internet cloud حاسوب إينياك صمامات مفرغة معالجات سحابية' },
@@ -981,11 +978,11 @@
 
     // Demos and Interactive Labs
     { type: 'demo', id: '1-1', target: '#/lesson/1-1', title: 'Moore’s Law Simulator', titleAr: 'محاكي قانون مور لمضاعفة الترانزستورات', keywords: 'moore law transistor doubling calculator 1971 2025 محاكي ترانزستور حساب' },
-    { type: 'demo', id: '2-1', target: '#/lesson/2-1', title: 'Interactive Caesar Cipher Lab', titleAr: 'مختبر شفرة قيصر التفاعلي وعجلة التشفير', keywords: 'caesar shift encode decode secret wheel تشفير قيصر إزاحة فك شفرة' },
-    { type: 'demo', id: '2-1', target: '#/lesson/2-1', title: 'Password Strength & Entropy Analyzer', titleAr: 'محلل قوة كلمات المرور وزمن الاختراق', keywords: 'password entropy brute force crack time قوة كلمة مرور كسر تخمين أمان' },
+    { type: 'demo', id: '2-1', target: '#/lesson/2-1', title: 'Caesar Cipher Simulator', titleAr: 'محاكي شفرة قيصر وعجلة التشفير', keywords: 'caesar shift encode decode secret wheel تشفير قيصر إزاحة فك شفرة' },
+    { type: 'demo', id: '2-1', target: '#/lesson/2-1', title: 'Password Strength Simulator', titleAr: 'محاكي قياس قوة كلمة المرور', keywords: 'password entropy brute force crack time قوة كلمة مرور كسر تخمين أمان' },
     { type: 'demo', id: '3-2', target: '#/lesson/3-2', title: 'Live HTTP Server Request Simulator', titleAr: 'محاكي خادم HTTP المباشر للطلبات والاستجابات', keywords: 'http request simulator get post json api محاكي طلبات خادم ردود' },
-    { type: 'demo', id: '3-3', target: '#/lesson/3-3', title: 'Live HTML/CSS/JS Sandbox Playground', titleAr: 'محرر الأكواد الحي لتقنيات الويب', keywords: 'html css javascript code editor live sandbox ملعب تجربة كود برمجة مباشر' },
-    { type: 'demo', id: '4-2', target: '#/lesson/4-2', title: 'WCAG Color Contrast Laboratory', titleAr: 'مختبر فحص تباين الألوان ومعايير الإتاحة', keywords: 'wcag contrast checker aa aaa accessibility ratio فاحص تباين ألوان وصول إتاحة' },
+    { type: 'demo', id: '3-3', target: '#/lesson/3-3', title: 'Live HTML/CSS/JS Sandbox Playground', titleAr: 'محاكي الأكواد: HTML وCSS وJavaScript', keywords: 'html css javascript code editor live sandbox ملعب تجربة كود برمجة مباشر' },
+    { type: 'demo', id: '4-2', target: '#/lesson/4-2', title: 'WCAG Color Contrast Simulator', titleAr: 'محاكي فحص تباين الألوان ومعايير الإتاحة', keywords: 'wcag contrast checker aa aaa accessibility ratio فاحص تباين ألوان وصول إتاحة' },
 
     // Real Hardware & Pioneers
     { type: 'figure', id: '1-1', target: '#/lesson/1-1', title: 'Gordon Moore & ENIAC (1945)', titleAr: 'جوردون مور وحاسوب إينياك العملاق', keywords: 'gordon moore eniac intel 4004 vacuum tubes transistors حاسوب تاريخي صمامات' },
@@ -1021,7 +1018,139 @@
   }
 
   /* ---------- site texts remote synchronization ---------- */
-  const TEXTS_LOCAL_KEY = 'syntax:texts:v2';
+  const TEXTS_LOCAL_KEY = 'syntax:texts:v4';
+  try { localStorage.removeItem('syntax:texts:v3'); } catch (e) {}
+  try { localStorage.removeItem('syntax:texts:v2'); } catch (e) {}
+
+  /* ---------- Course Student Ratings & Enrollment Store ---------- */
+  const RATINGS_LOCAL_KEY = 'syntax:ratings:v1';
+  const getLocalRatings = () => {
+    try {
+      return JSON.parse(localStorage.getItem(RATINGS_LOCAL_KEY)) || { courses: {} };
+    } catch (e) {
+      return { courses: {} };
+    }
+  };
+  const saveLocalRatings = (d) => {
+    try { localStorage.setItem(RATINGS_LOCAL_KEY, JSON.stringify(d)); } catch (e) {}
+  };
+  const computeLocalStats = (courseId) => {
+    const rdb = getLocalRatings();
+    const map = (rdb.courses && rdb.courses[courseId]) || {};
+    const vals = Object.values(map).map(Number).filter(n => n >= 1 && n <= 5);
+    const count = vals.length;
+    const average = count > 0 ? Number((vals.reduce((a, b) => a + b, 0) / count).toFixed(1)) : 0;
+    let studentsCount = 0;
+    try {
+      const localUsers = JSON.parse(localStorage.getItem('mabook:users_db') || '{}');
+      studentsCount = Object.keys(localUsers).length;
+    } catch (e) {}
+    return { average, count, studentsCount, ratings: map };
+  };
+
+  const StoreRatings = {
+    state: {
+      students: computeLocalStats('students')
+    },
+    subs: new Set(),
+    subscribe(fn) {
+      StoreRatings.subs.add(fn);
+      return () => StoreRatings.subs.delete(fn);
+    },
+    notify() {
+      StoreRatings.subs.forEach(fn => fn({ ...StoreRatings.state }));
+    },
+    getUserKey() {
+      if (Auth.user && !Auth.user.isGuest && Auth.user.username) {
+        return 'user:' + Auth.user.username.toLowerCase();
+      }
+      let anonId = '';
+      try {
+        anonId = localStorage.getItem('syntax:anon_rater_id') || '';
+        if (!anonId) {
+          anonId = 'student_' + Math.random().toString(36).slice(2, 10);
+          localStorage.setItem('syntax:anon_rater_id', anonId);
+        }
+      } catch (e) {
+        anonId = 'student_default';
+      }
+      return anonId;
+    },
+    getCourse(courseId = 'students') {
+      const st = StoreRatings.state[courseId] || computeLocalStats(courseId);
+      const uKey = StoreRatings.getUserKey();
+      const myRating = (st.ratings && st.ratings[uKey]) ? Number(st.ratings[uKey]) : 0;
+      return {
+        average: st.average || 0,
+        count: st.count || 0,
+        studentsCount: st.studentsCount || 0,
+        myRating
+      };
+    },
+    async load(courseId = 'students') {
+      const localSt = computeLocalStats(courseId);
+      StoreRatings.state[courseId] = localSt;
+      StoreRatings.notify();
+      try {
+        const res = await fetch('/api/course/ratings/' + encodeURIComponent(courseId));
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.ok) {
+            const rdb = getLocalRatings();
+            if (!rdb.courses) rdb.courses = {};
+            const merged = { ...(rdb.courses[courseId] || {}), ...(data.ratings || {}) };
+            rdb.courses[courseId] = merged;
+            saveLocalRatings(rdb);
+            const vals = Object.values(merged).map(Number).filter(n => n >= 1 && n <= 5);
+            const count = vals.length;
+            const average = count > 0 ? Number((vals.reduce((a, b) => a + b, 0) / count).toFixed(1)) : 0;
+            const studentsCount = Math.max(localSt.studentsCount || 0, Number(data.studentsCount || 0));
+            StoreRatings.state[courseId] = { average, count, studentsCount, ratings: merged };
+            StoreRatings.notify();
+          }
+        }
+      } catch (e) {}
+    },
+    async rate(courseId = 'students', stars = 5) {
+      const cleanStars = Math.max(1, Math.min(5, Math.round(Number(stars) || 5)));
+      const uKey = StoreRatings.getUserKey();
+      const rdb = getLocalRatings();
+      if (!rdb.courses) rdb.courses = {};
+      if (!rdb.courses[courseId]) rdb.courses[courseId] = {};
+      rdb.courses[courseId][uKey] = cleanStars;
+      saveLocalRatings(rdb);
+
+      const localSt = computeLocalStats(courseId);
+      const prevStudents = (StoreRatings.state[courseId] && StoreRatings.state[courseId].studentsCount) || 0;
+      StoreRatings.state[courseId] = {
+        ...localSt,
+        studentsCount: Math.max(localSt.studentsCount, prevStudents)
+      };
+      StoreRatings.notify();
+
+      try {
+        const res = await fetch('/api/course/ratings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ courseId, userKey: uKey, stars: cleanStars })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.ok) {
+            StoreRatings.state[courseId] = {
+              average: data.average || localSt.average,
+              count: data.count || localSt.count,
+              studentsCount: Math.max(localSt.studentsCount, Number(data.studentsCount || 0)),
+              ratings: { ...(rdb.courses[courseId] || {}), ...(data.ratings || {}) }
+            };
+            StoreRatings.notify();
+          }
+        }
+      } catch (e) {}
+      return StoreRatings.getCourse(courseId);
+    }
+  };
+  StoreRatings.load('students');
   const textListeners = new Set();
   const notifyTextChange = () => textListeners.forEach(fn => fn(STR));
   const subscribeTexts = (fn) => { textListeners.add(fn); return () => textListeners.delete(fn); };
@@ -1092,7 +1221,7 @@
   window.App = {
     h, STR, Store, useStore, LangCtx, useLang, getJSON, initSmoothScroll, scrollToY, scrollToEl, getLenis,
     scan, killAll, useScan, Words, ScrubWords, reduced, TTS, search, SEARCH_ITEMS,
-    Auth, useAuth, COUNTRIES, StoreVideos,
+    Auth, useAuth, COUNTRIES, StoreVideos, StoreRatings,
     loadSiteTexts, saveSiteTexts, subscribeTexts
   };
 })();
