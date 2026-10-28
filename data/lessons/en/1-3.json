@@ -84,13 +84,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/self_driving.jpg",
+              "img": "./assets/img/lessons/self_driving.jpg",
               "badge": "Smart Mobility",
               "title": "Waymo Self-Driving Car",
               "caption": "An autonomous vehicle equipped with LiDAR, radar, and AI cameras to navigate streets safely."
             },
             {
-              "img": "/assets/img/lessons/surgical_robot.jpg",
+              "img": "./assets/img/lessons/surgical_robot.jpg",
               "badge": "Smart Healthcare",
               "title": "Da Vinci Surgical Robot",
               "caption": "A precision robotic surgical system assisting doctors during delicate medical procedures."
@@ -141,13 +141,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/industrial_robot.jpg",
+              "img": "./assets/img/lessons/industrial_robot.jpg",
               "badge": "Industry 4.0",
               "title": "Smart Factory Robotic Arms",
               "caption": "Automated industrial robots assembling vehicles with high speed and accuracy."
             },
             {
-              "img": "/assets/img/lessons/agri_drone.jpg",
+              "img": "./assets/img/lessons/agri_drone.jpg",
               "badge": "Smart Farming",
               "title": "Precision Agriculture Drone",
               "caption": "An AI-guided drone scanning crop health and optimizing water and fertilizer usage."

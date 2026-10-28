@@ -47,13 +47,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/tim_berners_lee.jpg",
+              "img": "./assets/img/lessons/tim_berners_lee.jpg",
               "badge": "Pioneer",
               "title": "Sir Tim Berners-Lee",
               "caption": "Inventor of the World Wide Web in 1989 who created HTML, HTTP, and URLs."
             },
             {
-              "img": "/assets/img/lessons/next_computer.jpg",
+              "img": "./assets/img/lessons/next_computer.jpg",
               "badge": "Historic Server",
               "title": "The First Web Server (NeXT at CERN)",
               "caption": "The actual NeXT computer used by Tim Berners-Lee to host the world very first website."
@@ -128,7 +128,7 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/submarine_cable.png",
+              "img": "./assets/img/lessons/submarine_cable.png",
               "badge": "Internet Backbone",
               "title": "Undersea Fiber-Optic Cable",
               "caption": "Cross-section of an armored submarine cable carrying global internet traffic across ocean floors."

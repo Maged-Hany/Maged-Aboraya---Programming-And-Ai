@@ -47,13 +47,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/alan_turing.jpg",
+              "img": "./assets/img/lessons/alan_turing.jpg",
               "badge": "Pioneer",
               "title": "Alan Turing",
               "caption": "Father of modern computer science and creator of the Turing Test for machine intelligence."
             },
             {
-              "img": "/assets/img/lessons/john_mccarthy.jpg",
+              "img": "./assets/img/lessons/john_mccarthy.jpg",
               "badge": "Pioneer",
               "title": "John McCarthy",
               "caption": "Computer scientist who coined the term Artificial Intelligence at the 1956 Dartmouth conference."
@@ -140,13 +140,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/gpu_board.jpg",
+              "img": "./assets/img/lessons/gpu_board.jpg",
               "badge": "AI Hardware",
               "title": "AI Neural Computing Board",
               "caption": "Specialized high-speed processor boards that train deep learning neural networks."
             },
             {
-              "img": "/assets/img/lessons/computer_vision.jpg",
+              "img": "./assets/img/lessons/computer_vision.jpg",
               "badge": "Real Application",
               "title": "Computer Vision Object Detection",
               "caption": "How AI models detect and label objects, people, and vehicles in real-world camera feeds."

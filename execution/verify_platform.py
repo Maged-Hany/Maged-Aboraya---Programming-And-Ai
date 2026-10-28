@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 execution/verify_platform.py
-Deterministic health check and data integrity validation for Maged Aboraya Platform.
+Deterministic health check and data integrity validation for Syntax Platform.
 Part of Layer 3 (Execution) in the 3-Layer Architecture.
 """
 
@@ -31,7 +31,7 @@ def check_file(rel_path, required=True):
         return None
 
 def verify():
-    print("=== Maged Aboraya Platform Integrity Verification ===")
+    print("=== Syntax Platform Integrity Verification ===")
     errors = 0
 
     # 1. Check data configuration files

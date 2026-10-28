@@ -47,13 +47,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/firewall.png",
+              "img": "./assets/img/lessons/firewall.png",
               "badge": "Security Appliance",
               "title": "Hardware Network Firewall",
               "caption": "A dedicated security device that inspects network traffic and blocks unauthorized connections."
             },
             {
-              "img": "/assets/img/lessons/network_switch.jpg",
+              "img": "./assets/img/lessons/network_switch.jpg",
               "badge": "Network Hardware",
               "title": "Ethernet Network Switch",
               "caption": "Hardware device connecting computers and servers inside a local network via RJ45 cables."
@@ -148,7 +148,7 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/wifi_router.jpg",
+              "img": "./assets/img/lessons/wifi_router.jpg",
               "badge": "Wireless Device",
               "title": "Wi-Fi Wireless Router",
               "caption": "Broadcasts local wireless connectivity and requires WPA3 encryption to keep intruders out."

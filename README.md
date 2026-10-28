@@ -1,14 +1,15 @@
-# Maged Aboraya — Programming & AI Curriculum Platform
+# Syntax — Interactive Programming & AI Learning Platform
 
-An interactive, high-performance web learning platform built for the Grade 11 Baccalaureate Programming & Artificial Intelligence curriculum, developed by **Maged Aboraya**.
+An interactive, high-performance web learning platform for mastering programming, computer science, web engineering, cybersecurity, and artificial intelligence, developed by **AborayaTechnologies**.
 
 ---
 
 ## Overview
 
-This platform transforms the traditional textbook curriculum into an engaging digital experience. It features:
+**Syntax** transforms programming and technology education into an interactive digital experience for learners of all levels:
 
-- **Bilingual Stream Support:** Full Arabic curriculum alongside an English curriculum with an optional companion Arabic translation.
+- **Multi-Track Course Catalog:** Modular courses covering Web Engineering, Artificial Intelligence, Cybersecurity, Computer Science Foundations, and the complete Baccalaureate Programming & AI Track.
+- **Bilingual Support (`AR` / `EN`):** Full Arabic interface and curriculum alongside an English stream with an optional companion Arabic translation.
 - **Interactive Labs & Simulators:**
   - Moore's Law Transistor Scaling Simulator
   - Caesar Cipher Wheel & Cryptanalysis Lab
@@ -18,46 +19,12 @@ This platform transforms the traditional textbook curriculum into an engaging di
   - WCAG Color Contrast & Accessibility Checker
 - **48 Historical & Technical Photographs:** High-resolution galleries with interactive Lightbox zoom modals covering computing pioneers and hardware.
 - **Smart Text-to-Speech (TTS):** Native dual-language audio reading engine with variable playback speeds.
-- **Spotlight Search (Ctrl + K):** Instant search across all 14 lessons, key terms, pioneers, and interactive labs.
-- **Developer Dark Mode:** Native high-contrast dark theme designed for comfortable study.
-- **Post-Lesson Assessments:** Interactive quizzes (MCQ, True/False, Matching) with instant feedback and progress persistence.
+- **Spotlight Search (Ctrl + K):** Instant search across all lessons, key terms, pioneers, and interactive labs.
+- **Developer Dark Mode:** High-contrast dark theme designed for comfortable study across desktop, tablet, and mobile devices.
 
 ---
 
-## Structure
-
-```
-├── index.html              # Main application shell
-├── server.js               # Node.js static HTTP server with zero-cache headers
-├── package.json            # Project manifest and start script
-├── assets/
-│   ├── css/
-│   │   └── styles.css      # Design system, typography, and dark mode
-│   ├── js/
-│   │   ├── core.js         # State management, TTS engine, search index, i18n
-│   │   ├── app.js          # Routing, layout, header, footer, hero particle field
-│   │   ├── blocks.js       # Lesson block renderers (cards, compare, steps, callouts)
-│   │   ├── demos.js        # Interactive simulations and playgrounds
-│   │   └── quiz.js         # Assessment engine with instant scoring
-│   ├── vendor/             # React, GSAP, ScrollTrigger, Lenis smooth scroll
-│   └── img/
-│       └── lessons/        # 48 verified hardware and pioneer photographs
-└── data/
-    ├── meta.json           # Curriculum outline, chapters, and lesson metadata
-    └── lessons/
-        ├── ar/             # Complete Arabic lessons (1-1 to 4-4)
-        └── en/             # Complete English lessons (1-1 to 4-4)
-```
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) (v16 or newer)
-
-### Running Locally
+## Running Locally
 
 ```bash
 # Start the local server
@@ -76,5 +43,4 @@ http://localhost:3000
 
 ## Copyright
 
-© 2026 Maged Aboraya. All rights reserved.
-
+© 2026 AborayaTechnologies. All rights reserved.

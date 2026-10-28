@@ -3,61 +3,170 @@
     {
       "id": 1,
       "accent": "#2f5bff",
-      "title": { "ar": "تكنولوجيا المعلومات والمجتمع", "en": "Information Technology & Society" },
+      "title": {
+        "ar": "تكنولوجيا المعلومات والمجتمع",
+        "en": "Information Technology & Society"
+      },
       "blurb": {
         "ar": "من الحواسيب العملاقة إلى الذكاء الاصطناعي: كيف تغيّر التقنية حياتنا، وكيف نستخدمها بمسؤولية؟",
         "en": "From room-sized computers to artificial intelligence: how technology reshapes life, and how to use it responsibly."
       },
       "lessons": [
-        { "id": "1-1", "minutes": 18, "title": { "ar": "تطور تكنولوجيا المعلومات والتحول الاجتماعي", "en": "The Evolution of IT and Social Transformation" } },
-        { "id": "1-2", "minutes": 18, "title": { "ar": "كيف يعمل الذكاء الاصطناعي", "en": "How Artificial Intelligence Works" } },
-        { "id": "1-3", "minutes": 16, "title": { "ar": "الذكاء الاصطناعي في الحياة اليومية والصناعي", "en": "AI in Daily Life and Industry" } },
-        { "id": "1-4", "minutes": 18, "title": { "ar": "القضايا الأخلاقية المتعلقة بالذكاء الاصطناعي", "en": "Ethical Issues of Artificial Intelligence" } }
+        {
+          "id": "1-1",
+          "minutes": 18,
+          "title": {
+            "ar": "تطور تكنولوجيا المعلومات والتحول الاجتماعي",
+            "en": "The Evolution of IT and Social Transformation"
+          }
+        },
+        {
+          "id": "1-2",
+          "minutes": 18,
+          "title": {
+            "ar": "كيف يعمل الذكاء الاصطناعي",
+            "en": "How Artificial Intelligence Works"
+          }
+        },
+        {
+          "id": "1-3",
+          "minutes": 16,
+          "title": {
+            "ar": "الذكاء الاصطناعي في الحياة اليومية والصناعة",
+            "en": "AI in Daily Life and Industry"
+          }
+        },
+        {
+          "id": "1-4",
+          "minutes": 18,
+          "title": {
+            "ar": "القضايا الأخلاقية المتعلقة بالذكاء الاصطناعي",
+            "en": "Ethical Issues of Artificial Intelligence"
+          }
+        }
       ]
     },
     {
       "id": 2,
       "accent": "#e5484d",
-      "title": { "ar": "الأمن السيبراني", "en": "Cybersecurity" },
+      "title": {
+        "ar": "الأمن السيبراني",
+        "en": "Cybersecurity"
+      },
       "blurb": {
         "ar": "كيف نحمي بياناتنا وشبكاتنا؟ التشفير، المصادقة، وخطط مواجهة الحوادث والمخاطر.",
         "en": "How do we protect data and networks? Encryption, authentication, and plans for incidents and risk."
       },
       "lessons": [
-        { "id": "2-1", "minutes": 20, "title": { "ar": "تقنيات التشفير والمصادقة", "en": "Encryption and Authentication Techniques" } },
-        { "id": "2-2", "minutes": 18, "title": { "ar": "تصميم أمن الشبكات", "en": "Network Security Design" } },
-        { "id": "2-3", "minutes": 16, "title": { "ar": "الاستجابة للحوادث وإدارة المخاطر", "en": "Incident Response and Risk Management" } }
+        {
+          "id": "2-1",
+          "minutes": 20,
+          "title": {
+            "ar": "تقنيات التشفير والمصادقة",
+            "en": "Encryption and Authentication Techniques"
+          }
+        },
+        {
+          "id": "2-2",
+          "minutes": 18,
+          "title": {
+            "ar": "تصميم أمن الشبكات",
+            "en": "Network Security Design"
+          }
+        },
+        {
+          "id": "2-3",
+          "minutes": 16,
+          "title": {
+            "ar": "الاستجابة للحوادث وإدارة المخاطر",
+            "en": "Incident Response and Risk Management"
+          }
+        }
       ]
     },
     {
       "id": 3,
       "accent": "#0f9d8a",
-      "title": { "ar": "تطوير الويب", "en": "Web Development" },
+      "title": {
+        "ar": "تطوير الويب",
+        "en": "Web Development"
+      },
       "blurb": {
         "ar": "ماذا يحدث بين ضغطة الزر وظهور الصفحة؟ بنية تطبيقات الويب وطرق الاتصال وأساسيات الواجهة الأمامية.",
         "en": "What happens between a click and a page appearing? Web app architecture, communication, and front-end basics."
       },
       "lessons": [
-        { "id": "3-1", "minutes": 16, "title": { "ar": "البنية العامة لتطبيقات الويب", "en": "General Architecture of Web Applications" } },
-        { "id": "3-2", "minutes": 16, "title": { "ar": "طرق الاتصال في تطبيقات الويب", "en": "Communication Methods in Web Applications" } },
-        { "id": "3-3", "minutes": 18, "title": { "ar": "أساسيات تكنولوجيا الواجهة الأمامية", "en": "Front-End Technology Basics" } }
+        {
+          "id": "3-1",
+          "minutes": 16,
+          "title": {
+            "ar": "البنية العامة لتطبيقات الويب",
+            "en": "General Architecture of Web Applications"
+          }
+        },
+        {
+          "id": "3-2",
+          "minutes": 16,
+          "title": {
+            "ar": "طرق الاتصال في تطبيقات الويب",
+            "en": "Communication Methods in Web Applications"
+          }
+        },
+        {
+          "id": "3-3",
+          "minutes": 18,
+          "title": {
+            "ar": "أساسيات تكنولوجيا الواجهة الأمامية",
+            "en": "Front-End Technology Basics"
+          }
+        }
       ]
     },
     {
       "id": 4,
       "accent": "#e08a00",
-      "title": { "ar": "تصميم الويب والوسائط", "en": "Web Design & Media" },
+      "title": {
+        "ar": "تصميم الويب والوسائط",
+        "en": "Web Design & Media"
+      },
       "blurb": {
         "ar": "الوسائط وتجربة المستخدم وتقييم المواقع وتحسينها: كيف نصنع موقعًا يحبّه الناس؟",
         "en": "Media, user experience, evaluating and improving sites: how to build something people love to use."
       },
       "lessons": [
-        { "id": "4-1", "minutes": 16, "title": { "ar": "أنواع الوسائط وخصائصها", "en": "Media Types and Their Properties" } },
-        { "id": "4-2", "minutes": 16, "title": { "ar": "تصميم المعلومات وتجربة المستخدم للمواقع الإلكترونية", "en": "Information Design and User Experience" } },
-        { "id": "4-3", "minutes": 16, "title": { "ar": "طرق تقييم المواقع الإلكترونية", "en": "Methods of Evaluating Websites" } },
-        { "id": "4-4", "minutes": 16, "title": { "ar": "عملية التحسين التكراري للمواقع الإلكترونية", "en": "Iterative Improvement of Websites" } }
+        {
+          "id": "4-1",
+          "minutes": 16,
+          "title": {
+            "ar": "أنواع الوسائط وخصائصها",
+            "en": "Media Types and Their Properties"
+          }
+        },
+        {
+          "id": "4-2",
+          "minutes": 16,
+          "title": {
+            "ar": "تصميم المعلومات وتجربة المستخدم للمواقع الإلكترونية",
+            "en": "Information Design and User Experience"
+          }
+        },
+        {
+          "id": "4-3",
+          "minutes": 16,
+          "title": {
+            "ar": "طرق تقييم المواقع الإلكترونية",
+            "en": "Methods of Evaluating Websites"
+          }
+        },
+        {
+          "id": "4-4",
+          "minutes": 16,
+          "title": {
+            "ar": "عملية التحسين التكراري للمواقع الإلكترونية",
+            "en": "Iterative Improvement of Websites"
+          }
+        }
       ]
     }
   ]
 }
-

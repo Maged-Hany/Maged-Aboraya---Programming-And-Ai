@@ -1,38 +1,49 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Psyno - </title>
-  <meta name="description" content="Maged Aboraya — Interactive learning platform for Grade 11 Baccalaureate Programming & AI">
-  <meta name="author" content="Maged Aboraya">
-  <meta name="copyright" content="Maged Aboraya">
-  <meta name="theme-color" content="#f4f1ea">
+  <title>Syntax — اتعلم البرمجة والذكاء الاصطناعي صح</title>
+  <meta name="description"
+    content="منصة Syntax — اتعلم البرمجة وتطوير الويب والأمن السيبراني والذكاء الاصطناعي بشكل عملي وسهل. شروحات مباشرة وتطبيقات كود حية خطوة بخطوة.">
+  <meta name="author" content="AborayaTechnologies">
+  <meta name="copyright" content="AborayaTechnologies">
+  <meta name="theme-color" content="#faf4e6">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2312141a'/%3E%3Crect x='7' y='16' width='4' height='10' rx='2' fill='%23f4f1ea'/%3E%3Crect x='14' y='6' width='4' height='20' rx='2' fill='%232f5bff'/%3E%3Crect x='21' y='11' width='4' height='15' rx='2' fill='%23f4f1ea'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./assets/css/styles.css?v=5.8">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/styles.css?v=9.0">
   <script>
     try {
       var s = JSON.parse(localStorage.getItem('mabook:v1') || '{}');
-      var dark = s.theme ? s.theme === 'dark' : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-      if (dark) document.documentElement.dataset.theme = 'dark';
-    } catch(e) {}
+      if (s.theme) { delete s.theme; localStorage.setItem('mabook:v1', JSON.stringify(s)); }
+      document.documentElement.removeAttribute('data-theme');
+      var l = s.lang || 'ar';
+      document.documentElement.lang = l;
+      document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
+    } catch (e) { }
   </script>
 </head>
+
 <body>
   <div id="root"></div>
   <noscript>هذا الموقع يتطلب تفعيل لغة JavaScript في المتصفح / This site requires JavaScript enabled.</noscript>
 
-  <script src="./assets/vendor/react.js?v=5.8"></script>
-  <script src="./assets/vendor/react-dom.js?v=5.8"></script>
-  <script src="./assets/vendor/gsap.js?v=5.8"></script>
-  <script src="./assets/vendor/ScrollTrigger.js?v=5.8"></script>
-  <script src="./assets/vendor/lenis.js?v=5.8"></script>
-  <script src="./assets/js/core.js?v=5.8"></script>
-  <script src="./assets/js/demos.js?v=5.8"></script>
-  <script src="./assets/js/blocks.js?v=5.8"></script>
-  <script src="./assets/js/quiz.js?v=5.8"></script>
-  <script src="./assets/js/app.js?v=5.8"></script>
+  <script src="./assets/vendor/react.js?v=9.0"></script>
+  <script src="./assets/vendor/react-dom.js?v=9.0"></script>
+  <script src="./assets/vendor/gsap.js?v=9.0"></script>
+  <script src="./assets/vendor/ScrollTrigger.js?v=9.0"></script>
+  <script src="./assets/vendor/lenis.js?v=9.0"></script>
+  <script src="./assets/js/core.js?v=9.0"></script>
+  <script src="./assets/js/demos.js?v=9.0"></script>
+  <script src="./assets/js/blocks.js?v=9.0"></script>
+  <script src="./assets/js/quiz.js?v=9.0"></script>
+  <script src="./assets/js/app.js?v=9.0"></script>
 </body>
+
 </html>

@@ -47,7 +47,7 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/phishing.png",
+              "img": "./assets/img/lessons/phishing.png",
               "badge": "Cyber Threat",
               "title": "Phishing Email Example",
               "caption": "A deceptive email impersonating a trusted bank to trick users into revealing passwords."
@@ -95,13 +95,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/soc.jpg",
+              "img": "./assets/img/lessons/soc.jpg",
               "badge": "Defense Center",
               "title": "Security Operations Center (SOC)",
               "caption": "Cybersecurity analysts monitoring live network dashboards to detect and stop attacks."
             },
             {
-              "img": "/assets/img/lessons/nas.png",
+              "img": "./assets/img/lessons/nas.png",
               "badge": "Backup Hardware",
               "title": "NAS Backup Storage Server",
               "caption": "Dedicated multi-drive storage device used to keep safe backups against ransomware."

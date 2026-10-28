@@ -47,13 +47,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/julius_caesar.jpg",
+              "img": "./assets/img/lessons/julius_caesar.jpg",
               "badge": "Historic Figure",
               "title": "Julius Caesar",
               "caption": "Roman leader who used the Caesar shift cipher to protect confidential military messages."
             },
             {
-              "img": "/assets/img/lessons/enigma.jpg",
+              "img": "./assets/img/lessons/enigma.jpg",
               "badge": "Cipher Machine",
               "title": "The Enigma Cipher Machine",
               "caption": "Famous electromechanical rotor cipher machine used to encrypt secret messages in World War II."
@@ -119,13 +119,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/yubikey.jpg",
+              "img": "./assets/img/lessons/yubikey.jpg",
               "badge": "Security Tool",
               "title": "USB Hardware Security Key (2FA)",
               "caption": "A physical two-factor authentication key that protects accounts even if a password is leaked."
             },
             {
-              "img": "/assets/img/lessons/fingerprint.jpg",
+              "img": "./assets/img/lessons/fingerprint.jpg",
               "badge": "Biometric Device",
               "title": "Fingerprint Biometric Scanner",
               "caption": "A sensor that verifies identity using unique physical traits (something you are)."

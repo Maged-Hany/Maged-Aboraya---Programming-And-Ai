@@ -51,13 +51,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/don_norman.jpg",
+              "img": "./assets/img/lessons/don_norman.jpg",
               "badge": "Pioneer",
               "title": "Don Norman (Father of UX)",
               "caption": "Cognitive scientist who coined the term User Experience and defined core usability principles."
             },
             {
-              "img": "/assets/img/lessons/wireframe.png",
+              "img": "./assets/img/lessons/wireframe.png",
               "badge": "Design Tool",
               "title": "Website Wireframe Blueprint",
               "caption": "A simple grayscale layout sketch used to plan page structure and navigation before styling."
@@ -194,7 +194,7 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/braille_display.jpg",
+              "img": "./assets/img/lessons/braille_display.jpg",
               "badge": "Accessibility Hardware",
               "title": "Refreshable Braille Display",
               "caption": "Assistive device that converts semantic web text and alt descriptions into tactile Braille characters."

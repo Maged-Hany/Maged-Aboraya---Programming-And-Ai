@@ -51,7 +51,7 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/kanban.png",
+              "img": "./assets/img/lessons/kanban.png",
               "badge": "Workflow Tool",
               "title": "Agile Kanban Task Board",
               "caption": "Visual board organizing website improvements into To-Do, In Progress, Testing, and Done."
@@ -155,13 +155,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/smartphone_laptop.jpg",
+              "img": "./assets/img/lessons/smartphone_laptop.jpg",
               "badge": "QA Testing",
               "title": "Cross-Device Regression Testing",
               "caption": "Verifying website updates across mobile phones and laptops to ensure nothing broke."
             },
             {
-              "img": "/assets/img/lessons/server_room.jpg",
+              "img": "./assets/img/lessons/server_room.jpg",
               "badge": "Server Environments",
               "title": "Staging and Production Server Racks",
               "caption": "Dedicated server infrastructure separating safe pre-release testing from live student traffic."

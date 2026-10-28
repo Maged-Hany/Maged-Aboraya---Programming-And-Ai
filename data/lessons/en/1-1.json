@@ -47,25 +47,25 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/gordon_moore.png",
+              "img": "./assets/img/lessons/gordon_moore.png",
               "badge": "Pioneer",
               "title": "Gordon Moore",
               "caption": "Co-founder of Intel who formulated Moore Law predicting that transistors on a chip double every two years."
             },
             {
-              "img": "/assets/img/lessons/eniac.jpg",
+              "img": "./assets/img/lessons/eniac.jpg",
               "badge": "Historic Machine",
               "title": "ENIAC Computer (1945)",
               "caption": "The first general-purpose electronic computer; it filled an entire room and used vacuum tubes."
             },
             {
-              "img": "/assets/img/lessons/intel_4004.jpg",
+              "img": "./assets/img/lessons/intel_4004.jpg",
               "badge": "Real Microchip",
               "title": "Intel 4004 Microprocessor",
               "caption": "The world first single-chip microprocessor released in 1971 containing 2,300 transistors."
             },
             {
-              "img": "/assets/img/lessons/transistor.jpg",
+              "img": "./assets/img/lessons/transistor.jpg",
               "badge": "Component",
               "title": "Electronic Transistors",
               "caption": "Tiny semiconductor switches that replaced bulky vacuum tubes and made modern electronics possible."
@@ -120,13 +120,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/printing_press.png",
+              "img": "./assets/img/lessons/printing_press.png",
               "badge": "Milestone",
               "title": "Gutenberg Printing Press",
               "caption": "The historic machine that sparked the printing revolution and mass sharing of human knowledge."
             },
             {
-              "img": "/assets/img/lessons/data_center.jpg",
+              "img": "./assets/img/lessons/data_center.jpg",
               "badge": "Cloud Infrastructure",
               "title": "Modern Cloud Data Center",
               "caption": "Rows of high-speed servers inside a cloud data center powering online apps and storage."

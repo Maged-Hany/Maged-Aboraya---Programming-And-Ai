@@ -16,8 +16,8 @@ const MIME = {
   '.ico': 'image/x-icon',
   '.woff2': 'font/woff2'
 };
-// Only these paths are public. Everything else in the folder (e.g. the PDF) stays private.
-const PUBLIC_DIRS = ['assets'];
+// Public directories (users.json is strictly blocked below)
+const PUBLIC_DIRS = ['assets', 'data'];
 const LANGS = new Set(['ar', 'en']);
 const USERS_FILE = path.join(ROOT, 'data', 'users.json');
 const VIDEOS_FILE = path.join(ROOT, 'data', 'videos.json');
@@ -108,9 +108,9 @@ async function handleApi(req, url, res) {
   // GET /api/lesson/:lang/:id
   if (method === 'GET' && parts[1] === 'lesson' && parts.length === 4) {
     const [, , lang, id] = parts;
-    if (!LANGS.has(lang) || !/^\d-\d$/.test(id)) return sendJSON(res, 400, { error: 'bad request' });
+    if (!LANGS.has(lang) || !/^\d-\d$/.test(id)) return sendJSON(res, 400, { error: 'طلب غير صالح / Bad request' });
     const file = path.join(ROOT, 'data', 'lessons', lang, id + '.json');
-    if (!fs.existsSync(file)) return sendJSON(res, 404, { error: 'lesson not ready yet' });
+    if (!fs.existsSync(file)) return sendJSON(res, 404, { error: 'الدرس قيد الإعداد / Lesson not ready yet' });
     return sendJSON(res, 200, readJSON(file), { 'Cache-Control': 'no-cache' });
   }
 
@@ -130,30 +130,55 @@ async function handleApi(req, url, res) {
   // POST /api/auth/register
   if (method === 'POST' && parts[1] === 'auth' && parts[2] === 'register') {
     const payload = await readBody(req);
-    const { username, name, gmail, countryCode, phone, password, stream } = payload;
+    const { username, name, gmail, countryCode, phone, password, stream, lang } = payload;
+    const isAr = (lang || stream || 'ar') === 'ar';
     const cleanUser = String(username || '').trim().toLowerCase();
     const cleanGmail = String(gmail || '').trim().toLowerCase();
 
     if (!cleanUser || !/^[a-z0-9_]{3,20}$/.test(cleanUser)) {
-      return sendJSON(res, 400, { error: 'Username must be 3-20 characters of letters, numbers, or underscores' });
+      return sendJSON(res, 400, {
+        error: isAr
+          ? 'يجب أن يتكوّن اسم المستخدم من 3 إلى 20 حرفًا إنجليزيًا أو رقمًا أو شرطة سفلية (_)'
+          : 'Username must be 3-20 characters of letters, numbers, or underscores'
+      });
     }
     if (!cleanGmail || !cleanGmail.endsWith('@gmail.com') || cleanGmail.length < 12) {
-      return sendJSON(res, 400, { error: 'A valid Gmail address (@gmail.com) is required' });
+      return sendJSON(res, 400, {
+        error: isAr
+          ? 'يُرجى إدخال بريد Gmail صحيح ينتهي بـ @gmail.com'
+          : 'A valid Gmail address (@gmail.com) is required'
+      });
     }
     if (!phone || !/^\d{6,15}$/.test(String(phone).replace(/\D/g, ''))) {
-      return sendJSON(res, 400, { error: 'Valid phone number is required' });
+      return sendJSON(res, 400, {
+        error: isAr
+          ? 'يُرجى إدخال رقم هاتف صحيح'
+          : 'A valid phone number is required'
+      });
     }
     if (!password || password.length < 6 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
-      return sendJSON(res, 400, { error: 'Password must be at least 6 characters and contain letters and numbers' });
+      return sendJSON(res, 400, {
+        error: isAr
+          ? 'يجب أن تتكوّن كلمة المرور من 6 خانات على الأقل وتحتوي على حروف وأرقام'
+          : 'Password must be at least 6 characters and contain letters and numbers'
+      });
     }
 
     const db = getUsers();
     if (db.users[cleanUser]) {
-      return sendJSON(res, 409, { error: 'Username is already registered' });
+      return sendJSON(res, 409, {
+        error: isAr
+          ? 'اسم المستخدم هذا مسجّل بالفعل، يُرجى اختيار اسم آخر'
+          : 'Username is already registered'
+      });
     }
     for (const u in db.users) {
       if (db.users[u].gmail === cleanGmail) {
-        return sendJSON(res, 409, { error: 'This Gmail address is already registered' });
+        return sendJSON(res, 409, {
+          error: isAr
+            ? 'هذا البريد الإلكتروني (Gmail) مسجّل بالفعل'
+            : 'This Gmail address is already registered'
+        });
       }
     }
 
@@ -169,12 +194,16 @@ async function handleApi(req, url, res) {
       progress: { lessons: {} }
     };
     saveUsers(db);
-    return sendJSON(res, 200, { ok: true, message: 'Account created successfully' });
+    return sendJSON(res, 200, {
+      ok: true,
+      message: isAr ? 'تم إنشاء الحساب بنجاح' : 'Account created successfully'
+    });
   }
 
   // POST /api/auth/login
   if (method === 'POST' && parts[1] === 'auth' && parts[2] === 'login') {
-    const { login, password } = await readBody(req);
+    const { login, password, lang } = await readBody(req);
+    const isAr = (lang || 'ar') === 'ar';
     const cleanLogin = String(login || '').trim().toLowerCase();
     const db = getUsers();
     let found = db.users[cleanLogin];
@@ -187,7 +216,11 @@ async function handleApi(req, url, res) {
       }
     }
     if (!found || found.password !== String(password)) {
-      return sendJSON(res, 401, { error: 'Invalid username/Gmail or password' });
+      return sendJSON(res, 401, {
+        error: isAr
+          ? 'اسم المستخدم (أو البريد الإلكتروني) أو كلمة المرور غير صحيحة'
+          : 'Invalid username/Gmail or password'
+      });
     }
 
     const { password: _, ...userSafe } = found;
@@ -257,7 +290,12 @@ async function handleApi(req, url, res) {
 
 function handleStatic(url, res) {
   let rel = decodeURIComponent(url.pathname);
-  if (rel === '/' || rel === '/index.html' || !path.extname(rel) && !rel.startsWith('/assets')) rel = '/index.html';
+  if (rel === '/favicon.ico') {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#12141a"/><rect x="7" y="16" width="4" height="10" rx="2" fill="#f4f1ea"/><rect x="14" y="6" width="4" height="20" rx="2" fill="#2f5bff"/><rect x="21" y="11" width="4" height="15" rx="2" fill="#f4f1ea"/></svg>`;
+    return send(res, 200, svg, 'image/svg+xml', { 'Cache-Control': 'public, max-age=86400' });
+  }
+  if (rel === '/' || rel === '/index.html' || (!path.extname(rel) && !rel.startsWith('/assets') && !rel.startsWith('/data'))) rel = '/index.html';
+  if (rel.replace(/\\/g, '/').includes('users.json')) return send(res, 403, 'Forbidden', 'text/plain');
   const top = rel.split('/').filter(Boolean)[0];
   if (rel !== '/index.html' && !PUBLIC_DIRS.includes(top)) return send(res, 404, 'Not found', 'text/plain');
   const file = path.normalize(path.join(ROOT, rel));

@@ -47,13 +47,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/rgb_pixels.jpg",
+              "img": "./assets/img/lessons/rgb_pixels.jpg",
               "badge": "Macro View",
               "title": "Real RGB Screen Pixels Up Close",
               "caption": "Macro photograph of a display screen showing red, green, and blue subpixels forming images."
             },
             {
-              "img": "/assets/img/lessons/vector_raster.png",
+              "img": "./assets/img/lessons/vector_raster.png",
               "badge": "Visual Comparison",
               "title": "Vector vs Raster Zoom Quality",
               "caption": "Vector graphics (SVG) stay razor-sharp when zoomed, while raster bitmaps show blocky pixels."
@@ -157,7 +157,7 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/digital_audio.jpg",
+              "img": "./assets/img/lessons/digital_audio.jpg",
               "badge": "Media Tool",
               "title": "Digital Audio Waveform Editor",
               "caption": "Audio editing software visualizing sound waves, sample rates, and audio bitrates."

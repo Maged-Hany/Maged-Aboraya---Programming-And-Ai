@@ -47,13 +47,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/brendan_eich.jpg",
+              "img": "./assets/img/lessons/brendan_eich.jpg",
               "badge": "Pioneer",
               "title": "Brendan Eich (Creator of JavaScript)",
               "caption": "Invented the JavaScript programming language in 1995 to make web pages interactive and dynamic."
             },
             {
-              "img": "/assets/img/lessons/hakon_lie.jpg",
+              "img": "./assets/img/lessons/hakon_lie.jpg",
               "badge": "Pioneer",
               "title": "Hakon Wium Lie (Creator of CSS)",
               "caption": "Proposed Cascading Style Sheets (CSS) in 1994 to control colors, fonts, and web layouts."
@@ -121,7 +121,7 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/web_devtools.png",
+              "img": "./assets/img/lessons/web_devtools.png",
               "badge": "Developer Tool",
               "title": "Browser DOM & Style Inspector",
               "caption": "Built-in browser developer tools allowing programmers to inspect the DOM tree and test CSS live."

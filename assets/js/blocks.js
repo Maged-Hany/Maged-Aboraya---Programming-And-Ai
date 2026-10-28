@@ -24,9 +24,10 @@
     const isAr = (langHint === 'ar') || /[\u0600-\u06FF]/.test(text || '');
 
     return h('button', {
+      type: 'button',
       className: 'tts-btn' + (speaking ? ' is-active' : ''),
       onClick: e => { e.stopPropagation(); App.TTS.speak(text, langHint, id); },
-      title: speaking ? (isAr ? 'إيقاف الاستماع' : 'Stop') : (isAr ? 'استمع للقراءة' : 'Listen')
+      title: speaking ? (isAr ? 'إيقاف الاستماع' : 'Stop') : (isAr ? 'استمع للقراءة الصوتية' : 'Listen')
     },
       h(SpeakerIcon),
       h('span', null, speaking ? (isAr ? 'جارٍ القراءة…' : 'Playing…') : (isAr ? 'استمع' : 'Listen')));
@@ -40,16 +41,17 @@
 
     if (bilingual && arText) {
       return h('div', { className: 'b-p-wrap', 'data-reveal': '' },
-        h('div', { style: { display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' } },
+        h('div', { className: 'b-p-row' },
           h('p', { className: 'b-p', style: { flex: 1 } }, text),
           h(TTSButton, { text, langHint: 'en', id: pid })),
-        h('div', { style: { display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' } },
+        h('div', { className: 'b-p-row' },
           h('p', { className: 'ar-sub', dir: 'rtl', style: { flex: 1 } }, arText),
           h(TTSButton, { text: arText, langHint: 'ar', id: pid + '-ar' })));
     }
-    return h('div', { className: 'b-p-wrap', 'data-reveal': '', style: { display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' } },
-      h('p', { className: 'b-p', style: { flex: 1 } }, text),
-      h(TTSButton, { text, langHint: 'auto', id: pid }));
+    return h('div', { className: 'b-p-wrap', 'data-reveal': '' },
+      h('div', { className: 'b-p-row' },
+        h('p', { className: 'b-p', style: { flex: 1 } }, text),
+        h(TTSButton, { text, langHint: 'auto', id: pid })));
   };
 
   /* List */
@@ -98,21 +100,24 @@
     }));
 
   /* Compare */
-  const Compare = ({ b, arB, bilingual }) => h('div', { className: 'b-compare', 'data-reveal': '' },
-    [b.left, b.right].map((side, i) => {
-      const sideKey = i === 0 ? 'left' : 'right';
-      const arSide = (bilingual && arB && arB[sideKey]) || null;
-      return h('div', { key: i, className: 'cmp-side s' + i },
-        h('h4', null, side.title),
-        arSide && arSide.title ? h('span', { className: 'ar-sub-title', style: { fontSize: '15px' }, dir: 'rtl' }, arSide.title) : null,
-        h('ul', null, side.points.map((p, k) => {
-          const arP = (arSide && arSide.points && arSide.points[k]) || null;
-          return h('li', { key: k },
-            h('span', null, p),
-            arP ? h(ArSub, { text: arP }) : null);
-        })));
-    }),
-    h('span', { className: 'cmp-vs' }, 'VS'));
+  const Compare = ({ b, arB, bilingual }) => {
+    const { lang } = useLang();
+    return h('div', { className: 'b-compare', 'data-reveal': '' },
+      [b.left, b.right].map((side, i) => {
+        const sideKey = i === 0 ? 'left' : 'right';
+        const arSide = (bilingual && arB && arB[sideKey]) || null;
+        return h('div', { key: i, className: 'cmp-side s' + i },
+          h('h4', null, side.title),
+          arSide && arSide.title ? h('span', { className: 'ar-sub-title', style: { fontSize: '15px' }, dir: 'rtl' }, arSide.title) : null,
+          h('ul', null, side.points.map((p, k) => {
+            const arP = (arSide && arSide.points && arSide.points[k]) || null;
+            return h('li', { key: k },
+              h('span', null, p),
+              arP ? h(ArSub, { text: arP }) : null);
+          })));
+      }),
+      h('span', { className: 'cmp-vs' }, lang === 'ar' ? 'ضد' : 'VS'));
+  };
 
   /* Steps */
   const Steps = ({ b, arB, bilingual }) => h('ol', { className: 'b-steps', 'data-stagger': '' },
@@ -152,14 +157,14 @@
                 arIt && arIt.front ? h('span', { className: 'ar-sub', dir: 'rtl' }, arIt.front) : null),
               h('span', { className: 'fl-hint' },
                 h(RotateIcon, { size: 12 }),
-                h('span', null, lang === 'ar' ? 'انقر للقلب' : 'Click to flip'))),
+                h('span', null, lang === 'ar' ? 'اضغط لقلب البطاقة' : 'Click to flip'))),
             h('span', { className: 'fl-face fl-back' },
               h('span', { className: 'fl-body' },
                 h('span', { className: 'fl-back-title' }, it.back),
                 arIt && arIt.back ? h('span', { className: 'ar-sub', dir: 'rtl' }, arIt.back) : null),
               h('span', { className: 'fl-back-hint' },
                 h(RotateIcon, { size: 12 }),
-                h('span', null, lang === 'ar' ? 'الرجوع للسؤال' : 'Click to flip back')))));
+                h('span', null, lang === 'ar' ? 'العودة إلى السؤال' : 'Click to flip back')))));
       }));
   }
 
@@ -207,7 +212,7 @@
     }
     return h('div', { className: 'b-code', 'data-reveal': '' },
       h('div', { className: 'code-bar' }, h('span', null, b.lang.toUpperCase()),
-        h('button', { onClick: handleCopy }, ok ? t.copied : t.copy)),
+        h('button', { type: 'button', onClick: handleCopy }, ok ? t.copied : t.copy)),
       h('pre', { dir: 'ltr' }, h('code', null, b.text)));
   }
 
@@ -215,26 +220,30 @@
   function StatItem({ it, arIt, bilingual }) {
     const ref = useRef(null);
     const m = it.value.match(/^([^\d]*)([\d][\d,]*\.?\d*)(.*)$/);
-    const [shown, setShown] = useState(m ? 0 : null);
+    const [shown, setShown] = useState(m ? (0).toFixed((m[2].split('.')[1] || '').length) : null);
     useEffect(() => {
       if (!m) return;
       const target = parseFloat(m[2].replace(/,/g, ''));
       const dec = (m[2].split('.')[1] || '').length;
       const el = ref.current;
-      if (App.reduced) { setShown(target); return; }
+      if (App.reduced) { setShown(target.toFixed(dec)); return; }
       const io = new IntersectionObserver(es => {
         if (!es[0].isIntersecting) return;
         io.disconnect();
         const o = { v: 0 };
-        gsap.to(o, { v: target, duration: 1.6, ease: 'power3.out', onUpdate: () => setShown(+o.v.toFixed(dec)) });
-      }, { threshold: .5 });
+        gsap.to(o, { v: target, duration: 1.6, ease: 'power3.out', onUpdate: () => setShown(o.v.toFixed(dec)) });
+      }, { threshold: .35 });
       io.observe(el);
       return () => io.disconnect();
     }, []);
     const hasComma = m && m[2].includes(',');
-    const text = m ? m[1] + (hasComma ? Number(shown).toLocaleString('en') : (shown === null ? '' : shown)) + m[3] : it.value;
+    const formattedNum = m
+      ? (hasComma ? Number(shown).toLocaleString('en') : (shown === null ? '' : shown))
+      : '';
+    const text = m ? m[1] + formattedNum + m[3] : it.value;
+    const hasArabic = /[\u0600-\u06FF]/.test(text);
     return h('div', { ref, className: 'stat' },
-      h('b', { dir: 'ltr' }, text),
+      h('b', { dir: hasArabic ? 'rtl' : 'ltr' }, text),
       h('span', null, it.label),
       bilingual && arIt && arIt.label ? h('span', { className: 'ar-row-sub', dir: 'rtl' }, arIt.label) : null);
   }
@@ -242,16 +251,31 @@
 
   /* Figures / Real Photographs Gallery with Lightbox */
   function Figures({ b, arB, bilingual }) {
+    const { lang } = useLang();
     const [zoomImg, setZoomImg] = useState(null);
+
+    useEffect(() => {
+      if (!zoomImg) return;
+      const onKey = e => { if (e.key === 'Escape') setZoomImg(null); };
+      window.addEventListener('keydown', onKey);
+      return () => window.removeEventListener('keydown', onKey);
+    }, [zoomImg]);
+
+    const normImg = src => String(src || '').replace(/^\/assets\//, './assets/');
 
     return h('div', { className: 'b-figures-wrap' },
       h('div', { className: 'b-figures', 'data-stagger': '' },
         b.items.map((fig, i) => {
           const arFig = (bilingual && arB && arB.items && arB.items[i]) || null;
+          const imgSrc = normImg(fig.img);
           return h('figure', { key: i, className: 'fig-card' },
-            h('div', { className: 'fig-img-wrap', onClick: () => setZoomImg({ ...fig, ar: arFig }), title: 'Click to expand photo' },
-              h('img', { className: 'fig-img', src: fig.img, alt: fig.title, loading: 'lazy' }),
-              h('span', { className: 'fig-zoom-hint' }, 'Expand')),
+            h('div', {
+              className: 'fig-img-wrap',
+              onClick: () => setZoomImg({ ...fig, img: imgSrc, ar: arFig }),
+              title: lang === 'ar' ? 'اضغط لتكبير الصورة' : 'Click to expand photo'
+            },
+              h('img', { className: 'fig-img', src: imgSrc, alt: fig.title, loading: 'lazy' }),
+              h('span', { className: 'fig-zoom-hint' }, lang === 'ar' ? 'تكبير' : 'Expand')),
             h('figcaption', { className: 'fig-content' },
               h('span', { className: 'fig-badge' }, fig.badge + (arFig ? ' · ' + arFig.badge : '')),
               h('h4', { className: 'fig-title' }, fig.title),
@@ -269,7 +293,7 @@
               zoomImg.ar ? h('span', { className: 'ar-sub', dir: 'rtl', style: { margin: 0, padding: 0, border: 'none', background: 'none' } }, zoomImg.ar.title) : null,
               h('p', null, zoomImg.caption),
               zoomImg.ar ? h('span', { className: 'ar-sub', dir: 'rtl', style: { margin: 0, padding: 0, border: 'none', background: 'none' } }, zoomImg.ar.caption) : null),
-            h('button', { className: 'fig-lb-close', onClick: () => setZoomImg(null), 'aria-label': 'Close' }, '×')))) : null);
+            h('button', { type: 'button', className: 'fig-lb-close', onClick: () => setZoomImg(null), 'aria-label': lang === 'ar' ? 'إغلاق' : 'Close' }, '×')))) : null);
   }
 
   /* Interactive Demos */

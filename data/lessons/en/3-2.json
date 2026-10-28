@@ -47,13 +47,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/blade_server.jpg",
+              "img": "./assets/img/lessons/blade_server.jpg",
               "badge": "Server Hardware",
               "title": "High-Density Web Server Rack",
               "caption": "Enterprise servers wired to process thousands of HTTP requests and responses every second."
             },
             {
-              "img": "/assets/img/lessons/fiber_optic.jpg",
+              "img": "./assets/img/lessons/fiber_optic.jpg",
               "badge": "Data Medium",
               "title": "Optical Fiber Strands",
               "caption": "Glass fibers transmitting web packets as high-speed pulses of light across the internet."
@@ -129,7 +129,7 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/wireshark.png",
+              "img": "./assets/img/lessons/wireshark.png",
               "badge": "Network Tool",
               "title": "Wireshark Packet Analyzer",
               "caption": "Industry-standard software tool used by engineers to inspect HTTP traffic and verify HTTPS encryption."

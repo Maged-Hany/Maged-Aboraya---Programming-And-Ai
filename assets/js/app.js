@@ -1,4 +1,4 @@
-/* app.js — routing, pages, animations, and bilingual English+Arabic support */
+/* app.js — routing, pages, animations, courses catalog, and bilingual English+Arabic support */
 (function () {
   const { h, STR, Store, useStore, LangCtx, useLang, getJSON, scrollToEl, scrollToY, getLenis, scan, killAll, useScan, Words, ScrubWords } = App;
   const { useState, useEffect, useRef, useMemo } = React;
@@ -6,7 +6,7 @@
   const lt = (obj, lang) => obj[lang] || obj.en;
 
   /* ============ SVG Icons ============ */
-  const SearchIcon = () => h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round', style: { flex: 'none' } },
+  const SearchIcon = () => h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round', style: { flex: 'none' } },
     h('circle', { cx: 11, cy: 11, r: 8 }),
     h('line', { x1: 21, y1: 21, x2: 16.65, y2: 16.65 }));
 
@@ -23,6 +23,31 @@
 
   const MoonIcon = () => h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
     h('path', { d: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z' }));
+
+  const SwitchSunSvg = () => h('svg', { className: 'ts-icon ts-sun', viewBox: '0 0 24 24', fill: 'none' },
+    h('circle', { cx: 12, cy: 12, r: 4.6, fill: 'currentColor' }),
+    h('line', { x1: 12, y1: 2.2, x2: 12, y2: 4.6, stroke: 'currentColor', strokeWidth: 2.5, strokeLinecap: 'round' }),
+    h('line', { x1: 12, y1: 19.4, x2: 12, y2: 21.8, stroke: 'currentColor', strokeWidth: 2.5, strokeLinecap: 'round' }),
+    h('line', { x1: 2.2, y1: 12, x2: 4.6, y2: 12, stroke: 'currentColor', strokeWidth: 2.5, strokeLinecap: 'round' }),
+    h('line', { x1: 19.4, y1: 12, x2: 21.8, y2: 12, stroke: 'currentColor', strokeWidth: 2.5, strokeLinecap: 'round' }),
+    h('line', { x1: 5.07, y1: 5.07, x2: 6.77, y2: 6.77, stroke: 'currentColor', strokeWidth: 2.5, strokeLinecap: 'round' }),
+    h('line', { x1: 17.23, y1: 17.23, x2: 18.93, y2: 18.93, stroke: 'currentColor', strokeWidth: 2.5, strokeLinecap: 'round' }),
+    h('line', { x1: 18.93, y1: 5.07, x2: 17.23, y2: 6.77, stroke: 'currentColor', strokeWidth: 2.5, strokeLinecap: 'round' }),
+    h('line', { x1: 6.77, y1: 17.23, x2: 5.07, y2: 18.93, stroke: 'currentColor', strokeWidth: 2.5, strokeLinecap: 'round' }));
+
+  const SwitchMoonStarSvg = () => h('svg', { className: 'ts-icon ts-moon', viewBox: '0 0 24 24', fill: 'none' },
+    h('path', {
+      d: 'M14.5 18.2c-4.2 0-7.6-3.4-7.6-7.6 0-2.9 1.6-5.4 4.1-6.7.4-.2.1-.8-.3-.7-4.5.7-7.9 4.6-7.9 9.3 0 5.2 4.2 9.4 9.4 9.4 4.1 0 7.6-2.6 8.9-6.3.2-.4-.4-.8-.7-.5-1.5 2-3.6 3.1-5.9 3.1z',
+      fill: 'currentColor'
+    }),
+    h('path', {
+      d: 'M17.5 3.2l.85 2.15 2.15.85-2.15.85-.85 2.15-.85-2.15-2.15-.85 2.15-.85.85-2.15z',
+      fill: 'currentColor',
+      stroke: 'currentColor',
+      strokeWidth: 0.6,
+      strokeLinejoin: 'round'
+    }));
+
 
   const StarIcon = () => h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'currentColor', style: { display: 'inline-block', verticalAlign: 'middle' } },
     h('polygon', { points: '12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2' }));
@@ -41,14 +66,8 @@
     h('polygon', { points: '11 5 6 9 2 9 2 15 6 15 11 19 11 5' }),
     h('path', { d: 'M15.54 8.46a5 5 0 0 1 0 7.07' }));
 
-  const ZenIcon = () => h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
-    h('circle', { cx: 12, cy: 12, r: 3 }),
-    h('path', { d: 'M3 7V5a2 2 0 0 1 2-2h2' }),
-    h('path', { d: 'M17 3h2a2 2 0 0 1 2 2v2' }),
-    h('path', { d: 'M21 17v2a2 2 0 0 1-2 2h-2' }),
-    h('path', { d: 'M7 21H5a2 2 0 0 1-2-2v-2' }));
 
-  const CloseIcon = () => h('svg', { width: 13, height: 13, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+  const CloseIcon = () => h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' },
     h('line', { x1: 18, y1: 6, x2: 6, y2: 18 }),
     h('line', { x1: 6, y1: 6, x2: 18, y2: 18 }));
 
@@ -75,6 +94,198 @@
   const MailIcon = () => h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
     h('path', { d: 'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z' }),
     h('polyline', { points: '22,6 12,13 2,6' }));
+
+  const LayersIcon = () => h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+    h('polygon', { points: '12 2 2 7 12 12 22 7 12 2' }),
+    h('polyline', { points: '2 17 12 22 22 17' }),
+    h('polyline', { points: '2 12 12 17 22 12' }));
+
+  const GlobeIcon = () => h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+    h('circle', { cx: 12, cy: 12, r: 10 }),
+    h('line', { x1: 2, y1: 12, x2: 22, y2: 12 }),
+    h('path', { d: 'M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z' }));
+
+  const EyeIcon = ({ off }) => off
+    ? h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+        h('path', { d: 'M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24' }),
+        h('line', { x1: 1, y1: 1, x2: 23, y2: 23 }))
+    : h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+        h('path', { d: 'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z' }),
+        h('circle', { cx: 12, cy: 12, r: 3 }));
+
+  /* ============ Courses Catalog Definition ============ */
+  const COURSES_DATA = [
+    {
+      id: 'students',
+      featured: true,
+      accent: '#2563eb',
+      chapterIds: [1, 2, 3, 4],
+      labsCount: 6,
+      image: './assets/img/hero_students.png',
+      rating: '4.9',
+      reviewsCount: '3,600+ طالب',
+      priceText: {
+        ar: 'مجاني 100%',
+        en: '100% Free'
+      },
+      tag: {
+        ar: 'طلاب المدارس · مجاني 100%',
+        en: 'School Students · 100% Free'
+      },
+      badge: {
+        ar: 'منحة مجانية لطلاب المدارس',
+        en: 'Free Student Scholarship'
+      },
+      title: {
+        ar: 'كورس البرمجة والذكاء الاصطناعي لطلاب المدارس: الدليل الشامل من الصفر',
+        en: 'Programming & AI for School Students: Complete Guide from Scratch'
+      },
+      blurb: {
+        ar: 'اتعلم تفكر كمبرمج وتبني تطبيقات ومواقع حقيقية بنفسك خطوة بخطوة باللغة المصرية السهلة ومن الصفر تماماً. كورس عملي ممتع ومصمم خصيصاً لطلاب المدارس بدون أي تعقيد.',
+        en: 'Learn to think like a programmer and build real apps step by step from scratch. Designed specifically for school students in natural Arabic.'
+      },
+      highlights: {
+        ar: ['تفكير منطقي وحل مشكلات برمجية', 'بناء وتصميم أول موقع ويب ليك', 'استخدام الذكاء الاصطناعي في الكود', 'معامل كود حية وتجارب تفاعلية'],
+        en: ['Logical Thinking & Problem Solving', 'Building Your First Web App', 'AI in Practical Coding', 'Hands-on Interactive Labs']
+      }
+    },
+    {
+      id: 'web',
+      featured: false,
+      accent: '#0f9d8a',
+      chapterIds: [3, 4],
+      labsCount: 3,
+      image: './assets/img/lessons/web_devtools.png',
+      rating: '4.8',
+      reviewsCount: '2,140+ طالب',
+      priceText: {
+        ar: 'مجاني 100%',
+        en: '100% Free'
+      },
+      tag: {
+        ar: 'تطوير الويب و UX · مجاني 100%',
+        en: 'Web Dev & UX · 100% Free'
+      },
+      badge: {
+        ar: 'تطوير الويب و UX',
+        en: 'Web Dev & UX'
+      },
+      title: {
+        ar: 'تطوير الويب وتصميم تجربة المستخدم (HTML, CSS, JS, UX)',
+        en: 'Full-Stack Web Engineering & UX Design (HTML, CSS, JS, UX)'
+      },
+      blurb: {
+        ar: 'افهم شبكة الإنترنت وبروتوكول HTTP شغالين إزاي في الحقيقة، وابنِ واجهات ومواقع سريعة ومتجاوبة بـ HTML5 و CSS3 و JavaScript مع أفضل ممارسات تجربة المستخدم.',
+        en: 'Master how the internet and HTTP work, build responsive interactive web apps with HTML5, CSS3, and JavaScript, and apply human-centered UX and WCAG accessibility standards.'
+      },
+      highlights: {
+        ar: ['إزاي الويب والـ HTTP شغالين', 'بناء الصفحات بـ HTML5 وتنسيقات CSS3', 'برمجة التفاعل بلغة JavaScript', 'أصول الـ UX وتناسق الألوان'],
+        en: ['HTTP Protocol & Web Architecture', 'Semantic HTML5 & Modern CSS3', 'Interactive JavaScript DOM', 'UX Heuristics & WCAG Contrast']
+      }
+    },
+    {
+      id: 'ai',
+      featured: false,
+      accent: '#6d28d9',
+      chapterIds: [1],
+      labsCount: 1,
+      image: './assets/img/lessons/alan_turing.jpg',
+      rating: '4.9',
+      reviewsCount: '1,890+ طالب',
+      priceText: {
+        ar: 'مجاني 100%',
+        en: '100% Free'
+      },
+      tag: {
+        ar: 'الذكاء الاصطناعي · مجاني 100%',
+        en: 'AI & Computing · 100% Free'
+      },
+      badge: {
+        ar: 'الذكاء الاصطناعي',
+        en: 'AI & Computing'
+      },
+      title: {
+        ar: 'أساسيات الحوسبة والذكاء الاصطناعي وتعلم الآلة',
+        en: 'Computing Foundations, Artificial Intelligence & Machine Learning'
+      },
+      blurb: {
+        ar: 'من أول فيزياء المعالجات والترانزستور وقانون مور، لحد خوارزميات الـ Machine Learning والشبكات العصبية العميقة وتطبيقات الذكاء الاصطناعي في بيئة العمل الحقيقية.',
+        en: 'Journey from microprocessor hardware and Moore’s Law to machine learning paradigms, deep neural networks, and responsible AI engineering.'
+      },
+      highlights: {
+        ar: ['تطور أجهزة الكمبيوتر وقانون مور', 'تعلم الآلة والشبكات العصبية', 'أخلاقيات وقواعد استخدام الـ AI'],
+        en: ['Hardware Scaling & Moore’s Law', 'Machine Learning & Neural Nets', 'AI Ethics, Bias & Governance']
+      }
+    },
+    {
+      id: 'cyber',
+      featured: false,
+      accent: '#e5484d',
+      chapterIds: [2],
+      labsCount: 2,
+      image: './assets/img/lessons/firewall.png',
+      rating: '4.9',
+      reviewsCount: '1,420+ طالب',
+      priceText: {
+        ar: 'مجاني 100%',
+        en: '100% Free'
+      },
+      tag: {
+        ar: 'الأمن السيبراني · مجاني 100%',
+        en: 'Cybersecurity · 100% Free'
+      },
+      badge: {
+        ar: 'الأمن السيبراني',
+        en: 'Cybersecurity'
+      },
+      title: {
+        ar: 'الأمن السيبراني والتشفير وحماية البيانات',
+        en: 'Cybersecurity, Cryptography & Network Defense'
+      },
+      blurb: {
+        ar: 'افهم ألاعيب الهاكرز وحيل الهندسة الاجتماعية، وجرب بنفسك عملياً خوارزميات التشفير الكلاسيكية والحديثة، وشوف إزاي تقيس قوة الباسورد وتأمن أي نظام.',
+        en: 'Analyze cyber threats and social engineering, experiment hands-on with classical and modern encryption, password entropy, and defense-in-depth security.'
+      },
+      highlights: {
+        ar: ['مثلث أمن المعلومات CIA والتهديدات', 'خوارزميات التشفير السري والعلني', 'تأكيد الهوية MFA وجدران الحماية'],
+        en: ['CIA Triad & Threat Landscape', 'Symmetric & Public-Key Crypto', 'Multi-Factor Auth & Firewalls']
+      }
+    },
+    {
+      id: 'baccalaureate',
+      featured: false,
+      accent: '#2f5bff',
+      chapterIds: [1, 2, 3, 4],
+      labsCount: 6,
+      image: './assets/img/lessons/data_center.jpg',
+      rating: '4.9',
+      reviewsCount: '4,850+ طالب',
+      priceText: {
+        ar: 'مجاني 100%',
+        en: '100% Free'
+      },
+      tag: {
+        ar: 'الكورس الشامل · مجاني 100%',
+        en: 'Complete Track · 100% Free'
+      },
+      badge: {
+        ar: 'المنهج الكامل من الصفر',
+        en: 'Full Baccalaureate Track'
+      },
+      title: {
+        ar: 'كورس البرمجة والذكاء الاصطناعي الشامل — خطوة بخطوة',
+        en: 'Complete Programming & AI Course — Baccalaureate'
+      },
+      blurb: {
+        ar: 'المنهج الكامل للبرمجة والذكاء الاصطناعي والأمن السيبراني وتطوير الويب وتصميم الواجهات — 4 فصول عملية بشرح مفصل وممتع، ومعامل كود حية تجرب فيها بإيدك، وأكتر من 171 تمرين يثبت المعلومة في دماغك.',
+        en: 'The complete 4-chapter curriculum covering Computing & AI, Cybersecurity, Web Engineering, and UX Design — with all 14 interactive lessons, 6 live labs, and 171+ assessment questions.'
+      },
+      highlights: {
+        ar: ['01 الحوسبة والذكاء الاصطناعي', '02 التشفير والأمن السيبراني', '03 هندسة وتطوير الويب', '04 تصميم وتجربة المستخدم UX'],
+        en: ['01 Computing & AI', '02 Cybersecurity & Crypto', '03 Web Engineering', '04 Interface & UX Design']
+      }
+    }
+  ];
 
   /* ============ country picker ============ */
   function CountryPicker({ selected, onSelect, lang }) {
@@ -109,7 +320,7 @@
         h('span', { className: 'cp-dial' }, selected.dial),
         h('svg', { width: 10, height: 10, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.5, style: { transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .2s' } },
           h('polyline', { points: '6 9 12 15 18 9' }))),
-      open ? h('div', { className: 'cp-dropdown' },
+      open ? h('div', { className: 'cp-dropdown', dir: lang === 'ar' ? 'rtl' : 'ltr' },
         h('div', { className: 'cp-search' },
           h('svg', { width: 13, height: 13, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
             h('circle', { cx: 11, cy: 11, r: 8 }),
@@ -117,7 +328,7 @@
           h('input', {
             type: 'text',
             className: 'cp-input',
-            placeholder: lang === 'ar' ? 'ابحث بالاسم أو كود الدولة...' : 'Search country or dial code...',
+            placeholder: lang === 'ar' ? 'ابحث باسم الدولة أو مفتاح الاتصال...' : 'Search country or dial code...',
             value: q,
             autoFocus: true,
             onChange: e => setQ(e.target.value)
@@ -150,6 +361,10 @@
     const [lang, setLang] = useState('ar');
     const [tv, setTv] = useState(0);
     useEffect(() => App.subscribeTexts(() => setTv(v => v + 1)), []);
+    useEffect(() => {
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    }, [lang]);
     const t = App.STR[lang];
 
     const [name, setName] = useState('');
@@ -179,27 +394,27 @@
       const cleanPhone = phone.replace(/\D/g, '');
 
       if (!name.trim()) {
-        setError(lang === 'ar' ? 'يرجى إدخال اسمك بالكامل' : 'Please enter your full name');
+        setError(lang === 'ar' ? 'اكتب اسمك بالكامل عشان نسجله عندك' : 'Please enter your full name');
         return;
       }
       if (!cleanUser || !/^[a-z0-9_]{3,20}$/.test(cleanUser)) {
-        setError(lang === 'ar' ? 'اسم المستخدم يجب أن يتكون من 3-20 حرفًا إنجليزيًا أو أرقامًا أو شرطة سفلية' : 'Username must be 3-20 letters, numbers, or underscores');
+        setError(lang === 'ar' ? 'اسم المستخدم لازم يكون من 3 لـ 20 حرف أو رقم إنجليزي بدون مسافات' : 'Username must be 3-20 letters, numbers, or underscores');
         return;
       }
       if (!cleanGmail || !cleanGmail.endsWith('@gmail.com') || cleanGmail.length < 12) {
-        setError(lang === 'ar' ? 'يجب إدخال بريد Gmail صالح ينتهي بـ @gmail.com' : 'Valid Gmail address (@gmail.com) is required');
+        setError(lang === 'ar' ? 'اكتب إيميل Gmail مظبوط بينتهي بـ @gmail.com' : 'Valid Gmail address (@gmail.com) is required');
         return;
       }
       if (!cleanPhone || cleanPhone.length < 6 || cleanPhone.length > 15) {
-        setError(lang === 'ar' ? 'يرجى إدخال رقم هاتف صحيح' : 'Please enter a valid phone number');
+        setError(lang === 'ar' ? 'اكتب رقم موبايل مظبوط' : 'Please enter a valid phone number');
         return;
       }
       if (password.length < 6 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
-        setError(lang === 'ar' ? 'كلمة المرور يجب أن تكون 6 خانات على الأقل وتحتوي على حروف وأرقام' : 'Password must be at least 6 characters with letters and numbers');
+        setError(lang === 'ar' ? 'الباسورد لازم يكون 6 خانات على الأقل وفيه حروف وأرقام' : 'Password must be at least 6 characters with letters and numbers');
         return;
       }
       if (password !== confirmPassword) {
-        setError(lang === 'ar' ? 'كلمتا المرور غير متطابقتين' : 'Passwords do not match');
+        setError(lang === 'ar' ? 'الباسورد مش متطابق، اتأكد من كتابته تاني' : 'Passwords do not match');
         return;
       }
 
@@ -212,7 +427,7 @@
         phone: cleanPhone,
         password,
         stream
-      });
+      }, lang);
       setLoading(false);
 
       if (res.error) {
@@ -231,12 +446,12 @@
       setSuccessMsg('');
 
       if (!loginInput.trim() || !loginPassword) {
-        setError(lang === 'ar' ? 'يرجى إدخال اسم المستخدم أو الجيميل وكلمة المرور' : 'Please enter username/Gmail and password');
+        setError(lang === 'ar' ? 'اكتب اسم المستخدم (أو الإيميل) والباسورد' : 'Please enter username/Gmail and password');
         return;
       }
 
       setLoading(true);
-      const res = await App.Auth.login(loginInput.trim(), loginPassword);
+      const res = await App.Auth.login(loginInput.trim(), loginPassword, lang);
       setLoading(false);
 
       if (res.error) {
@@ -249,9 +464,9 @@
     return h('div', { className: 'auth-portal-wrap', dir: lang === 'ar' ? 'rtl' : 'ltr' },
       h('div', { className: 'auth-card' },
         h('div', { className: 'auth-head' },
-          h('div', { className: 'auth-brand' },
+          h('div', { className: 'auth-brand', dir: 'ltr' },
             h('span', { className: 'brand-mark' }, h('i'), h('i'), h('i')),
-            h('span', { className: 'auth-brand-name' }, 'Maged Aboraya')),
+            h('span', { className: 'auth-brand-name' }, t.brand || 'Syntax')),
           h('h1', { className: 'auth-title' }, t.authHeading),
           h('p', { className: 'auth-sub' }, t.authSub),
           h('div', { className: 'auth-tabs' },
@@ -268,7 +483,7 @@
           )
         ),
         error ? h('div', { className: 'auth-alert error' },
-          h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
+          h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, style: { flex: 'none' } },
             h('circle', { cx: 12, cy: 12, r: 10 }),
             h('line', { x1: 12, y1: 8, x2: 12, y2: 12 }),
             h('line', { x1: 12, y1: 16, x2: 12.01, y2: 16 })),
@@ -288,6 +503,7 @@
               placeholder: t.fullNamePh,
               value: name,
               required: true,
+              autoComplete: 'name',
               onChange: e => setName(e.target.value)
             })
           ),
@@ -299,9 +515,10 @@
               placeholder: t.usernamePh,
               value: username,
               required: true,
+              autoComplete: 'username',
               onChange: e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))
             }),
-            h('span', { className: 'input-hint' }, lang === 'ar' ? '3-20 حرفًا إنجليزيًا أو أرقامًا بدون مسافات' : '3-20 lowercase letters, numbers, or underscores')
+            h('span', { className: 'input-hint' }, lang === 'ar' ? 'من 3 لـ 20 حرف إنجليزي أو أرقام بدون مسافات' : '3-20 lowercase letters, numbers, or underscores')
           ),
           h('div', { className: 'form-group' },
             h('label', null, t.gmail),
@@ -309,25 +526,28 @@
               h(MailIcon),
               h('input', {
                 type: 'email',
-                className: 'form-input' + (gmail && !gmail.endsWith('@gmail.com') ? ' is-invalid' : ''),
+                className: 'form-input' + (gmail && !gmail.trim().toLowerCase().endsWith('@gmail.com') ? ' is-invalid' : ''),
                 placeholder: t.gmailPh,
                 value: gmail,
                 required: true,
+                autoComplete: 'email',
                 onChange: e => setGmail(e.target.value)
               })
             ),
-            h('span', { className: 'input-hint' }, lang === 'ar' ? 'بريد جيميل رسمي ينتهي بـ @gmail.com' : 'Valid Gmail account ending in @gmail.com')
+            h('span', { className: 'input-hint' }, lang === 'ar' ? 'إيميل Gmail بينتهي بـ @gmail.com' : 'Valid Gmail account ending in @gmail.com')
           ),
           h('div', { className: 'form-group' },
             h('label', null, t.phone),
-            h('div', { className: 'phone-input-row' },
+            h('div', { className: 'phone-input-row', dir: 'ltr' },
               h(CountryPicker, { selected: country, onSelect: setCountry, lang }),
               h('input', {
                 type: 'tel',
+                dir: 'ltr',
                 className: 'form-input phone-input',
                 placeholder: t.phonePh,
                 value: phone,
                 required: true,
+                autoComplete: 'tel',
                 onChange: e => setPhone(e.target.value.replace(/\D/g, ''))
               })
             )
@@ -335,7 +555,7 @@
           h('div', { className: 'form-row' },
             h('div', { className: 'form-group' },
               h('label', null, t.password),
-              h('div', { className: 'input-with-icon' },
+              h('div', { className: 'input-with-icon has-toggle' },
                 h(LockIcon),
                 h('input', {
                   type: showPass ? 'text' : 'password',
@@ -343,13 +563,20 @@
                   placeholder: t.passwordPh,
                   value: password,
                   required: true,
+                  autoComplete: 'new-password',
                   onChange: e => setPassword(e.target.value)
-                })
+                }),
+                h('button', {
+                  type: 'button',
+                  className: 'pass-toggle-btn',
+                  onClick: () => setShowPass(!showPass),
+                  title: showPass ? (lang === 'ar' ? 'إخفاء الباسورد' : 'Hide password') : (lang === 'ar' ? 'إظهار الباسورد' : 'Show password')
+                }, h(EyeIcon, { off: showPass }))
               )
             ),
             h('div', { className: 'form-group' },
               h('label', null, t.confirmPassword),
-              h('div', { className: 'input-with-icon' },
+              h('div', { className: 'input-with-icon has-toggle' },
                 h(LockIcon),
                 h('input', {
                   type: showPass ? 'text' : 'password',
@@ -357,71 +584,60 @@
                   placeholder: t.confirmPasswordPh,
                   value: confirmPassword,
                   required: true,
+                  autoComplete: 'new-password',
                   onChange: e => setConfirmPassword(e.target.value)
-                })
+                }),
+                h('button', {
+                  type: 'button',
+                  className: 'pass-toggle-btn',
+                  onClick: () => setShowPass(!showPass),
+                  title: showPass ? (lang === 'ar' ? 'إخفاء الباسورد' : 'Hide password') : (lang === 'ar' ? 'إظهار الباسورد' : 'Show password')
+                }, h(EyeIcon, { off: showPass }))
               )
             )
           ),
-          h('div', { className: 'form-group' },
-            h('label', null, t.streamHeading),
-            h('div', { className: 'stream-radio-group' },
-              h('label', { className: 'stream-radio-card' + (stream === 'ar' ? ' selected' : '') },
-                h('input', {
-                  type: 'radio',
-                  name: 'stream',
-                  value: 'ar',
-                  checked: stream === 'ar',
-                  onChange: () => setStream('ar')
-                }),
-                h('span', { className: 'src-title' }, t.streamAr),
-                h('span', { className: 'src-desc' }, lang === 'ar' ? 'المنهج والامتحانات كاملة باللغة العربية' : 'Arabic curriculum and assessments')
-              ),
-              h('label', { className: 'stream-radio-card' + (stream === 'en' ? ' selected' : '') },
-                h('input', {
-                  type: 'radio',
-                  name: 'stream',
-                  value: 'en',
-                  checked: stream === 'en',
-                  onChange: () => setStream('en')
-                }),
-                h('span', { className: 'src-title' }, t.streamEn),
-                h('span', { className: 'src-desc' }, lang === 'ar' ? 'المنهج بالإنجليزية مع ترجمة عربية مرافقة' : 'English curriculum with Arabic companion')
-              )
-            )
-          ),
+          /* Stream radio buttons removed - default to Arabic */
           h('button', { type: 'submit', className: 'solid auth-submit-btn', disabled: loading },
-            loading ? (lang === 'ar' ? 'جارٍ إنشاء الحساب...' : 'Creating Account...') : t.btnRegister),
+            loading ? (lang === 'ar' ? 'ثواني بنعمل الحساب...' : 'Creating Account...') : t.btnRegister),
           h('p', { className: 'auth-switch-note' },
             t.haveAccount, ' ',
             h('button', { type: 'button', className: 'auth-link-btn', onClick: () => { setTab('login'); setError(''); } }, t.goToLogin))
         ) : h('form', { className: 'auth-form', onSubmit: handleLogin },
           h('div', { className: 'form-group' },
-            h('label', null, lang === 'ar' ? 'اسم المستخدم أو بريد Gmail' : 'Username or Gmail'),
+            h('label', null, lang === 'ar' ? 'اسم المستخدم أو إيميلك (Gmail)' : 'Username or Gmail'),
             h('div', { className: 'input-with-icon' },
               h(UserIcon),
               h('input', {
                 type: 'text',
                 className: 'form-input',
-                placeholder: lang === 'ar' ? 'ادخل اسم المستخدم أو بريدك' : 'Enter username or Gmail',
+                placeholder: lang === 'ar' ? 'اكتب اسم المستخدم أو إيميلك' : 'Enter username or Gmail',
                 value: loginInput,
                 required: true,
                 autoFocus: true,
+                autoComplete: 'username',
                 onChange: e => setLoginInput(e.target.value)
               })
             )
           ),
           h('div', { className: 'form-group' },
             h('label', null, t.password),
-            h('div', { className: 'input-with-icon' },
+            h('div', { className: 'input-with-icon has-toggle' },
               h(LockIcon),
               h('input', {
                 type: showPass ? 'text' : 'password',
                 className: 'form-input',
-                placeholder: lang === 'ar' ? 'ادخل كلمة المرور' : 'Enter your password',
+                placeholder: lang === 'ar' ? 'اكتب الباسورد بتاعك' : 'Enter your password',
                 value: loginPassword,
                 required: true,
+                autoComplete: 'current-password',
                 onChange: e => setLoginPassword(e.target.value)
-              })
+              }),
+              h('button', {
+                type: 'button',
+                className: 'pass-toggle-btn',
+                onClick: () => setShowPass(!showPass),
+                title: showPass ? (lang === 'ar' ? 'إخفاء كلمة المرور' : 'Hide password') : (lang === 'ar' ? 'إظهار كلمة المرور' : 'Show password')
+              }, h(EyeIcon, { off: showPass }))
             )
           ),
           h('button', { type: 'submit', className: 'solid auth-submit-btn', disabled: loading },
@@ -447,30 +663,24 @@
               h('circle', { cx: 12, cy: 7, r: 4 })),
             h('div', { className: 'ag-btn-content' },
               h('span', { className: 'ag-btn-title' }, t.guestSignIn || (lang === 'ar' ? 'المتابعة كزائر' : 'Continue as Guest')),
-              h('span', { className: 'ag-btn-desc' }, t.guestSubtitle || (lang === 'ar' ? 'تصفح المنصة مباشرة دون حفظ للتقدم أو الدرجات' : 'Browse without saving progress or scores'))
+              h('span', { className: 'ag-btn-desc' }, t.guestSubtitle || (lang === 'ar' ? 'تصفّح الكورسات والدروس مباشرة دون حفظ التقدّم' : 'Browse courses without saving progress'))
             ),
-            h('span', { className: 'ag-badge' }, t.guestNoSavePill || (lang === 'ar' ? 'بدون حفظ' : 'No Save'))
+            h('span', { className: 'ag-badge' }, t.guestNoSavePill || (lang === 'ar' ? 'وضع مؤقت' : 'No Save'))
           )
         ),
         h('div', { className: 'auth-foot' },
-          h('span', null, '© ' + new Date().getFullYear() + ' ' + (t.brand || 'Maged Aboraya') + '. ' + (t.footerRights || 'All rights reserved.')),
+          h('span', null,
+            h('bdi', { dir: 'ltr' }, '© ' + new Date().getFullYear() + ' ' + (t.copyrightOwner || 'AborayaTechnologies')),
+            ' · ',
+            t.footerRights || 'جميع الحقوق محفوظة'
+          ),
           h('div', { className: 'auth-foot-actions' },
-            h('button', {
-              type: 'button',
-              className: 'auth-edit-texts-btn',
-              onClick: onOpenTextsEditor,
-              title: lang === 'ar' ? 'تعديل نصوص الموقع (Ctrl + Shift + E)' : 'Edit Site Texts (Ctrl + Shift + E)'
-            },
-              h('svg', { width: 13, height: 13, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
-                h('path', { d: 'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7' }),
-                h('path', { d: 'M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z' })),
-              h('span', null, lang === 'ar' ? 'تعديل نصوص الموقع' : 'Edit Texts')
-            ),
+            /* auth-edit-texts-btn removed */
             h('button', {
               type: 'button',
               className: 'auth-lang-toggle',
               onClick: () => setLang(lang === 'ar' ? 'en' : 'ar')
-            }, lang === 'ar' ? 'English Interface' : 'الواجهة العربية')
+            }, lang === 'ar' ? 'EN' : 'AR')
           )
         )
       )
@@ -479,6 +689,7 @@
 
   /* ============ student profile menu in header ============ */
   function StudentProfileMenu({ user, onLogout, lang, totalLessons, doneLessons }) {
+    const { t } = useLang();
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
 
@@ -497,7 +708,7 @@
         type: 'button',
         className: 'student-profile-btn' + (open ? ' is-active' : '') + (isGuest ? ' is-guest' : ''),
         onClick: () => setOpen(!open),
-        title: isGuest ? (lang === 'ar' ? 'وضع الزائر (التقدم غير محفوظ)' : 'Guest Mode (Progress not saved)') : (lang === 'ar' ? 'ملف الطالب' : 'Student Profile')
+        title: isGuest ? (t.guestBadge || (lang === 'ar' ? 'وضع الزائر المؤقت' : 'Guest Mode')) : (t.accountInfo || (lang === 'ar' ? 'بيانات الحساب' : 'Account Profile'))
       },
         h('span', { className: 'student-avatar' + (isGuest ? ' guest-avatar' : '') },
           isGuest
@@ -507,7 +718,7 @@
             : initial
         ),
         h('span', { className: 'student-name-pill' }, displayName),
-        isGuest ? h('span', { className: 'guest-pill-tag' }, lang === 'ar' ? 'غير محفوظ' : 'No Save') : null,
+        isGuest ? h('span', { className: 'guest-pill-tag' }, t.guestNoSavePill || (lang === 'ar' ? 'وضع مؤقت' : 'No Save')) : null,
         h('span', { className: 'student-status-dot' + (isGuest ? ' is-guest' : '') })
       ),
       open ? h('div', { className: 'student-menu-card' + (isGuest ? ' is-guest' : ''), dir: lang === 'ar' ? 'rtl' : 'ltr' },
@@ -517,12 +728,12 @@
               h('circle', { cx: 12, cy: 12, r: 10 }),
               h('line', { x1: 12, y1: 8, x2: 12, y2: 12 }),
               h('line', { x1: 12, y1: 16, x2: 12.01, y2: 16 })),
-            h('strong', null, lang === 'ar' ? 'وضع الزائر المؤقت' : 'Temporary Guest Mode')
+            h('strong', null, t.guestBadge || (lang === 'ar' ? 'وضع الزائر المؤقت' : 'Temporary Guest Mode'))
           ),
           h('p', { className: 'guest-banner-text' },
-            lang === 'ar'
-              ? 'تتصفح المنصة كزائر مؤقت. لن يتم حفظ الدروس المكتملة أو درجاتك بعد إغلاق المتصفح أو الخروج.'
-              : 'Browsing as a temporary guest. Completed lessons and quiz scores are not saved after closing or leaving.'
+            t.guestTempWarning || (lang === 'ar'
+              ? 'أنت تتصفّح المنصة حاليًا في وضع الزائر المؤقت. لن يتم حفظ الدروس المكتملة أو نتائج الاختبارات بعد إغلاق المتصفح.'
+              : 'Browsing as a temporary guest. Completed lessons and quiz scores are not saved after closing or leaving.')
           ),
           h('button', {
             type: 'button',
@@ -537,14 +748,14 @@
               h('circle', { cx: 8.5, cy: 7, r: 4 }),
               h('line', { x1: 20, y1: 8, x2: 20, y2: 14 }),
               h('line', { x1: 23, y1: 11, x2: 17, y2: 11 })),
-            h('span', null, lang === 'ar' ? 'إنشاء حساب لحفظ تقدمك' : 'Create Account to Save Progress')
+            h('span', null, t.createAccountToSave || (lang === 'ar' ? 'إنشاء حساب لحفظ تقدّمك' : 'Create Account to Save Progress'))
           )
         ) : h('div', { className: 'smc-head' },
           h('div', { className: 'smc-avatar-big' }, initial),
           h('div', { className: 'smc-info' },
             h('div', { className: 'smc-name' }, user.name),
-            h('div', { className: 'smc-username' }, '@' + user.username),
-            h('div', { className: 'smc-gmail' }, user.gmail)
+            h('div', { className: 'smc-username', dir: 'ltr' }, '@' + user.username),
+            h('div', { className: 'smc-gmail', dir: 'ltr' }, user.gmail)
           )
         ),
         h('div', { className: 'smc-details' },
@@ -553,11 +764,11 @@
             h('b', { dir: 'ltr' }, (user.countryCode || '+20') + ' ' + user.phone)
           ) : null,
           h('div', { className: 'smc-row' },
-            h('span', null, lang === 'ar' ? 'القسم الدراسي:' : 'Stream:'),
-            h('b', null, user.stream === 'en' ? 'Languages' : 'عربي')
+            h('span', null, lang === 'ar' ? 'اللغة:' : 'Language:'),
+            h('b', { dir: 'ltr' }, lang === 'en' ? 'EN' : 'AR')
           ),
           h('div', { className: 'smc-row' },
-            h('span', null, isGuest ? (lang === 'ar' ? 'دروس الجلسة الحالية:' : 'Session Lessons:') : (lang === 'ar' ? 'الدروس المكتملة:' : 'Lessons Done:')),
+            h('span', null, isGuest ? (lang === 'ar' ? 'دروس الجلسة الحالية:' : 'Session Lessons:') : (t.coursesCompleted ? t.coursesCompleted + ':' : (lang === 'ar' ? 'الدروس المكتملة:' : 'Lessons Done:'))),
             h('b', { dir: 'ltr' }, `${doneLessons} / ${totalLessons}` + (isGuest ? (lang === 'ar' ? ' (مؤقت)' : ' (temp)') : ''))
           )
         ),
@@ -567,82 +778,197 @@
           onClick: () => { setOpen(false); onLogout(); }
         },
           h(LogoutIcon),
-          h('span', null, isGuest ? (lang === 'ar' ? 'الخروج من وضع الزائر' : 'Exit Guest Mode') : (lang === 'ar' ? 'تسجيل الخروج' : 'Sign Out'))
+          h('span', null, isGuest ? (t.exitGuest || (lang === 'ar' ? 'الخروج من وضع الزائر' : 'Exit Guest Mode')) : (t.logout || (lang === 'ar' ? 'تسجيل الخروج' : 'Sign Out')))
         )
       ) : null
     );
   }
 
-  /* ============ header / footer ============ */
-  function Header({ meta, onSwitch, route, onOpenSearch, theme, onToggleTheme, zen, onToggleZen, authUser, onLogout }) {
+  /* ============ header / universal hamburger menu / footer ============ */
+  function Header({ meta, onSetLang, route, onOpenSearch, authUser, onLogout }) {
     const { t, lang } = useLang();
     const store = useStore();
     const [scrolled, setScrolled] = useState(false);
-    const total = meta ? meta.chapters.reduce((n, c) => n + c.lessons.length, 0) : 0;
+    const [menuOpen, setMenuOpen] = useState(false);
+    const total = meta ? meta.chapters.reduce((n, c) => n + c.lessons.length, 0) : 14;
     const done = Object.values(store.lessons || {}).filter(l => l.best != null).length;
+
     useEffect(() => {
       const f = () => setScrolled(window.scrollY > 24);
-      f(); window.addEventListener('scroll', f, { passive: true });
+      f();
+      window.addEventListener('scroll', f, { passive: true });
       return () => window.removeEventListener('scroll', f);
     }, []);
-    return h('header', { className: 'hdr' + (scrolled ? ' scrolled' : '') },
-      h('a', { className: 'brand', href: '#/' },
-        h('span', { className: 'brand-mark', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')),
-        h('span', { className: 'brand-t' }, t.brand)),
-      h('nav', { className: 'nav', 'aria-label': 'Chapters' },
-        (meta ? meta.chapters : []).map(c => h('a', { key: c.id, href: '#/chapter/' + c.id, className: 'nav-i' + (route.chapter === c.id ? ' on' : ''), style: { '--a': c.accent }, title: lt(c.title, lang) },
-          h('span', { className: 'nav-n' }, pad(c.id)), h('span', { className: 'nav-t' }, lt(c.title, lang))))),
-      h('div', { className: 'hdr-r' },
-        h('button', {
-          className: 'hdr-btn',
-          onClick: onOpenSearch,
-          title: lang === 'en' ? 'Search curriculum (Ctrl+K)' : 'البحث في المنهج (Ctrl+K)'
+
+    useEffect(() => {
+      setMenuOpen(false);
+    }, [route.key, route.target, route.courseId]);
+
+    useEffect(() => {
+      if (!menuOpen) return;
+      const onKey = e => { if (e.key === 'Escape') setMenuOpen(false); };
+      window.addEventListener('keydown', onKey);
+      return () => window.removeEventListener('keydown', onKey);
+    }, [menuOpen]);
+
+    const isCoursesActive = route.name === 'course' || route.target === 'courses';
+    const isHomeActive = route.name === 'home' && !isCoursesActive;
+
+    return h(React.Fragment, null,
+      h('header', { className: 'hdr' + (scrolled ? ' scrolled' : '') + (menuOpen ? ' menu-open' : '') },
+        h('a', { className: 'brand', href: '#/', dir: 'ltr' },
+          h('span', { className: 'brand-mark', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')),
+          h('span', { className: 'brand-t' }, t.brand || 'Syntax')),
+
+        h('nav', { className: 'nav', 'aria-label': lang === 'ar' ? 'التنقل الرئيسي' : 'Main Navigation' },
+          h('a', {
+            href: '#/',
+            className: 'nav-i' + (isHomeActive ? ' on' : ''),
+            style: { '--a': '#2f5bff' }
+          },
+            h('span', { className: 'nav-t' }, lang === 'ar' ? 'الرئيسية' : 'Home')),
+          h('a', {
+            href: '#/courses',
+            className: 'nav-i nav-courses-link' + (isCoursesActive ? ' on' : ''),
+            style: { '--a': '#2f5bff' }
+          },
+            h(LayersIcon),
+            h('span', { className: 'nav-t' }, t.coursesNav || (lang === 'ar' ? 'كورسات' : 'Courses')))),
+
+        h('div', { className: 'hdr-r' },
+          
+          authUser ? h(StudentProfileMenu, { user: authUser, onLogout, lang, totalLessons: total, doneLessons: done }) : null,
+          h('button', {
+            type: 'button',
+            className: 'ham-btn' + (menuOpen ? ' is-open' : ''),
+            onClick: () => setMenuOpen(prev => !prev),
+            'aria-expanded': menuOpen,
+            'aria-label': lang === 'ar' ? 'فتح القائمة والبحث واللغة' : 'Open menu, search, and language'
+          },
+            h('span', { className: 'ham-box' },
+              h('span', { className: 'ham-line' }),
+              h('span', { className: 'ham-line' }),
+              h('span', { className: 'ham-line' }))))),
+
+      menuOpen ? h('div', {
+        className: 'nav-drawer-backdrop',
+        onClick: () => setMenuOpen(false)
+      },
+        h('aside', {
+          className: 'nav-drawer',
+          dir: lang === 'ar' ? 'rtl' : 'ltr',
+          onClick: e => e.stopPropagation(),
+          'aria-label': lang === 'ar' ? 'قائمة الموقع' : 'Site Menu'
         },
-          h(SearchIcon),
-          h('span', null, lang === 'en' ? 'Search' : 'بحث'),
-          h('span', { className: 'spotlight-esc' }, 'Ctrl+K')),
-        route.name === 'lesson' ? h('button', {
-          className: 'hdr-btn icon-only zen-hdr-btn' + (zen ? ' is-active' : ''),
-          onClick: onToggleZen,
-          title: t.zenModeHint
-        }, h(ZenIcon)) : null,
-        h('button', {
-          className: 'hdr-btn icon-only',
-          onClick: onToggleTheme,
-          title: theme === 'dark' ? 'الوضع النهاري / Light Mode' : 'الوضع الليلي / Dark Mode'
-        }, theme === 'dark' ? h(SunIcon) : h(MoonIcon)),
-        total ? h('span', { className: 'hdr-prog', title: t.progress }, h('b', { dir: 'ltr' }, done + '/' + total)) : null,
-        h('button', { className: 'lang-btn', onClick: onSwitch }, t.switchTo),
-        authUser ? h(StudentProfileMenu, { user: authUser, onLogout, lang, totalLessons: total, doneLessons: done }) : null));
+          h('div', { className: 'nd-head' },
+            h('div', { className: 'nd-brand', dir: 'ltr' },
+              h('span', { className: 'brand-mark', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')),
+              h('span', { className: 'nd-brand-name' }, t.brand || 'Syntax')),
+            h('button', {
+              type: 'button',
+              className: 'nd-close',
+              onClick: () => setMenuOpen(false),
+              title: lang === 'ar' ? 'إغلاق القائمة' : 'Close menu'
+            }, h(CloseIcon))),
+
+          h('div', { className: 'nd-section' },
+            h('span', { className: 'nd-label' }, lang === 'ar' ? 'البحث السريع' : 'Quick Search'),
+            h('button', {
+              type: 'button',
+              className: 'nd-search-trigger',
+              onClick: () => {
+                setMenuOpen(false);
+                onOpenSearch();
+              }
+            },
+              h(SearchIcon),
+              h('span', { className: 'nd-search-text' }, lang === 'ar' ? 'ابحث في الكورسات والدروس والمصطلحات...' : 'Search courses, lessons, and terms...'),
+              h('span', { className: 'nd-search-kbd', dir: 'ltr' }, 'Ctrl+K'))),
+
+          h('div', { className: 'nd-section' },
+            h('div', { className: 'nd-lang-row' },
+              h('div', { className: 'nd-lang-info' },
+                h(GlobeIcon),
+                h('span', null, lang === 'ar' ? 'لغة المنصة' : 'Language')),
+              h('div', { className: 'nd-lang-seg', dir: 'ltr' },
+                h('button', {
+                  type: 'button',
+                  className: 'nd-lang-pill' + (lang === 'ar' ? ' active' : ''),
+                  onClick: () => onSetLang('ar')
+                }, 'AR'),
+                h('button', {
+                  type: 'button',
+                  className: 'nd-lang-pill' + (lang === 'en' ? ' active' : ''),
+                  onClick: () => onSetLang('en')
+                }, 'EN')))),
+
+          h('div', { className: 'nd-section' },
+            h('span', { className: 'nd-label' }, t.coursesNav || (lang === 'ar' ? 'كورسات' : 'Courses')),
+            h('div', { className: 'nd-nav-list' },
+              h('a', {
+                href: '#/',
+                className: 'nd-nav-item' + (isHomeActive ? ' active' : ''),
+                onClick: () => setMenuOpen(false)
+              },
+                h('span', { className: 'nd-nav-num' }, '00'),
+                h('div', { className: 'nd-nav-text' },
+                  h('strong', null, lang === 'ar' ? 'الصفحة الرئيسية' : 'Home'),
+                  h('span', null, lang === 'ar' ? 'نظرة عامة على المنصة والمسارات' : 'Platform overview & learning tracks'))),
+              h('a', {
+                href: '#/courses',
+                className: 'nd-nav-item' + (route.target === 'courses' ? ' active' : ''),
+                onClick: () => setMenuOpen(false)
+              },
+                h('span', { className: 'nd-nav-num' }, 'ALL'),
+                h('div', { className: 'nd-nav-text' },
+                  h('strong', null, t.coursesNav || (lang === 'ar' ? 'كورسات' : 'Courses')),
+                  h('span', null, lang === 'ar' ? 'تصفّح جميع الكورسات والمسارات البرمجية' : 'Browse all programming courses & tracks'))),
+              COURSES_DATA.map((crs, idx) =>
+                h('a', {
+                  key: crs.id,
+                  href: '#/course/' + crs.id,
+                  className: 'nd-nav-item' + (route.name === 'course' && route.courseId === crs.id ? ' active' : ''),
+                  style: { '--c-accent': crs.accent },
+                  onClick: () => setMenuOpen(false)
+                },
+                  h('span', { className: 'nd-nav-num', style: { color: crs.accent } }, pad(idx + 1)),
+                  h('div', { className: 'nd-nav-text' },
+                    h('strong', null, lt(crs.title, lang)),
+                    h('span', null, lt(crs.tag, lang))))
+              ))),
+
+          h('div', { className: 'nd-foot' },
+            
+            h('span', { className: 'nd-copy', dir: 'ltr' }, '© ' + new Date().getFullYear() + ' ' + (t.copyrightOwner || 'AborayaTechnologies')))
+        )
+      ) : null
+    );
   }
 
-  function Footer({ onOpenTextsEditor }) {
+  function Footer() {
     const { t, lang } = useLang();
     return h('footer', { className: 'ftr' },
       h('div', { className: 'ftr-in' },
-        h('div', { className: 'ftr-big', 'aria-hidden': 'true' }, t.brand || 'Maged Aboraya'),
+        h('div', { className: 'ftr-big', 'aria-hidden': 'true' }, t.brand || 'Syntax'),
         h('div', { className: 'ftr-row' },
           t.footerNote ? h('p', null, t.footerNote) : null,
-          h('p', { className: 'copy' }, '© ', new Date().getFullYear(), ' ', t.brand || 'Maged Aboraya', '. ', t.footerRights, '.'),
-          h('button', {
-            type: 'button',
-            className: 'ftr-edit-texts-btn',
-            onClick: onOpenTextsEditor,
-            title: lang === 'ar' ? 'تعديل جميع نصوص الموقع (Ctrl + Shift + E)' : 'Edit Site Texts (Ctrl + Shift + E)'
-          },
-            h('svg', { width: 13, height: 13, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
-              h('path', { d: 'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7' }),
-              h('path', { d: 'M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z' })),
-            h('span', null, lang === 'ar' ? 'تعديل نصوص الموقع' : 'Edit Site Texts')
-          )
+          h('p', { className: 'copy' },
+            h('bdi', { dir: 'ltr' }, '© ' + new Date().getFullYear() + ' ' + (t.copyrightOwner || 'AborayaTechnologies')),
+            ' · ',
+            t.footerRights,
+            '.'
+          ),
+          /* ftr-edit-texts-btn removed */
         )
       )
     );
   }
 
   /* ============ marquee ============ */
-  const TERMS = ['Artificial Intelligence', 'Machine Learning', 'Encryption', 'Firewall', 'HTTP', 'HTML', 'CSS', 'JavaScript', 'User Experience', 'Moore’s Law', 'Authentication', 'Responsive Design'];
+  const TERMS_EN = ['Artificial Intelligence', 'Machine Learning', 'Encryption', 'Firewall', 'HTTP', 'HTML', 'CSS', 'JavaScript', 'User Experience', 'Moore’s Law', 'Authentication', 'Responsive Design'];
+  const TERMS_AR = ['الذكاء الاصطناعي · AI', 'تعلّم الآلة · ML', 'التشفير والأمان', 'جدار الحماية · Firewall', 'بروتوكول HTTP', 'هيكلة HTML5', 'تنسيقات CSS3', 'برمجة JavaScript', 'تجربة المستخدم · UX', 'قانون مور · Moore’s Law', 'المصادقة متعددة العوامل', 'التصميم المتجاوب'];
   function Marquee() {
+    const { lang } = useLang();
     const track = useRef(null);
     useEffect(() => {
       if (App.reduced) return;
@@ -656,40 +982,41 @@
       });
       return () => { st.kill(); tw.kill(); };
     }, []);
-    const row = TERMS.concat(TERMS);
+    const base = lang === 'ar' ? TERMS_AR : TERMS_EN;
+    const row = base.concat(base);
     return h('div', { className: 'marquee', 'aria-hidden': 'true', dir: 'ltr' },
       h('div', { className: 'mq-track', ref: track }, row.concat(row).map((s, i) => h('span', { key: i }, s, h('i')))));
   }
 
-  /* ============ home ============ */
+  /* ============ chapter panels & courses ============ */
   const CH_PREVIEWS = {
     1: [
-      { img: './assets/img/lessons/gordon_moore.png', name: 'Gordon Moore' },
-      { img: './assets/img/lessons/eniac.jpg', name: 'ENIAC (1945)' },
-      { img: './assets/img/lessons/intel_4004.jpg', name: 'Intel 4004' },
-      { img: './assets/img/lessons/alan_turing.jpg', name: 'Alan Turing' },
-      { img: './assets/img/lessons/self_driving.jpg', name: 'Waymo Car' }
+      { img: './assets/img/lessons/gordon_moore.png', name: 'Gordon Moore', ar: 'جوردون مور' },
+      { img: './assets/img/lessons/eniac.jpg', name: 'ENIAC (1945)', ar: 'حاسوب إينياك (1945)' },
+      { img: './assets/img/lessons/intel_4004.jpg', name: 'Intel 4004', ar: 'معالج إنتل 4004' },
+      { img: './assets/img/lessons/alan_turing.jpg', name: 'Alan Turing', ar: 'آلان تورينج' },
+      { img: './assets/img/lessons/self_driving.jpg', name: 'Waymo Car', ar: 'سيارة وايمو الذاتية' }
     ],
     2: [
-      { img: './assets/img/lessons/julius_caesar.jpg', name: 'Julius Caesar' },
-      { img: './assets/img/lessons/enigma.jpg', name: 'Enigma' },
-      { img: './assets/img/lessons/firewall.png', name: 'Firewall' },
-      { img: './assets/img/lessons/yubikey.jpg', name: 'YubiKey 2FA' },
-      { img: './assets/img/lessons/soc.jpg', name: 'Cyber SOC' }
+      { img: './assets/img/lessons/julius_caesar.jpg', name: 'Julius Caesar', ar: 'يوليوس قيصر' },
+      { img: './assets/img/lessons/enigma.jpg', name: 'Enigma', ar: 'آلة إنجما للتشفير' },
+      { img: './assets/img/lessons/firewall.png', name: 'Firewall', ar: 'الجدار الناري' },
+      { img: './assets/img/lessons/yubikey.jpg', name: 'YubiKey 2FA', ar: 'مفتاح الأمان YubiKey' },
+      { img: './assets/img/lessons/soc.jpg', name: 'Cyber SOC', ar: 'مركز العمليات الأمنية' }
     ],
     3: [
-      { img: './assets/img/lessons/tim_berners_lee.jpg', name: 'Tim Berners-Lee' },
-      { img: './assets/img/lessons/next_computer.jpg', name: 'First Web Server' },
-      { img: './assets/img/lessons/submarine_cable.png', name: 'Submarine Cable' },
-      { img: './assets/img/lessons/brendan_eich.jpg', name: 'Brendan Eich' },
-      { img: './assets/img/lessons/hakon_lie.jpg', name: 'Håkon Wium Lie' }
+      { img: './assets/img/lessons/tim_berners_lee.jpg', name: 'Tim Berners-Lee', ar: 'تيم بيرنرز لي' },
+      { img: './assets/img/lessons/next_computer.jpg', name: 'First Web Server', ar: 'أول خادم ويب (NeXT)' },
+      { img: './assets/img/lessons/submarine_cable.png', name: 'Submarine Cable', ar: 'كابل الإنترنت البحري' },
+      { img: './assets/img/lessons/brendan_eich.jpg', name: 'Brendan Eich', ar: 'بريندان آيك (JS)' },
+      { img: './assets/img/lessons/hakon_lie.jpg', name: 'Håkon Wium Lie', ar: 'هاكون فيوم لي (CSS)' }
     ],
     4: [
-      { img: './assets/img/lessons/rgb_pixels.jpg', name: 'RGB Pixels' },
-      { img: './assets/img/lessons/don_norman.jpg', name: 'Don Norman' },
-      { img: './assets/img/lessons/wireframe.png', name: 'Wireframe' },
-      { img: './assets/img/lessons/braille_display.jpg', name: 'Braille Display' },
-      { img: './assets/img/lessons/jakob_nielsen.jpg', name: 'Jakob Nielsen' }
+      { img: './assets/img/lessons/rgb_pixels.jpg', name: 'RGB Pixels', ar: 'بكسلات الشاشة RGB' },
+      { img: './assets/img/lessons/don_norman.jpg', name: 'Don Norman', ar: 'دون نورمان (UX)' },
+      { img: './assets/img/lessons/wireframe.png', name: 'Wireframe', ar: 'المخطط السلكي' },
+      { img: './assets/img/lessons/braille_display.jpg', name: 'Braille Display', ar: 'سطر برايل الإلكتروني' },
+      { img: './assets/img/lessons/jakob_nielsen.jpg', name: 'Jakob Nielsen', ar: 'ياكوب نيلسن' }
     ]
   };
 
@@ -710,11 +1037,14 @@
           isEn ? h('p', { className: 'ar-sub', dir: 'rtl', style: { margin: '8px 0 16px' } }, c.blurb.ar) : null,
           h('div', { className: 'panel-prog', 'data-reveal': '' }, h('i', null, h('b', { style: { width: (doneN / lessons.length * 100) + '%' } })), h('span', { dir: 'ltr' }, `${doneN} / ${lessons.length}`)),
           h('div', { className: 'panel-gallery-strip', 'data-reveal': '' },
-            h('span', { className: 'pgs-label' }, isEn ? 'Pioneers & Real Hardware in this chapter:' : 'شخصيات وأجهزة حقيقية في هذا الفصل:'),
+            h('span', { className: 'pgs-label' }, isEn ? 'Pioneers & Real Hardware in this chapter:' : 'شخصيات رائدة وأجهزة حقيقية في هذا الفصل:'),
             h('div', { className: 'pgs-items' },
-              (CH_PREVIEWS[c.id] || []).map((p, k) => h('div', { key: k, className: 'pgs-item', title: p.name },
-                h('img', { src: p.img, alt: p.name, loading: 'lazy' }),
-                h('span', null, p.name)))))),
+              (CH_PREVIEWS[c.id] || []).map((p, k) => {
+                const label = isEn ? p.name : (p.ar || p.name);
+                return h('div', { key: k, className: 'pgs-item', title: label },
+                  h('img', { src: p.img, alt: label, loading: 'lazy' }),
+                  h('span', null, label));
+              })))),
         h('ol', { className: 'lesson-list', 'data-stagger': '' },
           lessons.map((l, i) => {
             const st = (store.lessons || {})[l.id] || {};
@@ -723,60 +1053,609 @@
             return h('li', { key: l.id },
               h('a', { className: 'lrow' + (ok ? '' : ' off'), href: ok ? '#/lesson/' + l.id : undefined, 'aria-disabled': !ok },
                 h('span', { className: 'lrow-n' }, `${c.id}.${i + 1}`),
-                h('div', { style: { display: 'flex', flexDirection: 'column', gap: '2px', flex: 1 } },
+                h('div', { style: { display: 'flex', flexDirection: 'column', gap: '2px', flex: 1, minWidth: 0 } },
                   h('span', { className: 'lrow-t' }, lt(l.title, lang)),
                   isEn ? h('span', { className: 'ar-row-sub', dir: 'rtl' }, l.title.ar) : null),
                 h('span', { className: 'lrow-m' }, `${l.minutes} ${t.min}`),
-                h('span', { className: 'lrow-s' + (isDone ? ' done' : '') }, !ok ? t.notReady : isDone ? `${st.best}/${st.total}` : (st.read ? t.cont : t.start)),
+                h('span', { className: 'lrow-s' + (isDone ? ' done' : '') }, !ok ? t.notReady : isDone ? `${st.best}/${st.total || 9}` : (st.read ? t.cont : t.start)),
                 h('span', { className: 'lrow-a', 'aria-hidden': 'true' }, '→')));
           })),
         null));
   }
 
+  /* ============ Custom Video Player (Brutalist style - Image 4) ============ */
+  function CustomVideoPlayer({ title, src, poster, duration = 152 }) {
+    const { lang } = useLang();
+    const [playing, setPlaying] = useState(false);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [volume, setVolume] = useState(1);
+    const [rate, setRate] = useState(1);
+    const videoRef = useRef(null);
+    const containerRef = useRef(null);
+
+    const formatTime = (secs) => {
+      const s = Math.floor(secs || 0);
+      const m = Math.floor(s / 60);
+      const rem = s % 60;
+      return `${m}:${rem < 10 ? '0' : ''}${rem}`;
+    };
+
+    const togglePlay = () => {
+      if (!videoRef.current) return;
+      if (playing) {
+        videoRef.current.pause();
+        setPlaying(false);
+      } else {
+        videoRef.current.play().then(() => setPlaying(true)).catch(() => setPlaying(true));
+      }
+    };
+
+    const skip = (delta) => {
+      if (!videoRef.current) return;
+      const target = Math.max(0, Math.min(duration, (videoRef.current.currentTime || currentTime) + delta));
+      videoRef.current.currentTime = target;
+      setCurrentTime(target);
+    };
+
+    const handleSeek = (e) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      const target = pos * duration;
+      if (videoRef.current) videoRef.current.currentTime = target;
+      setCurrentTime(target);
+    };
+
+    const cycleRate = () => {
+      const rates = [1, 1.25, 1.5, 2];
+      const next = rates[(rates.indexOf(rate) + 1) % rates.length];
+      setRate(next);
+      if (videoRef.current) videoRef.current.playbackRate = next;
+    };
+
+    const toggleFullscreen = () => {
+      if (!containerRef.current) return;
+      if (!document.fullscreenElement) {
+        containerRef.current.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    };
+
+    return h('div', { className: 'custom-video-player', ref: containerRef },
+      h('div', { className: 'cvp-header-strip' },
+        h('span', { className: 'cvp-header-title' }, title || (lang === 'ar' ? 'مقدمة وما الذي ستتعلمه | Introduction & What to Expect' : 'Introduction & What to Expect'))
+      ),
+      h('div', { className: 'cvp-stage' },
+        h('video', {
+          ref: videoRef,
+          className: 'cvp-video-el',
+          src: src || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          poster: poster || './assets/img/hero_students.png',
+          onTimeUpdate: () => videoRef.current && setCurrentTime(videoRef.current.currentTime),
+          onEnded: () => setPlaying(false),
+          playsInline: true,
+          onClick: togglePlay
+        }),
+        !playing ? h('button', {
+          type: 'button',
+          className: 'cvp-overlay-play-btn',
+          onClick: togglePlay,
+          'aria-label': lang === 'ar' ? 'تشغيل الفيديو' : 'Play video'
+        },
+          h('svg', { width: 32, height: 32, viewBox: '0 0 24 24', fill: 'currentColor' },
+            h('polygon', { points: '6 3 20 12 6 21 6 3' }))
+        ) : null,
+        h('div', { className: 'cvp-subtitle-demo' }, lang === 'ar' ? 'أهلاً بك' : 'Welcome'),
+        h('div', { className: 'cvp-controls' },
+          h('div', { className: 'cvp-scrub-wrap', onClick: handleSeek },
+            h('div', { className: 'cvp-scrub-track' },
+              h('div', { className: 'cvp-scrub-fill', style: { width: `${(currentTime / duration) * 100}%` } })
+            )
+          ),
+          h('div', { className: 'cvp-controls-row' },
+            h('div', { className: 'cvp-ctrl-left' },
+              h('button', { type: 'button', className: 'cvp-btn cvp-play-btn', onClick: togglePlay, title: playing ? 'Pause' : 'Play' },
+                playing
+                  ? h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'currentColor' },
+                      h('rect', { x: 6, y: 4, width: 4, height: 16 }),
+                      h('rect', { x: 14, y: 4, width: 4, height: 16 }))
+                  : h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'currentColor' },
+                      h('polygon', { points: '6 3 20 12 6 21 6 3' }))
+              ),
+              h('button', { type: 'button', className: 'cvp-btn cvp-skip-btn', onClick: () => skip(-10), title: lang === 'ar' ? 'رجوع 10 ثواني' : 'Rewind 10s' }, '◂10'),
+              h('button', { type: 'button', className: 'cvp-btn cvp-skip-btn', onClick: () => skip(10), title: lang === 'ar' ? 'تقديم 10 ثواني' : 'Forward 10s' }, '10▸'),
+              h('span', { className: 'cvp-time-display', dir: 'ltr' }, `${formatTime(currentTime)} / ${formatTime(duration)}`),
+              h('button', {
+                type: 'button',
+                className: 'cvp-btn cvp-vol-btn',
+                onClick: () => {
+                  const next = volume === 0 ? 1 : 0;
+                  setVolume(next);
+                  if (videoRef.current) videoRef.current.volume = next;
+                },
+                title: volume > 0 ? 'Mute' : 'Unmute'
+              }, volume > 0 ? '🔊' : '🔇')
+            ),
+            h('div', { className: 'cvp-ctrl-right' },
+              h('span', { className: 'cvp-pill cvp-quality' }, 'Auto · 720p'),
+              h('button', { type: 'button', className: 'cvp-pill cvp-rate-btn', onClick: cycleRate, title: 'Speed' }, `${rate}x`),
+              h('button', { type: 'button', className: 'cvp-btn cvp-fs-btn', onClick: toggleFullscreen, title: 'Fullscreen' }, '⛶')
+            )
+          )
+        )
+      )
+    );
+  }
+
+  /* ============ Courses Catalog Section on Home (Image 3) ============ */
+  function CoursesCatalog({ meta, store, lang, t }) {
+    return h('section', { className: 'courses-sec', id: 'courses' },
+      h('div', { className: 'courses-head' },
+        h('p', { className: 'kicker', 'data-reveal': '' }, lang === 'ar' ? 'مسارات تعلّم مجانية لطلاب المدارس' : 'Free Learning Tracks for Students'),
+        h(Words, { tag: 'h2', className: 'section-title', text: lang === 'ar' ? 'كورسات البرمجة والذكاء الاصطناعي' : 'Programming & AI Courses' }),
+        h('p', { className: 'courses-sub', 'data-reveal': '' },
+          lang === 'ar'
+            ? 'اتعلم البرمجة وتطوير الويب والذكاء الاصطناعي والأمن السيبراني من الصفر. شروحات عملية وتطبيقات كود حية خطوة بخطوة بطريقة مصرية ممتعة، ومجانية 100% لجميع طلاب المدارس.'
+            : 'Learn programming, web dev, AI, and cybersecurity hands-on. Practical interactive tutorials designed for school students, 100% free.')
+      ),
+      h('div', { className: 'courses-grid', 'data-stagger': '' },
+        COURSES_DATA.map((crs, idx) =>
+          h('a', {
+            key: crs.id,
+            href: '#/course/' + crs.id,
+            className: 'course-card' + (crs.featured ? ' is-featured' : ''),
+            style: { '--c-accent': crs.accent }
+          },
+            h('div', { className: 'cc-banner' },
+              h('img', {
+                src: crs.image || './assets/img/hero_students.png',
+                alt: lt(crs.title, lang),
+                loading: 'lazy'
+              })
+            ),
+            h('div', { className: 'cc-body' },
+              h('div', { className: 'cc-category' }, lt(crs.tag, lang)),
+              h('h3', { className: 'cc-title' }, lt(crs.title, lang)),
+              h('p', { className: 'cc-blurb' }, lt(crs.blurb, lang)),
+              h('div', { className: 'cc-rating' },
+                h('span', { className: 'cc-star' }, '★'),
+                h('span', { className: 'cc-score' }, crs.rating || '4.9'),
+                h('span', { className: 'cc-count' }, `(${crs.reviewsCount || '126 تقييم'})`)
+              )
+            ),
+            h('div', { className: 'cc-bottom' },
+              h('span', { className: 'cc-btn-solid' }, lang === 'ar' ? 'شوف محتوى الكورس ←' : 'Explore Course →'),
+              h('span', { className: 'cc-price-txt' }, lt(crs.priceText, lang) || (lang === 'ar' ? 'مجاني 100%' : '100% Free'))
+            )
+          )
+        )
+      )
+    );
+  }
+
+  /* ============ Dedicated Course Intro View (yehia.tech style) ============ */
+  function CourseView({ courseId, targetChapter, meta, status }) {
+    const { t, lang } = useLang();
+    const store = useStore();
+    useScan();
+
+    const course = useMemo(() => COURSES_DATA.find(c => c.id === courseId) || COURSES_DATA[0], [courseId]);
+    const chapters = useMemo(() => {
+      if (!meta) return [];
+      return meta.chapters.filter(c => course.chapterIds.includes(c.id));
+    }, [meta, course]);
+
+    const totalLessons = chapters.reduce((n, c) => n + c.lessons.length, 0);
+    const doneLessons = chapters.reduce((n, c) => n + c.lessons.filter(l => (store.lessons || {})[l.id] && store.lessons[l.id].best != null).length, 0);
+
+    const firstLessonId = chapters.length && chapters[0].lessons.length ? chapters[0].lessons[0].id : '1-1';
+
+    const learnItemsAr = [
+      'فهم التفكير المنطقي وأساسيات البرمجة من الصفر وبدون أي تعقيد.',
+      'بناء وتصميم أول موقع ويب تفاعلي ليك باستخدام HTML5 و CSS3 و JavaScript.',
+      'إزاي تستخدم الذكاء الاصطناعي كمساعد شخصي ليك في فهم وكتابة الكود وتصحيح الأخطاء.',
+      'حماية بياناتك وأجهزتك وفهم أساسيات الأمن السيبراني والتشفير وطرق تفكير الهاكرز.',
+      'حل المشكلات البرمجية والتطبيق العملي في معامل كود حية تفاعلية.',
+      'مشروع تخرج حقيقي تطبقه بنفسك وشهادة إتمام معتمدة بعد الانتهاء من الكورس.'
+    ];
+
+    const learnItemsEn = [
+      'Understand logical thinking and core programming principles from scratch without confusion.',
+      'Build and design your first interactive website using semantic HTML5, modern CSS3, and JavaScript.',
+      'Leverage Artificial Intelligence as your personal coding companion to write, understand, and debug code.',
+      'Secure your personal data and devices with cybersecurity fundamentals, encryption, and threat models.',
+      'Tackle programming problems hands-on with live code labs and interactive assessments.',
+      'Build a real graduation project and earn a verified certificate of completion upon finishing.'
+    ];
+
+    const learnList = lang === 'ar' ? learnItemsAr : learnItemsEn;
+
+    return h('main', { id: 'main', className: 'course-intro-view' },
+      /* 1. Breadcrumb */
+      h('nav', { className: 'cip-breadcrumb', 'aria-label': 'Breadcrumb' },
+        h('a', { href: '#/' }, lang === 'ar' ? 'الرئيسية' : 'Home'),
+        h('span', null, '/'),
+        h('a', { href: '#/courses' }, lang === 'ar' ? 'الكورسات' : 'Courses'),
+        h('span', null, '/'),
+        h('span', { style: { color: '#000000', fontWeight: 700 } }, lt(course.title, lang))
+      ),
+
+      /* 2. Course Header */
+      h('header', { className: 'cip-header' },
+        h('div', { className: 'cip-badge' }, lt(course.badge, lang)),
+        h('h1', { className: 'cip-title' }, lt(course.title, lang)),
+        h('p', { className: 'cip-sub' }, lt(course.blurb, lang)),
+        h('div', { className: 'cip-meta-strip' },
+          h('span', null, `★ ${course.rating || '4.9'} (${course.reviewsCount || '3,600+ طالب'})`),
+          h('span', null, '•'),
+          h('span', null, `${totalLessons} ${lang === 'ar' ? 'درس عملي' : 'practical lessons'}`),
+          h('span', null, '•'),
+          h('span', null, lang === 'ar' ? 'معامل كود حية تفاعلية' : 'Hands-on Coding Labs'),
+          h('span', null, '•'),
+          h('span', { style: { color: '#16a34a', fontWeight: 800 } }, lang === 'ar' ? 'مجاني 100% لطلاب المدارس' : '100% Free')
+        )
+      ),
+
+      /* 3. 2-Column Layout */
+      h('div', { className: 'cip-layout' },
+        /* Main Column */
+        h('div', { className: 'cip-main' },
+          /* Custom Video Player (Image 4) */
+          h(CustomVideoPlayer, {
+            title: lang === 'ar' ? 'مقدمة وما الذي ستتعلمه | Introduction & What to Expect' : 'Introduction & What to Expect',
+            src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            poster: course.image || './assets/img/hero_students.png',
+            duration: 152
+          }),
+
+          /* Section: What you will learn */
+          h('div', { className: 'cip-card' },
+            h('h2', { className: 'cip-card-title' },
+              h('span', null, '🎯'),
+              h('span', null, lang === 'ar' ? 'ماذا ستتعلم في هذا الكورس؟' : 'What You Will Learn in This Course')
+            ),
+            h('div', { className: 'cip-learn-grid' },
+              learnList.map((item, idx) =>
+                h('div', { key: idx, className: 'cip-learn-item' },
+                  h('span', { className: 'cip-check' }, '✓'),
+                  h('span', null, item)
+                )
+              )
+            )
+          ),
+
+          /* Section: Curriculum & Lessons */
+          h('div', { className: 'cip-card' },
+            h('h2', { className: 'cip-card-title' },
+              h('span', null, '📚'),
+              h('span', null, lang === 'ar' ? 'منهج الكورس وقائمة الدروس' : 'Curriculum & Course Content')
+            ),
+            h('div', { className: 'cip-curriculum-list' },
+              chapters.map((ch, idx) =>
+                h('div', { key: ch.id, className: 'cip-chapter-box' },
+                  h('div', { className: 'cip-ch-head' },
+                    h('span', null, `${lang === 'ar' ? 'الفصل' : 'Chapter'} ${pad(ch.id)}: ${lt(ch.title, lang)}`),
+                    h('span', { style: { fontSize: '13px', color: '#666' } }, `${ch.lessons.length} ${lang === 'ar' ? 'دروس' : 'lessons'}`)
+                  ),
+                  h('div', { className: 'cip-ch-lessons' },
+                    ch.lessons.map(ls => {
+                      const st = (store.lessons || {})[ls.id] || {};
+                      const isDone = st.best != null;
+                      return h('a', {
+                        key: ls.id,
+                        href: '#/lesson/' + ls.id,
+                        className: 'cip-lesson-row'
+                      },
+                        h('div', { className: 'cip-lesson-row-left' },
+                          h('span', { style: { fontFamily: 'var(--f-mono)', color: '#2563eb' } }, ls.id),
+                          h('span', null, lt(ls.title, lang))
+                        ),
+                        h('div', { className: 'cip-lesson-row-right' },
+                          h('span', { className: 'cip-lesson-badge' }, `${ls.minutes} ${lang === 'ar' ? 'دقيقة' : 'min'}`),
+                          h('span', {
+                            style: {
+                              fontWeight: 700,
+                              color: isDone ? '#16a34a' : '#2563eb'
+                            }
+                          }, isDone ? (lang === 'ar' ? 'مكتمل ✓' : 'Done ✓') : (lang === 'ar' ? 'ابدأ الدرس ←' : 'Start Lesson →'))
+                        )
+                      );
+                    })
+                  )
+                )
+              )
+            )
+          ),
+
+          /* Section: Prerequisites */
+          h('div', { className: 'cip-card' },
+            h('h2', { className: 'cip-card-title' },
+              h('span', null, '💡'),
+              h('span', null, lang === 'ar' ? 'متطلبات الكورس' : 'Prerequisites')
+            ),
+            h('ul', { style: { margin: 0, paddingRight: '20px', lineHeight: 1.8 } },
+              h('li', null, lang === 'ar' ? 'لا تحتاج أي خبرة مسبقة في البرمجة نهائياً — نبدأ معك خطوة بخطوة من الصفر.' : 'No prior coding experience required — we start together from zero.'),
+              h('li', null, lang === 'ar' ? 'جهاز كمبيوتر أو لابتوب واتصال بالإنترنت لتجربة الأكواد والمعامل.' : 'A computer or laptop with internet access to run code and labs.'),
+              h('li', null, lang === 'ar' ? 'فضول وشغف للتعلّم وبناء أشياء جديدة بيدك!' : 'Curiosity and passion to learn and build real things hands-on!')
+            )
+          ),
+
+          /* Section: About Instructor */
+          h('div', { className: 'cip-card' },
+            h('h2', { className: 'cip-card-title' },
+              h('span', null, '👨‍🏫'),
+              h('span', null, lang === 'ar' ? 'عن المدرب والمنصة' : 'About Instructor & Platform')
+            ),
+            h('p', { style: { margin: 0, lineHeight: 1.75, color: '#333' } },
+              lang === 'ar'
+                ? 'منصة Syntax بقيادة ماجد أبو راية صُممت لتقديم محتوى برمجي عصري وعالي الجودة باللغة المصرية البسيطة، لنمكن كل طالب وطالبة من دخول عالم البرمجة والذكاء الاصطناعي وبناء مشاريعهم الحقيقية بالمجان وبدون أي عوائق.'
+                : 'Syntax Academy by Maged Aboraya delivers world-class coding education in accessible, clear language — empowering every school student to master programming and AI for free.'
+            )
+          )
+        ),
+
+        /* Sticky Sidebar Column */
+        h('aside', { className: 'cip-sidebar' },
+          h('div', { className: 'cip-side-card' },
+            h('img', {
+              className: 'cip-side-img',
+              src: course.image || './assets/img/hero_students.png',
+              alt: lt(course.title, lang)
+            }),
+            h('div', { className: 'cip-side-body' },
+              h('div', { className: 'cip-price-block' },
+                h('span', { className: 'cip-price-main' }, lang === 'ar' ? 'مجاني 100%' : '100% Free'),
+                h('span', { className: 'cip-price-old' }, lang === 'ar' ? '899.99 ج.م' : '899.99 EGP'),
+                h('span', { className: 'cip-scholarship-tag' }, lang === 'ar' ? 'منحة لطلاب المدارس' : 'Student Scholarship')
+              ),
+              h('a', {
+                href: '#/lesson/' + firstLessonId,
+                className: 'cip-cta-btn'
+              },
+                h('span', null, lang === 'ar' ? 'ابدأ التعلّم مجاناً الآن' : 'Start Learning Free Now'),
+                h('span', { 'aria-hidden': 'true' }, '←')
+              ),
+              h('ul', { className: 'cip-perks' },
+                h('li', { className: 'cip-perk-item' },
+                  h('span', { style: { color: '#16a34a', fontWeight: 800 } }, '✓'),
+                  h('span', null, `${totalLessons} ${lang === 'ar' ? 'درس تطبيقي وشرح مفصل' : 'detailed interactive lessons'}`)
+                ),
+                h('li', { className: 'cip-perk-item' },
+                  h('span', { style: { color: '#16a34a', fontWeight: 800 } }, '✓'),
+                  h('span', null, lang === 'ar' ? '6 معامل كود حية تفاعلية' : '6 Live interactive code labs')
+                ),
+                h('li', { className: 'cip-perk-item' },
+                  h('span', { style: { color: '#16a34a', fontWeight: 800 } }, '✓'),
+                  h('span', null, lang === 'ar' ? '171 تمرين واختبار شامل' : '171+ assessment challenges')
+                ),
+                h('li', { className: 'cip-perk-item' },
+                  h('span', { style: { color: '#16a34a', fontWeight: 800 } }, '✓'),
+                  h('span', null, lang === 'ar' ? 'شهادة إتمام رسمية معتمدة' : 'Official Certificate of Completion')
+                ),
+                h('li', { className: 'cip-perk-item' },
+                  h('span', { style: { color: '#16a34a', fontWeight: 800 } }, '✓'),
+                  h('span', null, lang === 'ar' ? 'وصول دائم مدى الحياة مجاناً 100%' : 'Lifetime Free Access')
+                )
+              )
+            )
+          )
+        )
+      )
+    );
+  }
+
+  /* ============ Hero Visual Stage (Starburst + 3D Icons + Students + Puffy Cloud) ============ */
+  function HeroVisualStage({ lang }) {
+    return h('div', { className: 'hero-visual', 'data-reveal': 'fade', 'data-delay': .2 },
+      h('div', { className: 'hv-stage', dir: 'ltr' },
+        /* 1. Ambient Blue Aura */
+        h('div', { className: 'hv-aura', 'aria-hidden': 'true' }),
+
+        /* 2. Blue Comic-Splash Starburst + Halftone Dots SVG */
+        h('svg', {
+          className: 'hv-burst-svg',
+          viewBox: '0 0 800 620',
+          fill: 'none',
+          'aria-hidden': 'true'
+        },
+          /* Halftone dots left cluster */
+          h('g', { fill: '#2376d8', opacity: '0.88' },
+            h('circle', { cx: 92, cy: 268, r: 4.5 }),
+            h('circle', { cx: 112, cy: 254, r: 5.5 }),
+            h('circle', { cx: 134, cy: 242, r: 6.5 }),
+            h('circle', { cx: 84, cy: 294, r: 5 }),
+            h('circle', { cx: 106, cy: 282, r: 7 }),
+            h('circle', { cx: 128, cy: 270, r: 8.5 }),
+            h('circle', { cx: 78, cy: 322, r: 4.5 }),
+            h('circle', { cx: 98, cy: 312, r: 6.5 }),
+            h('circle', { cx: 120, cy: 300, r: 8 }),
+            h('circle', { cx: 88, cy: 344, r: 5 }),
+            h('circle', { cx: 110, cy: 334, r: 6.5 }),
+            h('circle', { cx: 64, cy: 405, r: 4 }),
+            h('circle', { cx: 82, cy: 416, r: 5.5 }),
+            h('circle', { cx: 70, cy: 432, r: 4.5 })
+          ),
+          /* Halftone dots right cluster */
+          h('g', { fill: '#2376d8', opacity: '0.88' },
+            h('circle', { cx: 658, cy: 252, r: 6 }),
+            h('circle', { cx: 680, cy: 266, r: 5 }),
+            h('circle', { cx: 646, cy: 280, r: 7.5 }),
+            h('circle', { cx: 670, cy: 294, r: 6 }),
+            h('circle', { cx: 692, cy: 308, r: 4.5 }),
+            h('circle', { cx: 656, cy: 316, r: 6.5 }),
+            h('circle', { cx: 680, cy: 328, r: 5 }),
+            h('circle', { cx: 215, cy: 196, r: 4.5 }),
+            h('circle', { cx: 232, cy: 184, r: 3.5 })
+          ),
+          /* Dynamic Blue Starburst Splash Shape behind students */
+          h('path', {
+            d: 'M 155 152 Q 245 225 320 155 Q 395 215 495 140 Q 515 235 635 205 Q 575 295 695 362 Q 585 395 612 485 L 185 485 Q 205 405 92 365 Q 198 308 155 152 Z',
+            fill: 'url(#hvBurstGrad)',
+            stroke: '#3b8ef3',
+            strokeWidth: '2.5',
+            strokeLinejoin: 'round'
+          }),
+          h('defs', null,
+            h('linearGradient', { id: 'hvBurstGrad', x1: '0%', y1: '0%', x2: '100%', y2: '100%' },
+              h('stop', { offset: '0%', stopColor: '#2b84ea' }),
+              h('stop', { offset: '100%', stopColor: '#1b62be' })))
+        ),
+
+        /* 3. Floating 3D-Extruded Left Programming Icon (</>) */
+        h('svg', {
+          className: 'hv-icon-3d hv-icon-left',
+          viewBox: '0 0 140 120',
+          fill: 'none',
+          'aria-hidden': 'true'
+        },
+          /* 3D Extrusion Depth Layer (#083d8c) */
+          h('g', { transform: 'translate(5, 6)', fill: '#083d8c', stroke: '#083d8c', strokeWidth: '10', strokeLinecap: 'round', strokeLinejoin: 'round' },
+            h('polyline', { points: '46,34 18,60 46,86' }),
+            h('polyline', { points: '94,34 122,60 94,86' }),
+            h('line', { x1: 78, y1: 24, x2: 62, y2: 96 })
+          ),
+          /* Bright Front Face (#1d82ff) */
+          h('g', { fill: 'none', stroke: '#1d82ff', strokeWidth: '10', strokeLinecap: 'round', strokeLinejoin: 'round' },
+            h('polyline', { points: '46,34 18,60 46,86' }),
+            h('polyline', { points: '94,34 122,60 94,86' }),
+            h('line', { x1: 78, y1: 24, x2: 62, y2: 96 })
+          )
+        ),
+
+        /* 4. Floating 3D-Extruded Right Programming Icon ({x}) */
+        h('svg', {
+          className: 'hv-icon-3d hv-icon-right',
+          viewBox: '0 0 150 130',
+          fill: 'none',
+          'aria-hidden': 'true'
+        },
+          /* 3D Extrusion Depth Layer (#083d8c) */
+          h('g', { transform: 'translate(-5, 6)' },
+            h('path', {
+              d: 'M 22 68 L 36 62 L 50 96 L 76 24 L 132 16',
+              stroke: '#083d8c',
+              strokeWidth: '11',
+              strokeLinecap: 'round',
+              strokeLinejoin: 'round'
+            }),
+            h('path', {
+              d: 'M 86 52 C 94 44, 102 48, 106 64 C 110 80, 118 84, 126 76 M 124 46 C 116 46, 108 58, 98 74 C 90 86, 84 84, 80 78',
+              stroke: '#083d8c',
+              strokeWidth: '10',
+              strokeLinecap: 'round',
+              strokeLinejoin: 'round'
+            })
+          ),
+          /* Bright Front Face (#1d82ff) */
+          h('g', null,
+            h('path', {
+              d: 'M 22 68 L 36 62 L 50 96 L 76 24 L 132 16',
+              stroke: '#1d82ff',
+              strokeWidth: '11',
+              strokeLinecap: 'round',
+              strokeLinejoin: 'round'
+            }),
+            h('path', {
+              d: 'M 86 52 C 94 44, 102 48, 106 64 C 110 80, 118 84, 126 76 M 124 46 C 116 46, 108 58, 98 74 C 90 86, 84 84, 80 78',
+              stroke: '#1d82ff',
+              strokeWidth: '10',
+              strokeLinecap: 'round',
+              strokeLinejoin: 'round'
+            })
+          )
+        ),
+
+        /* 5. Real Students Cutout Photo */
+        h('div', { className: 'hv-photo-wrap' },
+          h('img', {
+            src: './assets/img/hero_students.png',
+            alt: lang === 'ar' ? 'طلاب يتعلمون البرمجة' : 'Students learning programming',
+            className: 'hero-students-img',
+            loading: 'eager'
+          })
+        ),
+
+        /* 6. Puffy White Illustrated Cloud with Dark Navy Outline at Bottom Front */
+        h('svg', {
+          className: 'hv-cloud-svg',
+          viewBox: '0 0 820 250',
+          fill: 'none',
+          'aria-hidden': 'true'
+        },
+          /* Outer Dark Shadow Drop */
+          h('path', {
+            d: 'M 92 128 C 42 122, 22 62, 74 36 C 112 16, 162 28, 180 64 C 204 42, 250 52, 256 92 C 282 82, 314 96, 322 126 C 344 102, 392 98, 418 126 C 446 98, 494 102, 514 128 C 524 96, 558 82, 584 94 C 592 52, 638 42, 662 66 C 680 28, 730 16, 768 38 C 818 66, 796 126, 746 132 C 776 164, 742 214, 692 204 C 674 238, 612 242, 586 208 C 560 236, 502 234, 482 198 C 452 238, 386 238, 356 198 C 336 234, 278 236, 252 208 C 226 242, 164 238, 146 204 C 96 214, 62 164, 92 128 Z',
+            fill: '#08152c',
+            transform: 'translate(0, 6)'
+          }),
+          /* Main White Cloud Body */
+          h('path', {
+            d: 'M 92 128 C 42 122, 22 62, 74 36 C 112 16, 162 28, 180 64 C 204 42, 250 52, 256 92 C 282 82, 314 96, 322 126 C 344 102, 392 98, 418 126 C 446 98, 494 102, 514 128 C 524 96, 558 82, 584 94 C 592 52, 638 42, 662 66 C 680 28, 730 16, 768 38 C 818 66, 796 126, 746 132 C 776 164, 742 214, 692 204 C 674 238, 612 242, 586 208 C 560 236, 502 234, 482 198 C 452 238, 386 238, 356 198 C 336 234, 278 236, 252 208 C 226 242, 164 238, 146 204 C 96 214, 62 164, 92 128 Z',
+            fill: '#ffffff'
+          }),
+          /* Soft Blue-Gray Inner Shadow Crescent along the bottom puffs */
+          h('path', {
+            d: 'M 62 104 C 56 120, 72 132, 92 128 C 72 158, 98 198, 146 190 C 166 224, 224 226, 252 194 C 278 220, 334 220, 356 184 C 386 222, 452 222, 482 184 C 502 220, 560 220, 586 194 C 614 226, 672 224, 692 190 C 740 198, 766 158, 746 132 C 766 132, 782 120, 776 104 C 794 124, 774 140, 746 132 C 776 164, 742 214, 692 204 C 674 238, 612 242, 586 208 C 560 236, 502 234, 482 198 C 452 238, 386 238, 356 198 C 336 234, 278 236, 252 208 C 226 242, 164 238, 146 204 C 96 214, 62 164, 92 128 C 64 134, 48 120, 62 104 Z',
+            fill: '#c3cde0'
+          }),
+          /* Crisp Dark Navy Cloud Outline + Interior Puff Curls */
+          h('path', {
+            d: 'M 92 128 C 42 122, 22 62, 74 36 C 112 16, 162 28, 180 64 C 204 42, 250 52, 256 92 C 282 82, 314 96, 322 126 C 344 102, 392 98, 418 126 C 446 98, 494 102, 514 128 C 524 96, 558 82, 584 94 C 592 52, 638 42, 662 66 C 680 28, 730 16, 768 38 C 818 66, 796 126, 746 132 C 776 164, 742 214, 692 204 C 674 238, 612 242, 586 208 C 560 236, 502 234, 482 198 C 452 238, 386 238, 356 198 C 336 234, 278 236, 252 208 C 226 242, 164 238, 146 204 C 96 214, 62 164, 92 128 Z',
+            stroke: '#0a1936',
+            strokeWidth: '5',
+            strokeLinecap: 'round',
+            strokeLinejoin: 'round'
+          }),
+          /* Interior Comic Puff Arcs (matching reference image) */
+          h('path', {
+            d: 'M 180 64 C 188 76, 186 92, 176 102 M 256 92 C 262 104, 258 118, 248 126 M 322 126 C 328 138, 322 150, 312 156 M 418 126 C 422 138, 418 150, 410 156 M 514 128 C 508 140, 512 152, 522 158 M 584 94 C 578 106, 582 120, 592 128 M 662 66 C 654 78, 656 94, 666 104 M 146 204 C 154 192, 166 186, 178 188 M 252 208 C 258 194, 270 186, 282 188 M 356 198 C 366 184, 384 182, 396 190 M 482 198 C 472 184, 454 182, 442 190 M 586 208 C 580 194, 568 186, 556 188 M 692 204 C 684 192, 672 186, 660 188',
+            stroke: '#0a1936',
+            strokeWidth: '4.5',
+            strokeLinecap: 'round'
+          })
+        )
+      )
+    );
+  }
+
+  /* ============ home ============ */
   function Home({ meta, status, route }) {
     const { t, lang } = useLang();
     const store = useStore();
     useScan();
-    const questions = status && status.questions ? status.questions[lang] : 0;
+    const questions = status && status.questions ? status.questions[lang] : 171;
+
     useEffect(() => {
       if (App.reduced) return;
       const ctxs = [];
-      ctxs.push(gsap.to('.hero-content', { yPercent: -18, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } }));
-      const panels = gsap.utils.toArray('.panel');
-      panels.forEach((p, i) => {
-        if (i === panels.length - 1) return;
-        ctxs.push(gsap.to(p.querySelector('.panel-in'), { scale: .93, opacity: .35, ease: 'none', scrollTrigger: { trigger: panels[i + 1], start: 'top bottom', end: 'top top', scrub: true } }));
-        ctxs.push(gsap.to(p.querySelector('.panel-num'), { yPercent: 20, ease: 'none', scrollTrigger: { trigger: p, start: 'top bottom', end: 'bottom top', scrub: true } }));
-      });
+      ctxs.push(gsap.to('.hero-content', { yPercent: -14, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } }));
       return () => ctxs.forEach(c => { if (c.scrollTrigger) c.scrollTrigger.kill(); c.kill(); });
     }, [meta]);
+
     useEffect(() => {
       if (!meta) return;
       const id = route.target;
       if (!id) return;
-      const t0 = setTimeout(() => { scrollToEl(document.getElementById(id), id === 'chapters' ? 0 : 0); }, 120);
+      const t0 = setTimeout(() => { scrollToEl(document.getElementById(id), 0); }, 120);
       return () => clearTimeout(t0);
     }, [route.target, meta]);
 
     return h('main', { id: 'main', className: 'home' },
       h('section', { className: 'hero' },
-        h('div', { className: 'hero-content' },
-          h('h1', { className: 'hero-title', 'data-words': '', 'data-delay': .1 },
-            t.heroTitle.map((w, i) => h('span', { className: 'w', key: i }, h('span', { className: 'wi' }, w), ' '))),
-          h('p', { className: 'hero-sub', 'data-reveal': '', 'data-delay': .35 }, t.heroSub),
-          h('div', { className: 'hero-cta', 'data-reveal': '', 'data-delay': .55 },
-            h('a', { className: 'solid big', href: '#/chapter/1' }, t.heroCta, h('span', { className: 'arr', 'aria-hidden': 'true' }, '→')),
-            h('span', { className: 'scroll-hint' }, h('i'), t.scrollHint))),
+        h('div', { className: 'hero-main' },
+          h('div', { className: 'hero-content' },
+            h(Words, { tag: 'h1', className: 'hero-title', text: t.heroTitle, delay: .1 }),
+            h('p', { className: 'hero-sub', 'data-reveal': '', 'data-delay': .35 }, t.heroSub),
+            h('div', { className: 'hero-cta', 'data-reveal': '', 'data-delay': .55 },
+              h('a', { className: 'solid big', href: '#/courses' }, t.heroCta, h('span', { className: 'arr', 'aria-hidden': 'true' }, '→')),
+              h('span', { className: 'scroll-hint' }, h('i'), t.scrollHint))),
+          h(HeroVisualStage, { lang })),
         h('div', { className: 'hero-stats', 'data-reveal': 'fade', 'data-delay': .75 },
-          [[meta ? meta.chapters.length : 4, t.stats[0]], [meta ? meta.chapters.reduce((n, c) => n + c.lessons.length, 0) : 14, t.stats[1]], [questions ? questions + '+' : '—', t.stats[2]]].map(([n, l], i) =>
+          [[COURSES_DATA.length, t.stats[0]], [meta ? meta.chapters.reduce((n, c) => n + c.lessons.length, 0) : 14, t.stats[1]], [questions ? questions + '+' : '171+', t.stats[2]]].map(([n, l], i) =>
             h('div', { key: i }, h('b', { dir: 'ltr' }, n), h('span', null, l))))),
       h('section', { className: 'manifesto' }, h(ScrubWords, { text: t.manifesto })),
       h(Marquee),
-      h('section', { className: 'chapters', id: 'chapters' },
-        h('div', { className: 'chapters-head' },
-          h('p', { className: 'kicker', 'data-reveal': '' }, t.chaptersKicker),
-          h(Words, { tag: 'h2', className: 'section-title', text: t.chaptersTitle })),
-        meta ? meta.chapters.map((c, i) => h(ChapterPanel, { key: c.id, c, idx: i, status, lang, t, store })) : h('p', { className: 'loading' }, t.loading)));
+      h(CoursesCatalog, { meta, store, lang, t }));
   }
 
   /* ============ lesson page ============ */
@@ -790,7 +1669,7 @@
       h('div', { className: 'terms-grid', 'data-stagger': '' },
         items.map((it, i) => {
           const arIt = bilingual && arItems && arItems[i];
-          return h('button', { key: i, className: 'term' + (open[i] ? ' open' : ''), onClick: () => setOpen({ ...open, [i]: !open[i] }), 'aria-expanded': !!open[i] },
+          return h('button', { type: 'button', key: i, className: 'term' + (open[i] ? ' open' : ''), onClick: () => setOpen({ ...open, [i]: !open[i] }), 'aria-expanded': !!open[i] },
             h('span', { className: 'term-t' },
               it.term,
               arIt ? h('span', { className: 'ar-row-sub', style: { fontWeight: 600, fontSize: '13px' }, dir: 'rtl' }, arIt.term) : null,
@@ -804,7 +1683,7 @@
   function Exercises({ items, arItems, bilingual }) {
     const { t } = useLang();
     const [open, setOpen] = useState({});
-    return h('section', { className: 'practice' },
+    return h('section', { className: 'practice sec' },
       h('div', { className: 'sec-head' },
         h('span', { className: 'sec-n' }, h(StarIcon)),
         h('div', null,
@@ -819,7 +1698,7 @@
               h('div', { style: { display: 'flex', flexDirection: 'column', gap: '4px', width: '100%' } },
                 h('p', null, ex.prompt),
                 arEx ? h('p', { className: 'ar-sub', dir: 'rtl' }, arEx.prompt) : null)),
-            h('button', { className: 'ghost sm', onClick: () => setOpen({ ...open, [i]: !open[i] }), 'aria-expanded': !!open[i] }, open[i] ? t.hideSol : t.showSol),
+            h('button', { type: 'button', className: 'ghost sm', onClick: () => setOpen({ ...open, [i]: !open[i] }), 'aria-expanded': !!open[i] }, open[i] ? t.hideSol : t.showSol),
             h('div', { className: 'ex-sol' },
               h('div', null,
                 h('p', null, ex.solution),
@@ -829,113 +1708,52 @@
 
   /* ============ lesson video player section ============ */
   function LessonVideoSection({ id, title, watched, onMarkWatched, lang }) {
-    const [editing, setEditing] = useState(false);
-    const [urlInput, setUrlInput] = useState(App.StoreVideos.get(id) || '');
-    const [currentUrl, setCurrentUrl] = useState(App.StoreVideos.get(id) || '');
-
-    useEffect(() => {
-      const v = App.StoreVideos.get(id) || '';
-      setUrlInput(v);
-      setCurrentUrl(v);
-      setEditing(false);
-    }, [id]);
-
-    const saveUrl = () => {
-      App.StoreVideos.set(id, urlInput);
-      setCurrentUrl(urlInput);
-      setEditing(false);
-    };
-
-    const ytMatch = currentUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
-    const isYouTube = !!ytMatch;
-    const ytId = ytMatch ? ytMatch[1] : null;
+    const { t } = useLang();
+    const currentUrl = App.StoreVideos.get(id) || '';
 
     return h('section', { className: 'lesson-video-sec' },
-      h('div', { className: 'lesson-video-card' },
-        h('div', { className: 'lesson-video-header' },
-          h('div', { className: 'lvh-meta' },
-            h('span', { className: 'lvh-tag' }, lang === 'ar' ? 'فيديو الشرح التفاعلي' : 'Lesson Video Lecture'),
-            h('h2', { className: 'lvh-title' }, lang === 'ar' ? 'محاضرة شرح الدرس بالفيديو' : 'Interactive Video Lecture'),
-            h('p', { className: 'lvh-sub' }, lang === 'ar' ? 'شاهد محاضرة الدرس أولاً لفهم الأفكار الجوهرية، ثم تابع قراءة المواد التفاعلية والتمارين أدناه.' : 'Watch the lesson video lecture first, then proceed to the detailed study materials and worked exercises below.')
-          ),
-          h('button', {
-            type: 'button',
-            className: 'lvh-edit-btn',
-            onClick: () => setEditing(!editing)
-          },
-            h(EditIcon),
-            h('span', null, editing ? (lang === 'ar' ? 'إلغاء' : 'Cancel') : (lang === 'ar' ? 'إضافة / تعديل رابط الفيديو' : 'Set Video URL'))
-          )
+      h(CustomVideoPlayer, {
+        title: title || (lang === 'ar' ? 'مقدمة وما الذي ستتعلمه | Introduction & What to Expect' : 'Introduction & What to Expect'),
+        src: currentUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        poster: './assets/img/hero_students.png',
+        duration: 152
+      }),
+      h('div', { className: 'video-footer-strip', style: { marginTop: '12px' } },
+        watched ? h('div', { className: 'video-done-badge' },
+          h(CheckIcon),
+          h('span', null, t.videoWatched || (lang === 'ar' ? 'تم إتمام مشاهدة محاضرة الفيديو بنجاح' : 'Lecture Video Completed Successfully'))
+        ) : h('button', {
+          type: 'button',
+          className: 'video-finish-btn',
+          onClick: onMarkWatched
+        },
+          h(CheckIcon),
+          h('span', null, t.markVideoDone || (lang === 'ar' ? 'أنهيت مشاهدة الفيديو — الانتقال إلى الشرح' : 'Mark Video Finished — Jump to Reading'))
         ),
-        editing ? h('div', { className: 'video-edit-bar' },
-          h('input', {
-            type: 'text',
-            className: 'video-url-input',
-            placeholder: lang === 'ar' ? 'https://www.youtube.com/watch?v=... أو رابط MP4 مباشر' : 'https://www.youtube.com/watch?v=... or direct MP4 URL',
-            value: urlInput,
-            onChange: e => setUrlInput(e.target.value)
-          }),
-          h('button', { type: 'button', className: 'solid video-save-btn', onClick: saveUrl }, lang === 'ar' ? 'حفظ الرابط' : 'Save URL')
-        ) : null,
-        h('div', { className: 'video-frame-container' },
-          isYouTube ? h('iframe', {
-            className: 'video-iframe',
-            src: `https://www.youtube-nocookie.com/embed/${ytId}?rel=0&modestbranding=1`,
-            title: 'Lesson Video',
-            allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
-            allowFullScreen: true
-          }) : (currentUrl && (currentUrl.endsWith('.mp4') || currentUrl.endsWith('.webm')) ? h('video', {
-            className: 'video-native',
-            src: currentUrl,
-            controls: true,
-            playsInline: true
-          }) : h('div', { className: 'video-placeholder' },
-            h('div', { className: 'vp-inner' },
-              h('div', { className: 'vp-play-icon' },
-                h('svg', { width: 32, height: 32, viewBox: '0 0 24 24', fill: 'currentColor' },
-                  h('polygon', { points: '5 3 19 12 5 21 5 3' }))),
-              h('h3', null, lang === 'ar' ? 'مشغل فيديو الدرس جاهز' : 'Lesson Video Player Ready'),
-              h('p', null, lang === 'ar' ? 'يمكنك وضع رابط الفيديو الخاص بك (يوتيوب أو MP4) عبر زر "إضافة / تعديل رابط الفيديو" أعلاه.' : 'You can paste your video link (YouTube or MP4) using the "Set Video URL" button above.')
-            )
-          ))
-        ),
-        h('div', { className: 'video-footer-strip' },
-          watched ? h('div', { className: 'video-done-badge' },
-            h(CheckIcon),
-            h('span', null, lang === 'ar' ? 'تم استكمال مشاهدة فيديو الشرح بنجاح' : 'Lecture Video Completed Successfully')
-          ) : h('button', {
-            type: 'button',
-            className: 'video-finish-btn',
-            onClick: onMarkWatched
-          },
-            h(CheckIcon),
-            h('span', null, lang === 'ar' ? 'أنهيت مشاهدة الفيديو — الانتقال لشرح الدرس' : 'Mark Video Finished — Jump to Reading')
-          ),
-          h('button', {
-            type: 'button',
-            className: 'video-scroll-btn',
-            onClick: () => {
-              const el = document.getElementById('sec-0') || document.querySelector('.terms') || document.querySelector('.l-body');
-              if (el) App.scrollToEl(el, 80);
-            }
-          },
-            h('span', null, lang === 'ar' ? 'المتابعة إلى محتوى الدرس' : 'Continue to Lesson Content'),
-            h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2 },
-              h('polyline', { points: '6 9 12 15 18 9' }))
-          )
+        h('button', {
+          type: 'button',
+          className: 'video-scroll-btn',
+          onClick: () => {
+            const el = document.querySelector('.terms') || document.getElementById('sec-0') || document.querySelector('.l-body');
+            if (el) App.scrollToEl(el, 80);
+          }
+        },
+          h('span', null, t.continueToText || (lang === 'ar' ? 'المتابعة إلى محتوى الدرس' : 'Continue to Lesson Content')),
+          h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2 },
+            h('polyline', { points: '6 9 12 15 18 9' }))
         )
       )
     );
   }
 
-  function Lesson({ id, meta, status, zen, onToggleZen }) {
+  function Lesson({ id, meta, status }) {
     const { t, lang } = useLang();
     const store = useStore();
     const [data, setData] = useState(null);
     const [arData, setArData] = useState(null);
     const [err, setErr] = useState(null);
     const [quizOpen, setQuizOpen] = useState(!!(Store.data.lessons || {})[id] && !!Store.data.lessons[id].read);
-    const [readEnd, setReadEnd] = useState(false);
+    const [readEnd, setReadEnd] = useState(true);
     const [bilingual, setBilingual] = useState(store.bilingual !== false);
     const end = useRef(null);
     const quizRef = useRef(null);
@@ -955,7 +1773,7 @@
     };
 
     useEffect(() => {
-      setData(null); setArData(null); setErr(null); setReadEnd(false);
+      setData(null); setArData(null); setErr(null); setReadEnd(true);
       setQuizOpen(!!((Store.data.lessons || {})[id] || {}).read);
       let live = true;
       if (lang === 'en') {
@@ -976,9 +1794,17 @@
 
     useEffect(() => {
       if (!data) return;
-      const st = ScrollTrigger.create({ start: 0, end: 'max', onUpdate: s => { if (bar.current) bar.current.style.transform = `scaleX(${s.progress})`; } });
-      const io = new IntersectionObserver(es => { if (es[0].isIntersecting) setReadEnd(true); }, { threshold: 0 });
+      const st = ScrollTrigger.create({
+        start: 0,
+        end: 'max',
+        onUpdate: s => {
+          if (bar.current) bar.current.style.transform = `scaleX(${s.progress})`;
+          if (s.progress > 0.85) setReadEnd(true);
+        }
+      });
+      const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) setReadEnd(true); }, { threshold: 0 });
       if (end.current) io.observe(end.current);
+      if (quizRef.current) io.observe(quizRef.current);
       return () => { st.kill(); io.disconnect(); };
     }, [data]);
 
@@ -992,8 +1818,8 @@
       Store.setLesson(id, { read: true, best: Math.max(prev, score), total });
     };
 
-    if (err === 'prep') return h('main', { id: 'main', className: 'lesson-state', style: { '--accent': accent } }, h('h1', null, t.prepTitle), h('p', null, t.prepText), h('a', { className: 'solid', href: '#/chapters' }, t.backChapter));
-    if (err) return h('main', { id: 'main', className: 'lesson-state' }, h('p', null, t.error), h('a', { className: 'solid', href: '#/chapters' }, t.backChapter));
+    if (err === 'prep') return h('main', { id: 'main', className: 'lesson-state', style: { '--accent': accent } }, h('h1', null, t.prepTitle), h('p', null, t.prepText), h('a', { className: 'solid', href: '#/course/baccalaureate' }, t.backChapter));
+    if (err) return h('main', { id: 'main', className: 'lesson-state' }, h('p', null, t.error), h('a', { className: 'solid', href: '#/course/baccalaureate' }, t.backChapter));
     if (!data) return h('main', { id: 'main', className: 'lesson-state' }, h('p', { className: 'loading' }, t.loading));
 
     const isBi = lang === 'en' && bilingual && !!arData;
@@ -1007,33 +1833,28 @@
         h('p', { className: 'kicker' }, `${t.lesson} ${info ? info.id.replace('-', '.') : ''}`),
         h(Words, { tag: 'h1', className: 'l-title', text: data.title }),
         isBi && arData ? h('span', { className: 'ar-sub-title', dir: 'rtl' }, arData.title) : null,
-        h('div', { className: 'lesson-action-strip' },
-          lang === 'en' ? h('div', { className: 'bilingual-bar' },
+        lang === 'en' ? h('div', { className: 'lesson-action-strip' },
+          h('div', { className: 'bilingual-bar' },
             h('div', { className: 'bilingual-bar-text' },
-              h('span', { className: 'bilingual-tag' }, 'Bilingual · ثنائي اللغة'),
+              h('span', { className: 'bilingual-tag' }, 'EN + AR'),
               h('span', null, 'English curriculum with Arabic translation companion')),
             h('button', {
+              type: 'button',
               className: 'bilingual-toggle-btn' + (bilingual ? ' on' : ''),
               onClick: toggleBi
-            }, bilingual ? 'الترجمة العربية: مفعّلة' : 'تفعيل الترجمة العربية')) : null,
-          h('button', {
-            className: 'zen-trigger-btn' + (zen ? ' is-active' : ''),
-            onClick: onToggleZen,
-            title: t.zenModeHint
-          },
-            h(ZenIcon),
-            h('span', null, zen ? t.zenExit : t.zenMode),
-            h('span', { className: 'zen-trigger-kbd' }, 'Z'))),
-        h('p', { className: 'l-hook', 'data-reveal': '', 'data-delay': .3 }, data.hook),
+            }, bilingual ? 'الترجمة العربية: مفعّلة' : 'تفعيل الترجمة العربية'))) : null,
+        h('p', { className: 'l-hook', 'data-reveal': '', 'data-delay': .2 }, data.hook),
         isBi && arData ? h('p', { className: 'ar-sub', dir: 'rtl', style: { fontSize: '16.5px' } }, arData.hook) : null,
-        h('ul', { className: 'objectives', 'data-stagger': '' }, data.objectives.map((o, i) => {
-          const arO = isBi && arData && arData.objectives && arData.objectives[i];
-          return h('li', { key: i },
-            h('span', null, pad(i + 1)),
-            h('div', { style: { display: 'flex', flexDirection: 'column', gap: '4px' } },
-              h('p', null, o),
-              arO ? h('span', { className: 'ar-sub', dir: 'rtl' }, arO) : null));
-        }))),
+        h('div', { className: 'objectives-wrap' },
+          h('p', { className: 'kicker objectives-kicker' }, t.objectives),
+          h('ul', { className: 'objectives', 'data-stagger': '' }, data.objectives.map((o, i) => {
+            const arO = isBi && arData && arData.objectives && arData.objectives[i];
+            return h('li', { key: i },
+              h('span', null, pad(i + 1)),
+              h('div', { style: { display: 'flex', flexDirection: 'column', gap: '4px' } },
+                h('p', null, o),
+                arO ? h('span', { className: 'ar-sub', dir: 'rtl' }, arO) : null));
+          })))),
       h(LessonVideoSection, {
         id,
         title: data.title,
@@ -1067,14 +1888,13 @@
         !quizOpen
           ? h('div', { className: 'finish-box', 'data-reveal': '' },
               h('h2', null, t.finishTitle), h('p', null, t.finishText),
-              h('button', { className: 'solid big', disabled: !readEnd, onClick: open }, t.finishBtn),
+              h('button', { type: 'button', className: 'solid big', disabled: !readEnd, onClick: open }, t.finishBtn),
               !readEnd ? h('p', { className: 'lock-hint' }, t.readFirst) : null)
           : h('div', { className: 'quiz-box' },
               h('div', { className: 'quiz-head' }, h('p', { className: 'kicker' }, t.quiz), h('h2', null, data.title)),
               h(App.Quiz, { lesson: data, arLesson: arData, bilingual: isBi, accent, nextLesson, best: st.best, onDone: finished }))));
   }
 
-  
   /* ============ Spotlight Search Modal (Ctrl + K) ============ */
   function SpotlightSearch({ open, onClose, lang }) {
     const [query, setQuery] = useState('');
@@ -1113,7 +1933,7 @@
 
     const navigate = item => {
       onClose();
-      const target = item.target || (item.type === 'lesson' ? '#/lesson/' + item.id : '#/chapter/' + item.ch);
+      const target = item.target || (item.type === 'course' ? '#/course/' + item.id : item.type === 'lesson' ? '#/lesson/' + item.id : '#/chapter/' + item.ch);
       if (location.hash === target) {
         if (item.type === 'demo' || item.type === 'figure' || item.type === 'term') {
           const el = document.querySelector('.demo') || document.querySelector('.b-figures') || document.querySelector('.terms');
@@ -1127,9 +1947,10 @@
     if (!open) return null;
 
     const badgeLabel = type => {
+      if (type === 'course') return lang === 'en' ? 'Course' : 'كورس';
       if (type === 'lesson') return lang === 'en' ? 'Lesson' : 'درس';
-      if (type === 'demo') return lang === 'en' ? 'Interactive Lab' : 'مختبر تفاعلي';
-      if (type === 'figure') return lang === 'en' ? 'Pioneer / Device' : 'شخصية / عتاد';
+      if (type === 'demo') return lang === 'en' ? 'Interactive Lab' : 'معمل تفاعلي';
+      if (type === 'figure') return lang === 'en' ? 'Pioneer / Device' : 'شخصية / جهاز';
       return lang === 'en' ? 'Key Term' : 'مصطلح أساسي';
     };
 
@@ -1142,7 +1963,7 @@
             className: 'spotlight-input',
             value: query,
             onChange: e => setQuery(e.target.value),
-            placeholder: lang === 'en' ? 'Search lessons, key terms, pioneers, labs... (Ctrl+K)' : 'ابحث في الدروس والمصطلحات والشخصيات والمختبرات... (Ctrl+K)'
+            placeholder: lang === 'en' ? 'Search courses, lessons, key terms, labs... (Ctrl+K)' : 'ابحث في الكورسات والدروس والمصطلحات والمعامل التفاعلية... (Ctrl+K)'
           }),
           h('span', { className: 'spotlight-esc' }, 'ESC')),
         h('div', { className: 'spotlight-list' },
@@ -1155,13 +1976,12 @@
               },
                 h('div', { className: 'spotlight-item-main' },
                   h('span', { className: 'spotlight-item-title' }, lang === 'en' ? it.title : (it.titleAr || it.title)),
-                  h('span', { className: 'spotlight-item-sub', dir: 'rtl' }, lang === 'en' ? it.titleAr : it.title)),
+                  h('span', { className: 'spotlight-item-sub', dir: lang === 'en' ? 'rtl' : 'ltr' }, lang === 'en' ? it.titleAr : it.title)),
                 h('span', { className: 'spotlight-badge badge-' + it.type }, badgeLabel(it.type))))
             : query.trim()
                 ? h('div', { className: 'spotlight-empty' }, lang === 'en' ? 'No matching results found.' : 'لم يتم العثور على نتائج مطابقة.')
-                : h('div', { className: 'spotlight-empty' }, lang === 'en' ? 'Type to search the entire curriculum...' : 'اكتب للبحث في جميع فصول ومصطلحات المنهج...')),
-        h('div', { className: 'spotlight-footer' },
-          h('span', null, lang === 'en' ? '↑↓ navigate · ↵ open · ESC close' : '↑↓ للتنقل · ↵ للفتح · ESC للإغلاق'))));
+                : h('div', { className: 'spotlight-empty' }, lang === 'en' ? 'Type to search courses, lessons, and terms...' : 'اكتب للبحث في جميع الكورسات والدروس والمصطلحات...')),
+        /* spotlight-footer removed */));
   }
 
   /* ============ Floating TTS Audio Player Bar ============ */
@@ -1191,39 +2011,13 @@
       h('div', { className: 'tts-player-icon' }, h(VolumeIcon)),
       h('div', { className: 'tts-player-text' }, tts.text),
       h('div', { className: 'tts-player-controls' },
-        h('button', { className: 'tts-ctrl-btn', onClick: togglePlay, title: tts.paused ? 'استئناف' : 'إيقاف مؤقت' }, tts.paused ? h(PlayIcon) : h(PauseIcon)),
-        h('button', { className: 'tts-ctrl-btn', onClick: () => App.TTS.stop(), title: 'إيقاف تام' }, h(StopIcon)),
-        h('button', { className: 'tts-speed-btn', onClick: nextRate, title: 'سرعة القراءة' }, tts.rate + 'x'),
-        h('button', { className: 'tts-close-btn', onClick: () => App.TTS.stop(), title: 'إغلاق المشغل' }, '×')));
+        h('button', { type: 'button', className: 'tts-ctrl-btn', onClick: togglePlay, title: tts.paused ? 'استئناف القراءة' : 'إيقاف مؤقت' }, tts.paused ? h(PlayIcon) : h(PauseIcon)),
+        h('button', { type: 'button', className: 'tts-ctrl-btn', onClick: () => App.TTS.stop(), title: 'إيقاف القراءة' }, h(StopIcon)),
+        h('button', { type: 'button', className: 'tts-speed-btn', onClick: nextRate, title: 'سرعة القراءة' }, tts.rate + 'x'),
+        h('button', { type: 'button', className: 'tts-close-btn', onClick: () => App.TTS.stop(), title: 'إغلاق المشغّل' }, '×')));
   }
 
-  /* ============ Floating Zen Focus Toolbar ============ */
-  function ZenToolbar({ onExit, onToggleTheme, theme, fontSize, setFontSize, t }) {
-    return h('div', { className: 'zen-bar', role: 'toolbar', 'aria-label': 'Focus Mode Bar' },
-      h('div', { className: 'zen-bar-badge' },
-        h('span', { className: 'zen-dot', 'aria-hidden': 'true' }),
-        h('span', null, t.zenMode)),
-      h('div', { className: 'zen-bar-tools' },
-        h('button', {
-          className: 'zen-tool-btn' + (fontSize === 'big' ? ' on' : ''),
-          onClick: () => setFontSize(fontSize === 'big' ? 'normal' : 'big'),
-          title: fontSize === 'big' ? t.zenFontNormal : t.zenFontBig
-        },
-          h('span', { className: 'zen-tool-txt' }, fontSize === 'big' ? 'A+' : 'A')),
-        h('button', {
-          className: 'zen-tool-btn',
-          onClick: onToggleTheme,
-          title: theme === 'dark' ? 'الوضع النهاري / Light Mode' : 'الوضع الليلي / Dark Mode'
-        }, theme === 'dark' ? h(SunIcon) : h(MoonIcon)),
-        h('button', {
-          className: 'zen-exit-pill',
-          onClick: onExit,
-          title: t.zenEsc
-        },
-          h(CloseIcon),
-          h('span', null, t.zenExit),
-          h('span', { className: 'zen-esc-kbd' }, 'ESC'))));
-  }
+  /* ZenToolbar removed */
 
   /* ============ visual site texts editor modal ============ */
   const TEXT_CATEGORIES = [
@@ -1238,17 +2032,17 @@
         { key: 'loginTab', labelAr: 'تبويب تسجيل الدخول', labelEn: 'Login Tab' },
         { key: 'fullName', labelAr: 'تسمية حقل الاسم', labelEn: 'Full Name Label' },
         { key: 'fullNamePh', labelAr: 'المثال داخل حقل الاسم', labelEn: 'Full Name Placeholder' },
-        { key: 'username', labelAr: 'تسمية حقل اسم الحساب', labelEn: 'Username Label' },
-        { key: 'usernamePh', labelAr: 'المثال داخل حقل اسم الحساب', labelEn: 'Username Placeholder' },
-        { key: 'gmail', labelAr: 'تسمية حقل الجيميل', labelEn: 'Gmail Label' },
+        { key: 'username', labelAr: 'تسمية حقل اسم المستخدم', labelEn: 'Username Label' },
+        { key: 'usernamePh', labelAr: 'المثال داخل حقل اسم المستخدم', labelEn: 'Username Placeholder' },
+        { key: 'gmail', labelAr: 'تسمية حقل البريد الإلكتروني', labelEn: 'Gmail Label' },
         { key: 'phone', labelAr: 'تسمية حقل الهاتف', labelEn: 'Phone Label' },
         { key: 'password', labelAr: 'تسمية حقل كلمة المرور', labelEn: 'Password Label' },
         { key: 'passwordPh', labelAr: 'تنبيه شروط كلمة المرور', labelEn: 'Password Hint' },
         { key: 'confirmPassword', labelAr: 'تسمية تأكيد كلمة المرور', labelEn: 'Confirm Password Label' },
         { key: 'selectCountry', labelAr: 'تسمية اختيار الدولة', labelEn: 'Select Country Label' },
-        { key: 'streamHeading', labelAr: 'سؤال اختيار الشعبة/القسم', labelEn: 'Stream Heading' },
-        { key: 'streamAr', labelAr: 'خيار القسم العربي', labelEn: 'Arabic Option' },
-        { key: 'streamEn', labelAr: 'خيار قسم اللغات', labelEn: 'Languages Option' },
+        { key: 'streamHeading', labelAr: 'سؤال اختيار لغة الدراسة', labelEn: 'Language Preference Heading' },
+        { key: 'streamAr', labelAr: 'رمز اللغة العربية (AR)', labelEn: 'AR Label' },
+        { key: 'streamEn', labelAr: 'رمز اللغة الإنجليزية (EN)', labelEn: 'EN Label' },
         { key: 'btnRegister', labelAr: 'زر إنشاء الحساب', labelEn: 'Create Account Button' },
         { key: 'btnLogin', labelAr: 'زر تسجيل الدخول', labelEn: 'Sign In Button' },
         { key: 'haveAccount', labelAr: 'سؤال لديك حساب بالفعل؟', labelEn: 'Have Account Text' },
@@ -1264,14 +2058,15 @@
       nameEn: 'Brand, Header & Footer',
       keys: [
         { key: 'siteTitle', labelAr: 'عنوان الموقع في المتصفح (Tab Title)', labelEn: 'Browser Tab Title' },
-        { key: 'brand', labelAr: 'اسم المنصة / الأستاذ', labelEn: 'Platform Brand Name' },
-        { key: 'grade', labelAr: 'الصف الدراسي والمرحلة', labelEn: 'Grade & Stage' },
-        { key: 'heroKicker', labelAr: 'شارة رأس الصفحة الرئيسية', labelEn: 'Hero Top Kicker' },
+        { key: 'brand', labelAr: 'اسم المنصة', labelEn: 'Platform Brand Name' },
+        { key: 'copyrightOwner', labelAr: 'اسم مالك حقوق النشر', labelEn: 'Copyright Owner' },
+        { key: 'coursesNav', labelAr: 'اسم رابط الكورسات في الهيدر', labelEn: 'Courses Navbar Label' },
+        { key: 'heroTitle', labelAr: 'العنوان الرئيسي في الصفحة الرئيسية', labelEn: 'Hero Main Title' },
         { key: 'heroSub', labelAr: 'الوصف الرئيسي للمنصة', labelEn: 'Hero Description', isLong: true },
-        { key: 'heroCta', labelAr: 'زر بدء التعلم الرئيسي', labelEn: 'Hero Start Button' },
+        { key: 'heroCta', labelAr: 'زر استكشاف الكورسات الرئيسي', labelEn: 'Hero CTA Button' },
         { key: 'manifesto', labelAr: 'فقرة رسالة المنصة وطريقة التعلم', labelEn: 'Platform Manifesto', isLong: true },
-        { key: 'chaptersKicker', labelAr: 'شارة قسم الفصول', labelEn: 'Chapters Section Kicker' },
-        { key: 'chaptersTitle', labelAr: 'عنوان قسم الفصول', labelEn: 'Chapters Section Title' },
+        { key: 'coursesKicker', labelAr: 'شارة قسم الكورسات', labelEn: 'Courses Section Kicker' },
+        { key: 'coursesTitle', labelAr: 'عنوان قسم الكورسات', labelEn: 'Courses Section Title' },
         { key: 'footerRights', labelAr: 'حقوق النشر في الفوتر', labelEn: 'Footer Rights Note' }
       ]
     },
@@ -1328,223 +2123,30 @@
     }
   ];
 
-  function SiteTextEditor({ onClose, onUpdated }) {
-    const [editLang, setEditLang] = useState('ar');
-    const [activeTab, setActiveTab] = useState('all');
-    const [searchQ, setSearchQ] = useState('');
-    const [draft, setDraft] = useState(() => ({ ...(App.STR[editLang] || {}) }));
-    const [saving, setSaving] = useState(false);
-    const [statusMsg, setStatusMsg] = useState('');
-    const [statusType, setStatusType] = useState('ok');
-
-    useEffect(() => {
-      setDraft({ ...(App.STR[editLang] || {}) });
-      setStatusMsg('');
-    }, [editLang]);
-
-    const handleFieldChange = (key, val) => {
-      setDraft(prev => ({ ...prev, [key]: val }));
-      setStatusMsg('');
-    };
-
-    const handleSave = async () => {
-      setSaving(true);
-      setStatusMsg('');
-      const res = await App.saveSiteTexts({ [editLang]: draft });
-      setSaving(false);
-      if (res && res.ok) {
-        setStatusType('ok');
-        setStatusMsg(editLang === 'ar' ? 'تم حفظ التعديلات بنجاح وتحديث الموقع فورًا!' : 'Changes saved successfully and site updated!');
-        if (onUpdated) onUpdated();
-      } else {
-        setStatusType('err');
-        setStatusMsg(editLang === 'ar' ? 'حدث خطأ أثناء حفظ التعديلات' : 'Error saving changes');
-      }
-    };
-
-    const getVisibleFields = () => {
-      let fields = [];
-      if (activeTab === 'all') {
-        TEXT_CATEGORIES.forEach(cat => {
-          cat.keys.forEach(k => {
-            if (!fields.some(f => f.key === k.key)) fields.push({ ...k, catName: editLang === 'ar' ? cat.nameAr : cat.nameEn });
-          });
-        });
-      } else {
-        const cat = TEXT_CATEGORIES.find(c => c.id === activeTab);
-        if (cat) {
-          fields = cat.keys.map(k => ({ ...k, catName: editLang === 'ar' ? cat.nameAr : cat.nameEn }));
-        }
-      }
-
-      if (searchQ.trim()) {
-        const q = searchQ.trim().toLowerCase();
-        fields = fields.filter(f => {
-          const lAr = (f.labelAr || '').toLowerCase();
-          const lEn = (f.labelEn || '').toLowerCase();
-          const kName = f.key.toLowerCase();
-          const val = String(draft[f.key] || '').toLowerCase();
-          return lAr.includes(q) || lEn.includes(q) || kName.includes(q) || val.includes(q);
-        });
-      }
-      return fields;
-    };
-
-    const visibleFields = getVisibleFields();
-
-    return h('div', { className: 'ste-overlay', onClick: e => { if (e.target === e.currentTarget) onClose(); }, dir: editLang === 'ar' ? 'rtl' : 'ltr' },
-      h('div', { className: 'ste-modal' },
-        h('div', { className: 'ste-head' },
-          h('div', { className: 'ste-title-group' },
-            h('div', { className: 'ste-title' },
-              h('svg', { width: 20, height: 20, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
-                h('path', { d: 'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7' }),
-                h('path', { d: 'M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z' })),
-              h('span', null, editLang === 'ar' ? 'محرر نصوص الموقع' : 'Site Content Editor')
-            ),
-            h('p', { className: 'ste-sub' },
-              editLang === 'ar'
-                ? 'غيّر أي نص أو كلمة في الموقع هنا مباشرة واضغط حفظ بدون البحث في أي كود.'
-                : 'Edit any text or label on the website directly and click save without touching code.'
-            )
-          ),
-          h('div', { className: 'ste-head-actions' },
-            h('div', { className: 'ste-lang-switch' },
-              h('button', {
-                type: 'button',
-                className: 'ste-lang-btn' + (editLang === 'ar' ? ' active' : ''),
-                onClick: () => setEditLang('ar')
-              }, 'العربية (AR)'),
-              h('button', {
-                type: 'button',
-                className: 'ste-lang-btn' + (editLang === 'en' ? ' active' : ''),
-                onClick: () => setEditLang('en')
-              }, 'English (EN)')
-            ),
-            h('button', {
-              type: 'button',
-              className: 'ste-close-btn',
-              onClick: onClose,
-              title: editLang === 'ar' ? 'إغلاق' : 'Close'
-            },
-              h('svg', { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
-                h('line', { x1: 18, y1: 6, x2: 6, y2: 18 }),
-                h('line', { x1: 6, y1: 6, x2: 18, y2: 18 })))
-          )
-        ),
-
-        h('div', { className: 'ste-toolbar' },
-          h('div', { className: 'ste-search-wrap' },
-            h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
-              h('circle', { cx: 11, cy: 11, r: 8 }),
-              h('line', { x1: 21, y1: 21, x2: 16.65, y2: 16.65 })),
-            h('input', {
-              type: 'text',
-              className: 'ste-search-input',
-              placeholder: editLang === 'ar' ? 'ابحث عن أي نص أو كلمة لتعديلها فورًا...' : 'Search any text or label to edit instantly...',
-              value: searchQ,
-              onChange: e => setSearchQ(e.target.value)
-            })
-          ),
-          h('div', { className: 'ste-tabs' },
-            h('button', {
-              type: 'button',
-              className: 'ste-tab' + (activeTab === 'all' ? ' active' : ''),
-              onClick: () => setActiveTab('all')
-            }, editLang === 'ar' ? 'الكل' : 'All'),
-            TEXT_CATEGORIES.map(c =>
-              h('button', {
-                key: c.id,
-                type: 'button',
-                className: 'ste-tab' + (activeTab === c.id ? ' active' : ''),
-                onClick: () => setActiveTab(c.id)
-              }, editLang === 'ar' ? c.nameAr : c.nameEn)
-            )
-          )
-        ),
-
-        h('div', { className: 'ste-body' },
-          visibleFields.length === 0
-            ? h('div', { className: 'ste-empty' }, editLang === 'ar' ? 'لا توجد نصوص مطابقة للبحث' : 'No matching text fields found')
-            : visibleFields.map(f => {
-                const val = draft[f.key] != null ? draft[f.key] : '';
-                return h('div', { className: 'ste-field', key: f.key },
-                  h('div', { className: 'ste-field-meta' },
-                    h('label', { className: 'ste-field-label' }, editLang === 'ar' ? f.labelAr : f.labelEn),
-                    h('span', { className: 'ste-field-key' }, f.key),
-                    activeTab === 'all' ? h('span', { className: 'ste-field-cat' }, f.catName) : null
-                  ),
-                  f.isLong
-                    ? h('textarea', {
-                        className: 'ste-input ste-textarea',
-                        rows: 3,
-                        value: val,
-                        onChange: e => handleFieldChange(f.key, e.target.value)
-                      })
-                    : h('input', {
-                        type: 'text',
-                        className: 'ste-input',
-                        value: val,
-                        onChange: e => handleFieldChange(f.key, e.target.value)
-                      })
-                );
-              })
-        ),
-
-        h('div', { className: 'ste-foot' },
-          h('div', { className: 'ste-status-wrap' },
-            statusMsg
-              ? h('div', { className: 'ste-status-msg ' + statusType },
-                  h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
-                    h('polyline', { points: '20 6 9 17 4 12' })),
-                  h('span', null, statusMsg)
-                )
-              : h('span', { className: 'ste-hint' },
-                  editLang === 'ar'
-                    ? 'يتم حفظ التعديلات فورًا في ملف data/texts.json وتطبيقها على الموقع مباشرة.'
-                    : 'Changes are written to data/texts.json and applied live.'
-                )
-          ),
-          h('div', { className: 'ste-foot-actions' },
-            h('button', {
-              type: 'button',
-              className: 'ste-cancel-btn',
-              onClick: onClose
-            }, editLang === 'ar' ? 'إغلاق' : 'Close'),
-            h('button', {
-              type: 'button',
-              className: 'solid ste-save-btn',
-              disabled: saving,
-              onClick: handleSave
-            }, saving ? (editLang === 'ar' ? 'جارٍ الحفظ...' : 'Saving...') : (editLang === 'ar' ? 'حفظ وتطبيق التعديلات' : 'Save Changes'))
-          )
-        )
-      )
-    );
-  }
+  /* SiteTextEditor removed */
 
   /* ============ root ============ */
   function parseRoute() {
     const hash = location.hash.replace(/^#/, '') || '/';
     let m;
     if ((m = hash.match(/^\/lesson\/(\d-\d)$/))) return { name: 'lesson', id: m[1], key: hash, chapter: +m[1][0] };
-    if ((m = hash.match(/^\/chapter\/(\d)$/))) return { name: 'home', target: 'chapter-' + m[1], key: 'home', chapter: +m[1] };
-    if (hash === '/chapters') return { name: 'home', target: 'chapters', key: 'home' };
+    if ((m = hash.match(/^\/course\/([a-z0-9_-]+)$/i))) return { name: 'course', courseId: m[1].toLowerCase(), key: 'course-' + m[1].toLowerCase() };
+    if ((m = hash.match(/^\/chapter\/(\d)$/))) return { name: 'course', courseId: 'baccalaureate', targetChapter: +m[1], key: 'course-baccalaureate', chapter: +m[1] };
+    if (hash === '/courses' || hash === '/chapters') return { name: 'home', target: 'courses', key: 'home' };
     return { name: 'home', key: 'home' };
   }
 
   function Root() {
     const store = useStore();
-    const lang = store.lang || null;
-    const theme = store.theme || 'light';
-    const [zen, setZen] = useState(false);
-    const [zenFont, setZenFont] = useState('normal');
+    const authUser = App.useAuth();
+    const currentLang = store.lang || (authUser && authUser.stream) || 'ar';
     const [searchOpen, setSearchOpen] = useState(false);
     const [route, setRoute] = useState(parseRoute());
     const [meta, setMeta] = useState(null);
     const [status, setStatus] = useState(null);
-    const [textEditorOpen, setTextEditorOpen] = useState(false);
     const [textVersion, setTextVersion] = useState(0);
+
+    const ctx = useMemo(() => ({ lang: currentLang, t: STR[currentLang], dir: currentLang === 'ar' ? 'rtl' : 'ltr' }), [currentLang, textVersion]);
 
     useEffect(() => { App.initSmoothScroll(); }, []);
     useEffect(() => {
@@ -1555,120 +2157,71 @@
       window.addEventListener('hashchange', f);
       return () => window.removeEventListener('hashchange', f);
     }, []);
-    useEffect(() => { getJSON('/api/meta').then(setMeta).catch(() => {}); getJSON('/api/status').then(setStatus).catch(() => {}); }, []);
     useEffect(() => {
-      const activeL = lang || 'ar';
-      document.documentElement.lang = activeL;
-      document.documentElement.dir = activeL === 'ar' ? 'rtl' : 'ltr';
-      const curT = STR[activeL];
-      document.title = (curT && (curT.siteTitle || curT.brand)) || 'Maged Aboraya';
-    }, [lang, textVersion]);
+      getJSON('/api/meta').then(setMeta).catch(() => {});
+      getJSON('/api/status').then(setStatus).catch(() => {});
+    }, []);
     useEffect(() => {
-      document.documentElement.dataset.theme = theme;
-    }, [theme]);
-    useEffect(() => {
-      document.documentElement.dataset.zen = zen ? 'true' : 'false';
-      document.documentElement.dataset.zenFont = zenFont;
-    }, [zen, zenFont]);
+      if (!authUser) return;
+      document.documentElement.lang = currentLang;
+      document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+      const curT = STR[currentLang];
+      document.title = (curT && (curT.siteTitle || curT.brand)) || 'Syntax';
+    }, [currentLang, textVersion, authUser]);
 
-    // Exit Zen if navigating away from lesson
-    useEffect(() => {
-      if (route.name !== 'lesson') setZen(false);
-    }, [route.name]);
-
-    // Shortcuts: Z to toggle Zen, Escape to exit Zen, Ctrl+K for search, Ctrl+Shift+E for site texts editor
+    // Shortcuts: Ctrl+K for search
     useEffect(() => {
       const onKeyDown = e => {
-        if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'e' || e.key === 'E')) {
-          e.preventDefault();
-          setTextEditorOpen(prev => !prev);
-          return;
-        }
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
           e.preventDefault();
           setSearchOpen(prev => !prev);
-          return;
-        }
-        const tag = (e.target && e.target.tagName) || '';
-        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-        if (e.key === 'Escape' && zen) {
-          e.preventDefault();
-          setZen(false);
-        } else if ((e.key === 'z' || e.key === 'Z') && !e.ctrlKey && !e.metaKey && !e.altKey) {
-          if (route.name === 'lesson') {
-            e.preventDefault();
-            setZen(prev => !prev);
-          }
         }
       };
       window.addEventListener('keydown', onKeyDown);
       return () => window.removeEventListener('keydown', onKeyDown);
-    }, [zen, route.name]);
+    }, []);
 
     useEffect(() => {
-      if (!lang) return;
+      if (!authUser) return;
       App.TTS.stop();
-      if (route.name === 'lesson' || !route.target) {
+      if (route.name === 'lesson' || (route.name === 'course' && !route.targetChapter) || (route.name === 'home' && !route.target)) {
         const l = getLenis();
         if (l) l.scrollTo(0, { immediate: true }); else window.scrollTo(0, 0);
       }
       const el = document.getElementById('main');
-      if (el && !App.reduced) gsap.fromTo(el, { opacity: 0 }, { opacity: 1, duration: .6, ease: 'power2.out', clearProps: 'opacity' });
+      if (el && !App.reduced) gsap.fromTo(el, { opacity: 0 }, { opacity: 1, duration: .45, ease: 'power2.out', clearProps: 'opacity' });
       return () => killAll();
-    }, [route.key, lang]);
-
-    const authUser = App.useAuth();
+    }, [route.key, currentLang, authUser]);
 
     if (!authUser) {
-      return h(React.Fragment, null,
-        h(AuthPortal, {
-          onAuthSuccess: (u) => {
-            Store.loadUser(u.username);
-            Store.set({ lang: u.stream || 'ar' });
-          },
-          onOpenTextsEditor: () => setTextEditorOpen(true)
-        }),
-        textEditorOpen ? h(SiteTextEditor, { onClose: () => setTextEditorOpen(false), onUpdated: () => setTextVersion(v => v + 1) }) : null
-      );
+      return h(AuthPortal, {
+        onAuthSuccess: (u) => {
+          Store.loadUser(u.username);
+          Store.set({ lang: u.stream || 'ar' });
+        }
+      });
     }
 
-    const currentLang = lang || (authUser && authUser.stream) || 'ar';
-    const ctx = useMemo(() => ({ lang: currentLang, t: STR[currentLang], dir: currentLang === 'ar' ? 'rtl' : 'ltr' }), [currentLang, textVersion]);
-    const switchLang = () => Store.set({ lang: currentLang === 'ar' ? 'en' : 'ar' });
-    const toggleTheme = () => Store.set({ theme: theme === 'dark' ? 'light' : 'dark' });
-    const toggleZen = () => setZen(prev => !prev);
+    const setLangDirectly = (newLang) => Store.set({ lang: newLang });
 
     return h(LangCtx.Provider, { value: ctx },
-      h('a', { className: 'skip', href: '#main' }, ctx.lang === 'ar' ? 'تخطَّ إلى المحتوى' : 'Skip to content'),
+      h('a', { className: 'skip', href: '#main' }, ctx.lang === 'ar' ? 'تخطَّ إلى المحتوى الرئيسي' : 'Skip to content'),
       h(Header, {
         meta,
-        onSwitch: switchLang,
+        onSetLang: setLangDirectly,
         route,
         onOpenSearch: () => setSearchOpen(true),
-        theme,
-        onToggleTheme: toggleTheme,
-        zen,
-        onToggleZen: toggleZen,
         authUser,
         onLogout: () => App.Auth.logout()
       }),
-      zen && route.name === 'lesson'
-        ? h(ZenToolbar, {
-            onExit: () => setZen(false),
-            onToggleTheme: toggleTheme,
-            theme,
-            fontSize: zenFont,
-            setFontSize: setZenFont,
-            t: ctx.t
-          })
-        : null,
       route.name === 'lesson'
-        ? h(Lesson, { key: route.id + lang, id: route.id, meta, status, zen, onToggleZen: toggleZen })
-        : h(Home, { key: 'home' + lang, meta, status, route }),
-      h(Footer, { onOpenTextsEditor: () => setTextEditorOpen(true) }),
-      h(SpotlightSearch, { open: searchOpen, onClose: () => setSearchOpen(false), lang }),
-      h(TTSPlayerBar),
-      textEditorOpen ? h(SiteTextEditor, { onClose: () => setTextEditorOpen(false), onUpdated: () => setTextVersion(v => v + 1) }) : null
+        ? h(Lesson, { key: route.id + currentLang, id: route.id, meta, status })
+        : route.name === 'course'
+          ? h(CourseView, { key: route.key + currentLang, courseId: route.courseId, targetChapter: route.targetChapter, meta, status })
+          : h(Home, { key: 'home' + currentLang, meta, status, route }),
+      h(Footer),
+      h(SpotlightSearch, { open: searchOpen, onClose: () => setSearchOpen(false), lang: currentLang }),
+      h(TTSPlayerBar)
     );
   }
 

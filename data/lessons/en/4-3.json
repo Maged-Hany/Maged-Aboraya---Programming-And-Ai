@@ -51,13 +51,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/jakob_nielsen.jpg",
+              "img": "./assets/img/lessons/jakob_nielsen.jpg",
               "badge": "Pioneer",
               "title": "Jakob Nielsen (Usability Guru)",
               "caption": "Co-founder of Nielsen Norman Group and creator of the 10 usability heuristics for interface evaluation."
             },
             {
-              "img": "/assets/img/lessons/eye_tracking.jpg",
+              "img": "./assets/img/lessons/eye_tracking.jpg",
               "badge": "Testing Hardware",
               "title": "Eye-Tracking Usability Analyzer",
               "caption": "Specialized hardware sensor tracking exactly where a user looks while scanning a website."
@@ -207,7 +207,7 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/ab_testing.jpg",
+              "img": "./assets/img/lessons/ab_testing.jpg",
               "badge": "Analytics Tool",
               "title": "Visual Engagement & Analytics Tracking",
               "caption": "Data visualizations helping teams measure visitor behavior and compare A/B test results."

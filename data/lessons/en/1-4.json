@@ -47,13 +47,13 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/facial_rec.jpg",
+              "img": "./assets/img/lessons/facial_rec.jpg",
               "badge": "Biometrics",
               "title": "Facial Recognition System",
               "caption": "AI software scanning facial landmarks; requires diverse data to prevent algorithmic bias."
             },
             {
-              "img": "/assets/img/lessons/cctv_camera.jpg",
+              "img": "./assets/img/lessons/cctv_camera.jpg",
               "badge": "Data Privacy",
               "title": "Smart Surveillance & Privacy",
               "caption": "Modern data protection laws balance public safety with strict individual privacy rights."
@@ -126,7 +126,7 @@
           "type": "figures",
           "items": [
             {
-              "img": "/assets/img/lessons/copyright_law.jpg",
+              "img": "./assets/img/lessons/copyright_law.jpg",
               "badge": "Law & Ethics",
               "title": "Legal Accountability & Copyright",
               "caption": "Ethical frameworks and laws protect human creators and define clear responsibility for AI actions."

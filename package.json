@@ -1,13 +1,12 @@
 {
-  "name": "bac2-programming-ai",
-  "version": "1.0.0",
-  "description": "Interactive study site for Programming & AI, Grade 11 Baccalaureate (Egypt)",
+  "name": "syntax-platform",
+  "version": "2.0.0",
+  "description": "Syntax — Interactive programming, web engineering, cybersecurity, and AI learning platform",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "author": "Maged Aboraya",
+  "author": "AborayaTechnologies",
   "license": "UNLICENSED",
   "private": true
 }
-

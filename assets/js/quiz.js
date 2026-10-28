@@ -32,14 +32,26 @@
     const [checked, setChecked] = useState(false);
     const rights = useMemo(() => q.type === 'match' ? shuffled(q.pairs.map(p => p[1])) : [], [q]);
 
-    const ready = q.type === 'match' ? Object.keys(pairs).length === q.pairs.length : sel !== null;
+    const arRightMap = useMemo(() => {
+      const map = {};
+      if (bilingual && q.type === 'match' && arQ && arQ.pairs) {
+        q.pairs.forEach((p, idx) => {
+          if (arQ.pairs[idx] && arQ.pairs[idx][1]) {
+            map[p[1]] = arQ.pairs[idx][1];
+          }
+        });
+      }
+      return map;
+    }, [q, arQ, bilingual]);
+
+    const ready = q.type === 'match' ? q.pairs.every((_, idx) => !!pairs[idx]) : sel !== null;
     const isCorrect = q.type === 'mcq' ? sel === q.answer : q.type === 'tf' ? sel === q.answer : q.pairs.every((p, i) => pairs[i] === p[1]);
 
     const optBtn = (key, label, arLabel, value, correctValue) => {
       let cls = 'opt';
       if (sel === value) cls += ' sel';
       if (checked) { if (value === correctValue) cls += ' right'; else if (sel === value) cls += ' wrong'; }
-      return h('button', { key, className: cls, disabled: checked, onClick: () => setSel(value) },
+      return h('button', { type: 'button', key, className: cls, disabled: checked, onClick: () => setSel(value) },
         h('span', { className: 'opt-k' }, typeof value === 'number' ? 'ABCD'[value] : ''),
         h('div', { style: { display: 'flex', flexDirection: 'column', gap: '2px', width: '100%' } },
           h('span', null, label),
@@ -54,9 +66,9 @@
       q.type === 'mcq' ? h('div', { className: 'opts' }, q.options.map((o, i) => optBtn(i, o, arQ && arQ.options && arQ.options[i], i, q.answer))) : null,
       q.type === 'tf' ? h('div', { className: 'opts two' },
         optBtn('t', bilingual ? 'True · صح' : t.tTrue, null, true, q.answer),
-        optBtn('f', bilingual ? 'False · خطأ' : t.tFalse, null, false, q.answer)) : null,
+        optBtn('f', bilingual ? 'False · غلط' : t.tFalse, null, false, q.answer)) : null,
       q.type === 'match' ? h('div', { className: 'match' },
-        h('p', { className: 'q-hint' }, t.matchHint + (bilingual ? ' (طابق كل عنصر بما يناسبه)' : '')),
+        h('p', { className: 'q-hint' }, t.matchHint + (bilingual ? ' (وصّل كل عنصر باللي يناسبه)' : '')),
         q.pairs.map((p, i) => {
           const good = checked && pairs[i] === p[1];
           const bad = checked && pairs[i] !== p[1];
@@ -66,17 +78,18 @@
               h('span', null, p[0]),
               bilingual && arP ? h('span', { className: 'ar-opt', dir: 'rtl' }, arP[0]) : null),
             h('select', { disabled: checked, value: pairs[i] || '', onChange: e => setPairs({ ...pairs, [i]: e.target.value }) },
-              h('option', { value: '' }, t.choose), rights.map((r, k) => h('option', { key: k, value: r }, r))),
-            bad ? h('span', { className: 'm-fix' }, p[1]) : null);
+              h('option', { value: '' }, t.choose),
+              rights.map((r, k) => h('option', { key: k, value: r }, r + (bilingual && arRightMap[r] ? ' — ' + arRightMap[r] : '')))),
+            bad ? h('span', { className: 'm-fix' }, p[1] + (bilingual && arRightMap[p[1]] ? ' (' + arRightMap[p[1]] + ')' : '')) : null);
         })) : null,
       checked ? h('div', { className: 'q-fb ' + (isCorrect ? 'ok' : 'no'), role: 'status' },
-        h('b', null, isCorrect ? (bilingual ? 'Correct! إجابة صحيحة' : t.correct) : (bilingual ? 'Not quite · إجابة غير صحيحة' : t.wrong)),
+        h('b', null, isCorrect ? (bilingual ? 'Correct! · إجابة صح ومظبوطة!' : t.correct) : (bilingual ? 'Not quite · مش مظبوطة، راجع النقطة دي' : t.wrong)),
         h('p', null, h('em', null, t.explanation + ': '), q.explain),
         bilingual && arQ && arQ.explain ? h('p', { className: 'ar-sub', style: { margin: '4px 0 0', background: 'rgba(0,0,0,0.04)' }, dir: 'rtl' }, arQ.explain) : null) : null,
       h('div', { className: 'q-actions' },
         !checked
-          ? h('button', { className: 'solid', disabled: !ready, onClick: () => setChecked(true) }, t.check)
-          : h('button', { className: 'solid', onClick: () => onResult(isCorrect) }, isLast ? t.seeResult : t.next)));
+          ? h('button', { type: 'button', className: 'solid', disabled: !ready, onClick: () => setChecked(true) }, t.check)
+          : h('button', { type: 'button', className: 'solid', onClick: () => onResult(isCorrect) }, isLast ? t.seeResult : t.next)));
   }
 
   function Quiz({ lesson, arLesson, bilingual, accent, nextLesson, best, onDone }) {
@@ -116,7 +129,7 @@
           h('h3', null, pct >= .8 ? t.msgHigh : pct >= .5 ? t.msgMid : t.msgLow),
           h('p', null, `${t.best}: ${Math.max(best || 0, score)} / ${total}`),
           h('div', { className: 'res-actions' },
-            h('button', { className: 'ghost', onClick: retry }, t.retry),
+            h('button', { type: 'button', className: 'ghost', onClick: retry }, t.retry),
             nextLesson ? h('a', { className: 'solid', href: '#/lesson/' + nextLesson }, t.nextLesson) : null,
             h('a', { className: 'ghost', href: '#/chapters' }, t.backChapter))));
     }
