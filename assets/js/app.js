@@ -107,11 +107,11 @@
 
   const EyeIcon = ({ off }) => off
     ? h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
-        h('path', { d: 'M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24' }),
-        h('line', { x1: 1, y1: 1, x2: 23, y2: 23 }))
+      h('path', { d: 'M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24' }),
+      h('line', { x1: 1, y1: 1, x2: 23, y2: 23 }))
     : h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
-        h('path', { d: 'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z' }),
-        h('circle', { cx: 12, cy: 12, r: 3 }));
+      h('path', { d: 'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z' }),
+      h('circle', { cx: 12, cy: 12, r: 3 }));
 
   /* ============ Courses Catalog Definition ============ */
   const COURSES_DATA = [
@@ -141,7 +141,7 @@
         en: 'Programming & AI Course for 2nd Secondary Baccalaureate'
       },
       blurb: {
-        ar: 'كورس البرمجة والذكاء الاصطناعي للصف الثاني الثانوي - البكالوريا. شرح مبسط لكل درس، ملازم الحصة والواجب، واجب إلكتروني وحله بالتفصيل، وكويز إلكتروني بوقت بعد كل حصة.',
+        ar: 'كورس البرمجة والذكاء الاصطناعي للصف الثاني الثانوي - البكالوريا. شرح مبسط لكل درس، ملازم الحصة والواجب، واجب إلكتروني وحله بالتفصيل، وكويز إلكتروني ',
         en: 'Complete Programming & Artificial Intelligence curriculum for 2nd Secondary Baccalaureate students with video explanations, study handouts, homework solutions, and timed quizzes.'
       },
       highlights: {
@@ -220,6 +220,9 @@
   }
 
   /* ============ auth portal (register + login) ============ */
+  /* Register / login are paused until the database is connected. Set to false to re-enable. */
+  const AUTH_PAUSED = true;
+
   function AuthPortal({ onAuthSuccess, onOpenTextsEditor }) {
     const [tab, setTab] = useState('register');
     const [lang, setLang] = useState('ar');
@@ -250,6 +253,7 @@
 
     const handleRegister = async (e) => {
       e.preventDefault();
+      if (AUTH_PAUSED) return;
       setError('');
       setSuccessMsg('');
 
@@ -306,6 +310,7 @@
 
     const handleLogin = async (e) => {
       e.preventDefault();
+      if (AUTH_PAUSED) return;
       setError('');
       setSuccessMsg('');
 
@@ -358,7 +363,14 @@
           h('span', null, successMsg)
         ) : null,
 
+        AUTH_PAUSED ? h('div', { className: 'auth-alert paused' },
+          h('span', null, lang === 'ar'
+            ? 'إنشاء الحساب وتسجيل الدخول متوقفين حاليًا لحد ما نجهّز قاعدة البيانات. تقدر تتصفح كزائر دلوقتي.'
+            : 'Sign up and sign in are paused until the database is ready. You can browse as a guest for now.')
+        ) : null,
+
         tab === 'register' ? h('form', { className: 'auth-form', onSubmit: handleRegister },
+          h('fieldset', { className: 'auth-fieldset', disabled: AUTH_PAUSED },
           h('div', { className: 'form-group' },
             h('label', null, t.fullName),
             h('input', {
@@ -461,12 +473,14 @@
             )
           ),
           /* Stream radio buttons removed - default to Arabic */
-          h('button', { type: 'submit', className: 'solid auth-submit-btn', disabled: loading },
+          h('button', { type: 'submit', className: 'solid auth-submit-btn', disabled: loading || AUTH_PAUSED },
             loading ? (lang === 'ar' ? 'ثواني بنعمل الحساب...' : 'Creating Account...') : t.btnRegister),
           h('p', { className: 'auth-switch-note' },
             t.haveAccount, ' ',
             h('button', { type: 'button', className: 'auth-link-btn', onClick: () => { setTab('login'); setError(''); } }, t.goToLogin))
+          )
         ) : h('form', { className: 'auth-form', onSubmit: handleLogin },
+          h('fieldset', { className: 'auth-fieldset', disabled: AUTH_PAUSED },
           h('div', { className: 'form-group' },
             h('label', null, lang === 'ar' ? 'اسم المستخدم أو إيميلك (Gmail)' : 'Username or Gmail'),
             h('div', { className: 'input-with-icon' },
@@ -509,6 +523,7 @@
           h('p', { className: 'auth-switch-note' },
             t.noAccount, ' ',
             h('button', { type: 'button', className: 'auth-link-btn', onClick: () => { setTab('register'); setError(''); } }, t.goToRegister))
+          )
         ),
         h('div', { className: 'auth-guest-box' },
           h('div', { className: 'auth-guest-divider' },
@@ -529,7 +544,7 @@
               h('span', { className: 'ag-btn-title' }, t.guestSignIn || (lang === 'ar' ? 'المتابعة كزائر' : 'Continue as Guest')),
               h('span', { className: 'ag-btn-desc' }, t.guestSubtitle || (lang === 'ar' ? 'تصفّح الكورسات والدروس مباشرة دون حفظ التقدّم' : 'Browse courses without saving progress'))
             ),
-            h('span', { className: 'ag-badge' }, t.guestNoSavePill || (lang === 'ar' ? 'وضع مؤقت' : 'No Save'))
+            null
           )
         ),
         h('div', { className: 'auth-foot' },
@@ -572,49 +587,22 @@
         type: 'button',
         className: 'student-profile-btn' + (open ? ' is-active' : '') + (isGuest ? ' is-guest' : ''),
         onClick: () => setOpen(!open),
-        title: isGuest ? (t.guestBadge || (lang === 'ar' ? 'وضع الزائر المؤقت' : 'Guest Mode')) : (t.accountInfo || (lang === 'ar' ? 'بيانات الحساب' : 'Account Profile'))
+        title: t.accountInfo || (lang === 'ar' ? 'بيانات الحساب' : 'Account Profile')
       },
         h('span', { className: 'student-avatar' + (isGuest ? ' guest-avatar' : '') },
           isGuest
             ? h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' },
-                h('path', { d: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2' }),
-                h('circle', { cx: 12, cy: 7, r: 4 }))
+              h('path', { d: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2' }),
+              h('circle', { cx: 12, cy: 7, r: 4 }))
             : initial
         ),
-        h('span', { className: 'student-name-pill' }, displayName),
-        isGuest ? h('span', { className: 'guest-pill-tag' }, t.guestNoSavePill || (lang === 'ar' ? 'وضع مؤقت' : 'No Save')) : null,
-        h('span', { className: 'student-status-dot' + (isGuest ? ' is-guest' : '') })
+        /* Guest: profile icon only (no name / "temporary" tag) */
+        isGuest ? null : h('span', { className: 'student-name-pill' }, displayName),
+        isGuest ? null : h('span', { className: 'student-status-dot' })
       ),
       open ? h('div', { className: 'student-menu-card' + (isGuest ? ' is-guest' : ''), dir: lang === 'ar' ? 'rtl' : 'ltr' },
-        isGuest ? h('div', { className: 'guest-menu-banner' },
-          h('div', { className: 'guest-banner-head' },
-            h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' },
-              h('circle', { cx: 12, cy: 12, r: 10 }),
-              h('line', { x1: 12, y1: 8, x2: 12, y2: 12 }),
-              h('line', { x1: 12, y1: 16, x2: 12.01, y2: 16 })),
-            h('strong', null, t.guestBadge || (lang === 'ar' ? 'وضع الزائر المؤقت' : 'Temporary Guest Mode'))
-          ),
-          h('p', { className: 'guest-banner-text' },
-            t.guestTempWarning || (lang === 'ar'
-              ? 'أنت تتصفّح المنصة حاليًا في وضع الزائر المؤقت. لن يتم حفظ الدروس المكتملة أو نتائج الاختبارات بعد إغلاق المتصفح.'
-              : 'Browsing as a temporary guest. Completed lessons and quiz scores are not saved after closing or leaving.')
-          ),
-          h('button', {
-            type: 'button',
-            className: 'guest-register-btn',
-            onClick: () => {
-              setOpen(false);
-              onLogout();
-            }
-          },
-            h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
-              h('path', { d: 'M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2' }),
-              h('circle', { cx: 8.5, cy: 7, r: 4 }),
-              h('line', { x1: 20, y1: 8, x2: 20, y2: 14 }),
-              h('line', { x1: 23, y1: 11, x2: 17, y2: 11 })),
-            h('span', null, t.createAccountToSave || (lang === 'ar' ? 'إنشاء حساب لحفظ تقدّمك' : 'Create Account to Save Progress'))
-          )
-        ) : h('div', { className: 'smc-head' },
+        /* Guest: no warning banner, only language + exit button */
+        isGuest ? null : h('div', { className: 'smc-head' },
           h('div', { className: 'smc-avatar-big' }, initial),
           h('div', { className: 'smc-info' },
             h('div', { className: 'smc-name' }, user.name),
@@ -631,10 +619,10 @@
             h('span', null, lang === 'ar' ? 'اللغة:' : 'Language:'),
             h('b', { dir: 'ltr' }, lang === 'en' ? 'EN' : 'AR')
           ),
-          h('div', { className: 'smc-row' },
-            h('span', null, isGuest ? (lang === 'ar' ? 'دروس الجلسة الحالية:' : 'Session Lessons:') : (t.coursesCompleted ? t.coursesCompleted + ':' : (lang === 'ar' ? 'الدروس المكتملة:' : 'Lessons Done:'))),
-            h('b', { dir: 'ltr' }, `${doneLessons} / ${totalLessons}` + (isGuest ? (lang === 'ar' ? ' (مؤقت)' : ' (temp)') : ''))
-          )
+          !isGuest ? h('div', { className: 'smc-row' },
+            h('span', null, t.coursesCompleted ? t.coursesCompleted + ':' : (lang === 'ar' ? 'الدروس المكتملة:' : 'Lessons Done:')),
+            h('b', { dir: 'ltr' }, `${doneLessons} / ${totalLessons}`)
+          ) : null
         ),
         h('button', {
           type: 'button',
@@ -700,7 +688,7 @@
             h('span', { className: 'nav-t' }, t.coursesNav || (lang === 'ar' ? 'كورسات' : 'Courses')))),
 
         h('div', { className: 'hdr-r' },
-          
+
           authUser ? h(StudentProfileMenu, { user: authUser, onLogout, lang, totalLessons: total, doneLessons: done }) : null,
           h('button', {
             type: 'button',
@@ -802,7 +790,7 @@
               ))),
 
           h('div', { className: 'nd-foot' },
-            
+
             h('span', { className: 'nd-copy', dir: 'ltr' }, '© ' + new Date().getFullYear() + ' ' + (t.copyrightOwner || 'AborayaTechnologies')))
         )
       ) : null
@@ -1006,9 +994,9 @@
     const toggleFullscreen = () => {
       if (!containerRef.current) return;
       if (!document.fullscreenElement) {
-        containerRef.current.requestFullscreen().catch(() => {});
+        containerRef.current.requestFullscreen().catch(() => { });
       } else {
-        document.exitFullscreen().catch(() => {});
+        document.exitFullscreen().catch(() => { });
       }
     };
 
@@ -1131,10 +1119,10 @@
               h('button', { type: 'button', className: 'cvp-btn cvp-play-btn', onClick: togglePlay, title: playing ? 'Pause' : 'Play' },
                 playing
                   ? h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'currentColor' },
-                      h('rect', { x: 6, y: 4, width: 4, height: 16 }),
-                      h('rect', { x: 14, y: 4, width: 4, height: 16 }))
+                    h('rect', { x: 6, y: 4, width: 4, height: 16 }),
+                    h('rect', { x: 14, y: 4, width: 4, height: 16 }))
                   : h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'currentColor' },
-                      h('polygon', { points: '6 3 20 12 6 21 6 3' }))
+                    h('polygon', { points: '6 3 20 12 6 21 6 3' }))
               ),
               h('button', { type: 'button', className: 'cvp-btn', onClick: () => skip(10), title: 'Forward 10s' }, h(ForwardSvg)),
               h('span', { className: 'cvp-time-display', dir: 'ltr' }, `${formatTime(currentTime)} / ${formatTime(duration)}`),
@@ -1790,9 +1778,10 @@
   /* ============ lesson video player section ============ */
   function LessonVideoSection({ id, title, lang }) {
     const currentUrl = App.StoreVideos.get(id) || '';
+    /* lesson explicitly has no video -> render nothing */
+    if (!currentUrl && App.StoreVideos.isRemoved(id)) return null;
 
-    return h('section', { className: 'lesson-video-sec' },
-      h(CustomVideoPlayer, {
+    return h('section', { className: 'lesson-video-sec' },      h(CustomVideoPlayer, {
         title: title || (lang === 'ar' ? 'فيديو الشرح' : 'Lesson Video'),
         src: currentUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
         duration: 152
@@ -1965,12 +1954,12 @@
       h('section', { className: 'finish', ref: quizRef },
         !quizOpen
           ? h('div', { className: 'finish-box', 'data-reveal': '' },
-              h('h2', null, t.finishTitle), h('p', null, t.finishText),
-              h('button', { type: 'button', className: 'solid big', disabled: !readEnd, onClick: open }, t.finishBtn),
-              !readEnd ? h('p', { className: 'lock-hint' }, t.readFirst) : null)
+            h('h2', null, t.finishTitle), h('p', null, t.finishText),
+            h('button', { type: 'button', className: 'solid big', disabled: !readEnd, onClick: open }, t.finishBtn),
+            !readEnd ? h('p', { className: 'lock-hint' }, t.readFirst) : null)
           : h('div', { className: 'quiz-box' },
-              h('div', { className: 'quiz-head' }, h('p', { className: 'kicker' }, t.quiz), h('h2', null, data.title)),
-              h(App.Quiz, { lesson: data, arLesson: arData, bilingual: isBi, accent, nextLesson, best: st.best, onDone: finished }))));
+            h('div', { className: 'quiz-head' }, h('p', { className: 'kicker' }, t.quiz), h('h2', null, data.title)),
+            h(App.Quiz, { lesson: data, arLesson: arData, bilingual: isBi, accent, nextLesson, best: st.best, onDone: finished }))));
   }
 
   /* ============ Spotlight Search Modal (Ctrl + K) ============ */
@@ -2047,18 +2036,18 @@
         h('div', { className: 'spotlight-list' },
           results.length > 0
             ? results.map((it, idx) => h('div', {
-                key: idx,
-                className: 'spotlight-item' + (idx === activeIdx ? ' is-active' : ''),
-                onClick: () => navigate(it),
-                onMouseEnter: () => setActiveIdx(idx)
-              },
-                h('div', { className: 'spotlight-item-main' },
-                  h('span', { className: 'spotlight-item-title' }, lang === 'en' ? it.title : (it.titleAr || it.title)),
-                  h('span', { className: 'spotlight-item-sub', dir: lang === 'en' ? 'rtl' : 'ltr' }, lang === 'en' ? it.titleAr : it.title)),
-                h('span', { className: 'spotlight-badge badge-' + it.type }, badgeLabel(it.type))))
+              key: idx,
+              className: 'spotlight-item' + (idx === activeIdx ? ' is-active' : ''),
+              onClick: () => navigate(it),
+              onMouseEnter: () => setActiveIdx(idx)
+            },
+              h('div', { className: 'spotlight-item-main' },
+                h('span', { className: 'spotlight-item-title' }, lang === 'en' ? it.title : (it.titleAr || it.title)),
+                h('span', { className: 'spotlight-item-sub', dir: lang === 'en' ? 'rtl' : 'ltr' }, lang === 'en' ? it.titleAr : it.title)),
+              h('span', { className: 'spotlight-badge badge-' + it.type }, badgeLabel(it.type))))
             : query.trim()
-                ? h('div', { className: 'spotlight-empty' }, lang === 'en' ? 'No matching results found.' : 'لم يتم العثور على نتائج مطابقة.')
-                : h('div', { className: 'spotlight-empty' }, lang === 'en' ? 'Type to search courses, lessons, and terms...' : 'اكتب للبحث في جميع الكورسات والدروس والمصطلحات...')),
+              ? h('div', { className: 'spotlight-empty' }, lang === 'en' ? 'No matching results found.' : 'لم يتم العثور على نتائج مطابقة.')
+              : h('div', { className: 'spotlight-empty' }, lang === 'en' ? 'Type to search courses, lessons, and terms...' : 'اكتب للبحث في جميع الكورسات والدروس والمصطلحات...')),
         /* spotlight-footer removed */));
   }
 
@@ -2236,8 +2225,8 @@
       return () => window.removeEventListener('hashchange', f);
     }, []);
     useEffect(() => {
-      getJSON('/api/meta').then(setMeta).catch(() => {});
-      getJSON('/api/status').then(setStatus).catch(() => {});
+      getJSON('/api/meta').then(setMeta).catch(() => { });
+      getJSON('/api/status').then(setStatus).catch(() => { });
     }, []);
     useEffect(() => {
       if (!authUser) return;

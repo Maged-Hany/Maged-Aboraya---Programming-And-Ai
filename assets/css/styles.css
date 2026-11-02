@@ -5852,3 +5852,39 @@ ol.b-list li::before { content: counter(li); position: absolute; inset-inline-st
     font-size: 19px !important;
   }
 }
+
+
+/* Guest header profile: icon-only circle (no name / tag) */
+.student-profile-btn.is-guest,
+[dir="rtl"] .student-profile-btn.is-guest {
+  padding: 4px !important;
+  gap: 0;
+}
+
+/* Register / login paused until the database is connected */
+.auth-fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.auth-fieldset:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+.auth-fieldset:disabled * {
+  cursor: not-allowed;
+}
+.auth-alert.paused {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper-2);
+  color: var(--ink);
+  font-size: 13.5px;
+  line-height: 1.6;
+}

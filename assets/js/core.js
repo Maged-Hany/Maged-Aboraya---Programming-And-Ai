@@ -97,8 +97,8 @@
       zenEsc: 'زرار ESC للخروج',
       zenFontNormal: 'خط عادي',
       zenFontBig: 'خط كبير وواضح',
-      authHeading: 'منور في Syntax',
-      authSub: 'اعمل حسابك المجاني عشان تتابع تقدمك في الكورس وتحفظ درجاتك في الكويزات.',
+      authHeading: 'أهلا بيك في Syntax',
+      authSub: 'اعمل حسابك المجاني عشان تتابع تقدمك في الكورسات وتحفظ درجاتك في الكويزات.',
       registerTab: 'حساب جديد',
       loginTab: 'تسجيل الدخول',
       fullName: 'اسمك بالكامل',
@@ -575,9 +575,17 @@
 
   /* ---------- lesson video player store ---------- */
   const VIDEOS_KEY = 'mabook:videos';
-  const getLocalVideos = () => { try { return JSON.parse(localStorage.getItem(VIDEOS_KEY)) || {}; } catch (e) { return {}; } };
+  const getLocalVideos = () => {
+    try {
+      const v = JSON.parse(localStorage.getItem(VIDEOS_KEY)) || {};
+      /* drop the removed lesson 1-1 YouTube video that older sessions may have cached */
+      if (/RPgWgZrSfQc/.test(v['1-1'] || '')) v['1-1'] = '';
+      return v;
+    } catch (e) { return {}; }
+  };
   const StoreVideos = {
-    data: { '1-1': 'https://www.youtube.com/watch?v=RPgWgZrSfQc', ...getLocalVideos() },
+    /* '' = lesson explicitly has no video (player is hidden) */
+    data: { '1-1': '', ...getLocalVideos() },
     subs: new Set(),
     subscribe(fn) { StoreVideos.subs.add(fn); return () => StoreVideos.subs.delete(fn); },
     async init() {
@@ -594,6 +602,10 @@
     },
     get(lessonId) {
       return StoreVideos.data[lessonId] || '';
+    },
+    /* true when a lesson was explicitly set to have no video */
+    isRemoved(lessonId) {
+      return Object.prototype.hasOwnProperty.call(StoreVideos.data, lessonId) && !StoreVideos.data[lessonId];
     },
     async set(lessonId, url) {
       StoreVideos.data = { ...StoreVideos.data, [lessonId]: String(url || '').trim() };
