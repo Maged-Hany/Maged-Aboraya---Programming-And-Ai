@@ -4,7 +4,10 @@
   "description": "Syntax — Interactive programming, web engineering, cybersecurity, and AI learning platform",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "node --check server.js && node --check assets/js/core.js && node --check assets/js/demos.js && node --check assets/js/blocks.js && node --check assets/js/quiz.js && node --check assets/js/app.js",
+    "lint": "node --test tests/platform.test.mjs"
   },
   "author": "AborayaTechnologies",
   "license": "UNLICENSED",

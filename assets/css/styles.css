@@ -76,15 +76,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
 [dir=rtl] .kicker { font-family: 'IBM Plex Sans Arabic', var(--f-mono); letter-spacing: 0; font-size: 14px; }
 .loading { text-align: center; padding: 18vh 0; color: var(--mute); }
 
-/* animation initial states (only when JS animation is active) */
-.js-anim [data-reveal]:not([data-r]) { opacity: 0; }
-.js-anim [data-stagger]:not([data-r]) > * { opacity: 0; }
-.js-anim [data-words]:not([data-r]) .wi { transform: translateY(115%); }
-.js-anim .sw { opacity: .14; }
-.w { display: inline-block; overflow: hidden; vertical-align: top; padding-block: .14em; margin-block: -.14em; margin-inline-end: .22em; }
+/* Neo-Brutalist Blocky Scroll Animation (never hides content at opacity 0) */
+.w { display: inline-block; vertical-align: top; padding-block: .06em; margin-block: -.06em; margin-inline-end: .22em; }
 .w:last-child { margin-inline-end: 0; }
-[dir=rtl] .w { padding-block: .3em; margin-block: -.3em; }
-.wi { display: inline-block; will-change: transform; }
+[dir=rtl] .w { padding-block: .12em; margin-block: -.12em; }
+.wi { display: inline-block; }
 
 /* ---------- buttons (Neo-brutalist / Yehia Tech style) ---------- */
 .solid, .ghost {
@@ -3447,10 +3443,10 @@ ol.b-list li::before { content: counter(li); position: absolute; inset-inline-st
    CLEAN LIGHT WHITE THEME REFINEMENTS, HERO STUDENTS PHOTO & ANIMATED THEME SWITCH
    ========================================================================== */
 
-/* Clean white surface refinements in light mode */
+/* Warm cream paper surface in light mode */
 :root:not([data-theme="dark"]) body {
-  background: #ffffff;
-  color: #0f172a;
+  background: var(--paper);
+  color: var(--ink);
 }
 :root:not([data-theme="dark"]) .hdr {
   background: rgba(255, 255, 255, 0.82);
@@ -5888,3 +5884,763 @@ ol.b-list li::before { content: counter(li); position: absolute; inset-inline-st
   font-size: 13.5px;
   line-height: 1.6;
 }
+
+/* ==========================================================================
+   SYNTAX ROCKET UPDATE: BLOCKY SCROLL ANIMATION, TOP RAIL, RICH NEO-BRUTALIST
+   FOOTER, SOCIAL LINKS, GUIDELINES, "MADE BY MAGED" HIGHLIGHT & LECTURE STAGE
+   ========================================================================== */
+
+/* 1. Top Blocky Scroll Progress Rail */
+.brutal-scroll-rail {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  height: 6px;
+  background: #faf4e6;
+  border-bottom: 2px solid #000000;
+  z-index: 260;
+  pointer-events: none;
+  overflow: hidden;
+}
+.brutal-scroll-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ffd233 0%, #2563eb 100%);
+  border-inline-end: 2px solid #000000;
+  transition: width 0.06s linear;
+}
+
+/* 2. Blocky Neo-Brutalist Scroll Animation (snappy mechanical pop-in) */
+@keyframes brutalBlockSnap {
+  0% {
+    transform: translate(6px, 12px);
+  }
+  65% {
+    transform: translate(-2px, -2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.brutal-block-anim {
+  will-change: transform;
+}
+.brutal-block-anim:not(.brutal-in) {
+  transform: translate(6px, 12px);
+}
+.brutal-block-anim.brutal-in {
+  animation: brutalBlockSnap 0.34s cubic-bezier(0.22, 1, 0.36, 1) var(--b-delay, 0s) both;
+}
+
+/* 3. Blocky Hero Scroll Hint Badge */
+.scroll-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #111111;
+  background: #fffdf9;
+  border: 2px solid #000000;
+  border-radius: 10px;
+  padding: 8px 14px;
+  box-shadow: 3px 3px 0px #000000;
+}
+[dir="rtl"] .scroll-hint {
+  font-family: var(--f-ar);
+  letter-spacing: 0;
+  font-size: 13.5px;
+}
+.scroll-hint-box {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: #ffd233;
+  border: 2px solid #000000;
+  color: #000000;
+  display: inline-grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 1;
+  box-shadow: 2px 2px 0px #000000;
+}
+
+/* 4. Chapter & Lesson Header Badges (Replacing Ghost Stroke Watermarks) */
+.panel-kicker-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.panel-badge-num,
+.l-ch-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  border-radius: 8px;
+  background: #ffd233;
+  color: #000000;
+  border: 2px solid #000000;
+  box-shadow: 3px 3px 0px #000000;
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+.l-crumb-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: #fffdf9;
+  border: 2px solid #000000;
+  border-radius: 10px;
+  box-shadow: 3px 3px 0px #000000;
+  font-weight: 800;
+  color: #111111 !important;
+  text-decoration: none;
+  transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
+}
+.crumb:hover {
+  background: #ffd233;
+  color: #000000 !important;
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px #000000;
+}
+
+/* 5. Neo-Brutalist Callout & Exercise Solution (Replacing Left-Border & Pulsing Dot Clichés) */
+.b-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 22px;
+  border-radius: 14px !important;
+  background: #fffdf9 !important;
+  border: 2.5px solid #000000 !important;
+  box-shadow: 5px 5px 0px #000000 !important;
+}
+.co-badge {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 11px;
+  border-radius: 8px;
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
+  background: var(--tone, #ffd233);
+  color: #ffffff;
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+[dir="rtl"] .co-badge {
+  font-family: var(--f-ar);
+  letter-spacing: 0;
+  font-size: 12.5px;
+}
+.tone-tip .co-badge { background: #16a34a; color: #ffffff; }
+.tone-note .co-badge { background: #2563eb; color: #ffffff; }
+.tone-warning .co-badge { background: #ffd233; color: #000000; }
+.tone-think .co-badge { background: #111111; color: #ffd233; }
+.co-body {
+  display: grid;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+.b-callout strong {
+  color: #000000 !important;
+  font-size: 17.5px;
+  font-weight: 800;
+}
+.ex-sol p {
+  background: #faf4e6 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 3px 3px 0px #000000 !important;
+  border-radius: 12px !important;
+  padding: 16px 18px !important;
+  color: #111111 !important;
+  font-weight: 600;
+}
+
+/* 6. Neo-Brutalist Video Player & Interactive Lecture Stage */
+.custom-video-player {
+  border: 2.5px solid #000000 !important;
+  box-shadow: 6px 6px 0px #000000 !important;
+  border-radius: 16px !important;
+  background: #0f172a !important;
+}
+.cvp-overlay-play-btn {
+  background: #ffd233 !important;
+  color: #000000 !important;
+  border: 2.5px solid #000000 !important;
+  box-shadow: 4px 4px 0px #000000 !important;
+  border-radius: 14px !important;
+}
+.cvp-overlay-play-btn:hover {
+  background: #ffffff !important;
+  transform: translate(-2px, -2px) !important;
+  box-shadow: 6px 6px 0px #000000 !important;
+}
+.cvp-lecture-board {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 85% 18%, rgba(37, 99, 235, 0.28), transparent 55%), #0b1120;
+  color: #f8fafc;
+  padding: clamp(18px, 3.5vw, 34px) clamp(18px, 4vw, 38px) 68px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+}
+.cvp-lb-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.cvp-lb-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: #ffd233;
+  color: #000000;
+  border: 2px solid #000000;
+  box-shadow: 3px 3px 0px #000000;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+[dir="rtl"] .cvp-lb-badge {
+  font-family: var(--f-ar);
+  letter-spacing: 0;
+}
+.cvp-lb-steps {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.cvp-lb-step-btn {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 2px solid #000000;
+  background: #1e293b;
+  color: #cbd5e1;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px #000000;
+  transition: transform 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+.cvp-lb-step-btn:hover,
+.cvp-lb-step-btn.active {
+  background: #2563eb;
+  color: #ffffff;
+  transform: translate(-1px, -1px);
+}
+.cvp-lb-main {
+  display: grid;
+  gap: 14px;
+  max-width: 680px;
+  margin-block: auto;
+  padding-inline-end: 100px;
+}
+.cvp-lecture-board ~ .cvp-overlay-play-btn {
+  left: auto !important;
+  right: 36px !important;
+  top: 56% !important;
+  transform: translateY(-50%) !important;
+}
+[dir="rtl"] .cvp-lecture-board ~ .cvp-overlay-play-btn {
+  right: auto !important;
+  left: 36px !important;
+}
+.cvp-lecture-board ~ .cvp-overlay-play-btn:hover {
+  transform: translateY(-50%) scale(1.08) !important;
+}
+.cvp-lb-title {
+  font-size: clamp(20px, 2.8vw, 30px);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.25;
+  margin: 0;
+}
+.cvp-lb-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.cvp-lb-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(13.5px, 1.5vw, 15.5px);
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+.cvp-lb-bullet {
+  flex: none;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(37, 99, 235, 0.35);
+  border: 1.5px solid #60a5fa;
+  color: #93c5fd;
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  font-weight: 800;
+}
+@media (max-width: 640px) {
+  .cvp-lb-main {
+    padding-inline-end: 68px;
+  }
+  .cvp-lecture-board ~ .cvp-overlay-play-btn {
+    right: 16px !important;
+    width: 52px !important;
+    height: 52px !important;
+  }
+  [dir="rtl"] .cvp-lecture-board ~ .cvp-overlay-play-btn {
+    left: 16px !important;
+    right: auto !important;
+  }
+  .cvp-lb-list li:nth-child(3) {
+    display: none;
+  }
+  .cvp-lecture-board {
+    padding: 14px 14px 56px;
+    gap: 8px;
+  }
+}
+
+/* 7. "Made By Maged" Highlight Badge & Link */
+.made-by-maged {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--f-body);
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #111111;
+}
+.maged-highlight {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 12px;
+  background: #ffd233;
+  color: #000000 !important;
+  border: 2px solid #000000;
+  border-radius: 8px;
+  box-shadow: 3px 3px 0px #000000;
+  font-weight: 900;
+  text-decoration: none !important;
+  letter-spacing: 0.01em;
+  transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.14s cubic-bezier(0.22, 1, 0.36, 1), background 0.14s ease, color 0.14s ease;
+}
+.maged-highlight:hover {
+  background: #2563eb;
+  color: #ffffff !important;
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px #000000;
+}
+.maged-highlight:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #000000;
+}
+.auth-foot-copy {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* 8. Rich Neo-Brutalist Blocky Footer (.ftr) */
+.ftr {
+  background: #f2ead6 !important;
+  color: #111111 !important;
+  border-top: 3px solid #000000 !important;
+  padding: clamp(48px, 7vw, 84px) clamp(16px, 5vw, 72px) 36px !important;
+  overflow: hidden;
+}
+.ftr-in {
+  max-width: 1380px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+/* Footer Top Callout Banner */
+.ftr-top-banner {
+  background: #ffd233;
+  color: #000000;
+  border: 2.5px solid #000000;
+  border-radius: 16px;
+  box-shadow: 6px 6px 0px #000000;
+  padding: clamp(20px, 3vw, 30px) clamp(20px, 3.5vw, 36px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.ftr-tb-left {
+  display: grid;
+  gap: 8px;
+  max-width: 740px;
+}
+.ftr-tb-tag {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #111111;
+  color: #ffd233;
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+[dir="rtl"] .ftr-tb-tag {
+  font-family: var(--f-ar);
+  letter-spacing: 0;
+  font-size: 12.5px;
+}
+.ftr-tb-title {
+  font-size: clamp(20px, 2.4vw, 28px);
+  font-weight: 800;
+  line-height: 1.3;
+  color: #000000;
+  margin: 0;
+}
+.ftr-tb-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.ftr-cta-btn {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  padding: 12px 22px !important;
+  font-size: 15px !important;
+}
+.ftr-search-btn {
+  background: #fffdf9 !important;
+  color: #111111 !important;
+  padding: 12px 18px !important;
+  font-size: 14.5px !important;
+}
+
+/* Footer 4-Column Grid */
+.ftr-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr 1.25fr;
+  gap: 22px;
+  align-items: stretch;
+}
+@media (max-width: 1180px) {
+  .ftr-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 680px) {
+  .ftr-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ftr-col {
+  background: #fffdf9;
+  border: 2.5px solid #000000;
+  border-radius: 16px;
+  box-shadow: 5px 5px 0px #000000;
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ftr-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #000000;
+  width: fit-content;
+}
+.ftr-brand-name {
+  font-family: var(--f-display);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.ftr-desc {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: #333333;
+  margin: 0;
+}
+.ftr-col-kicker {
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2563eb;
+  margin-bottom: 10px;
+}
+[dir="rtl"] .ftr-col-kicker {
+  font-family: var(--f-ar);
+  letter-spacing: 0;
+  font-size: 13px;
+}
+.ftr-col-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #000000;
+  margin: 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #000000;
+}
+
+/* Social Media Cards inside Footer */
+.ftr-social-list {
+  display: grid;
+  gap: 10px;
+}
+.ftr-social-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 2px solid #000000;
+  background: #faf4e6;
+  color: #000000;
+  text-decoration: none;
+  box-shadow: 3px 3px 0px #000000;
+  transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.14s cubic-bezier(0.22, 1, 0.36, 1), background 0.14s ease;
+}
+.ftr-social-card:hover {
+  background: #ffd233;
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px #000000;
+}
+.ftr-soc-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 2px solid #000000;
+  background: #ffffff;
+  color: #000000;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  box-shadow: 2px 2px 0px #000000;
+}
+.soc-instagram:hover .ftr-soc-icon { background: #e1306c; color: #ffffff; }
+.soc-facebook:hover .ftr-soc-icon { background: #1877f2; color: #ffffff; }
+.soc-github:hover .ftr-soc-icon { background: #111111; color: #ffffff; }
+.ftr-soc-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+.ftr-soc-meta strong {
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.ftr-soc-meta small {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  color: #444444;
+}
+.ftr-soc-ext {
+  color: #000000;
+  opacity: 0.75;
+}
+
+/* Navigation & Lab Link Lists in Footer */
+.ftr-link-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.ftr-link-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1.5px solid #000000;
+  background: #faf4e6;
+  color: #111111;
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 700;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+.ftr-link-item:hover {
+  background: #ffd233;
+  transform: translate(-2px, -2px);
+  box-shadow: 3px 3px 0px #000000;
+}
+.ftr-link-tag {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1.5px solid #000000;
+  color: #2563eb;
+  flex-shrink: 0;
+}
+.ftr-link-tag.lab-tag {
+  background: #111111;
+  color: #ffd233;
+}
+.ftr-link-txt {
+  line-height: 1.35;
+}
+
+/* Study Guidelines Cards in Footer */
+.ftr-guidelines-list {
+  display: grid;
+  gap: 10px;
+}
+.ftr-guide-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.5px solid #000000;
+  background: #faf4e6;
+}
+.ftr-guide-num {
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #ffffff;
+  border: 1.5px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
+}
+.ftr-guide-body {
+  display: grid;
+  gap: 2px;
+}
+.ftr-guide-body strong {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #000000;
+}
+.ftr-guide-body p {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #333333;
+  margin: 0;
+}
+
+/* Footer Bottom Dual Copyright Bar */
+.ftr-bottom {
+  background: #fffdf9;
+  border: 2.5px solid #000000;
+  border-radius: 14px;
+  box-shadow: 5px 5px 0px #000000;
+  padding: 16px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.ftr-copy-group {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.ftr-bottom .copy {
+  color: #111111 !important;
+  font-weight: 800;
+  font-size: 14.5px;
+  margin: 0;
+}
+.ftr-made-by {
+  display: inline-flex;
+  align-items: center;
+  padding-inline-start: 16px;
+  border-inline-start: 2px solid #000000;
+}
+@media (max-width: 640px) {
+  .ftr-made-by {
+    padding-inline-start: 0;
+    border-inline-start: none;
+  }
+}
+.ftr-bottom-social-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.ftr-mini-soc {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 2px solid #000000;
+  background: #faf4e6;
+  color: #000000;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 2px 2px 0px #000000;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+.ftr-mini-soc:hover {
+  background: #ffd233;
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px #000000;
+}
+

@@ -113,6 +113,89 @@
       h('path', { d: 'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z' }),
       h('circle', { cx: 12, cy: 12, r: 3 }));
 
+  const InstagramIcon = () => h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round', style: { flex: 'none' } },
+    h('rect', { x: 2, y: 2, width: 20, height: 20, rx: 5, ry: 5 }),
+    h('path', { d: 'M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z' }),
+    h('line', { x1: 17.5, y1: 6.5, x2: 17.51, y2: 6.5 }));
+
+  const FacebookIcon = () => h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round', style: { flex: 'none' } },
+    h('path', { d: 'M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z' }));
+
+  const GithubIcon = () => h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round', style: { flex: 'none' } },
+    h('path', { d: 'M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22' }));
+
+  const ArrowUpRightIcon = () => h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.5, strokeLinecap: 'round', strokeLinejoin: 'round', style: { flex: 'none' } },
+    h('line', { x1: 7, y1: 17, x2: 17, y2: 7 }),
+    h('polyline', { points: '7 7 17 7 17 17' }));
+
+  const SOCIAL_LINKS = [
+    {
+      id: 'instagram',
+      label: 'Instagram',
+      handle: '@magedinsta2',
+      href: 'https://www.instagram.com/magedinsta2/',
+      icon: InstagramIcon
+    },
+    {
+      id: 'facebook',
+      label: 'Facebook',
+      handle: 'Maged Hany',
+      href: 'https://www.facebook.com/share/1ECRubwWis/',
+      icon: FacebookIcon
+    },
+    {
+      id: 'github',
+      label: 'GitHub',
+      handle: 'Maged-Hany',
+      href: 'https://github.com/Maged-Hany',
+      icon: GithubIcon
+    }
+  ];
+
+  const MAGED_FB_URL = 'https://www.facebook.com/share/1ECRubwWis/';
+
+  function MadeByMagedBadge({ className }) {
+    return h('span', { className: 'made-by-maged' + (className ? ' ' + className : ''), dir: 'ltr' },
+      'Made By ',
+      h('a', {
+        href: MAGED_FB_URL,
+        target: '_blank',
+        rel: 'noopener noreferrer',
+        className: 'maged-highlight',
+        title: 'Maged on Facebook'
+      }, 'Maged')
+    );
+  }
+
+  function BrutalScrollProgress() {
+    const fillRef = useRef(null);
+    useEffect(() => {
+      let raf = 0;
+      const update = () => {
+        raf = 0;
+        if (!fillRef.current) return;
+        const doc = document.documentElement;
+        const max = Math.max(1, doc.scrollHeight - window.innerHeight);
+        const pct = Math.min(100, Math.max(0, (window.scrollY / max) * 100));
+        fillRef.current.style.width = pct + '%';
+      };
+      const onScroll = () => {
+        if (!raf) raf = requestAnimationFrame(update);
+      };
+      update();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      return () => {
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', onScroll);
+        if (raf) cancelAnimationFrame(raf);
+      };
+    }, []);
+    return h('div', { className: 'brutal-scroll-rail', 'aria-hidden': 'true' },
+      h('div', { className: 'brutal-scroll-fill', ref: fillRef })
+    );
+  }
+
   /* ============ Courses Catalog Definition ============ */
   const COURSES_DATA = [
     {
@@ -548,13 +631,15 @@
           )
         ),
         h('div', { className: 'auth-foot' },
-          h('span', null,
-            h('bdi', { dir: 'ltr' }, '© ' + new Date().getFullYear() + ' ' + (t.copyrightOwner || 'AborayaTechnologies')),
-            ' · ',
-            t.footerRights || 'جميع الحقوق محفوظة'
+          h('div', { className: 'auth-foot-copy' },
+            h('span', null,
+              h('bdi', { dir: 'ltr' }, '© ' + new Date().getFullYear() + ' ' + (t.copyrightOwner || 'AborayaTechnologies')),
+              ' · ',
+              t.footerRights || 'جميع الحقوق محفوظة'
+            ),
+            h(MadeByMagedBadge)
           ),
           h('div', { className: 'auth-foot-actions' },
-            /* auth-edit-texts-btn removed */
             h('button', {
               type: 'button',
               className: 'auth-lang-toggle',
@@ -597,8 +682,7 @@
             : initial
         ),
         /* Guest: profile icon only (no name / "temporary" tag) */
-        isGuest ? null : h('span', { className: 'student-name-pill' }, displayName),
-        isGuest ? null : h('span', { className: 'student-status-dot' })
+        isGuest ? null : h('span', { className: 'student-name-pill' }, displayName)
       ),
       open ? h('div', { className: 'student-menu-card' + (isGuest ? ' is-guest' : ''), dir: lang === 'ar' ? 'rtl' : 'ltr' },
         /* Guest: no warning banner, only language + exit button */
@@ -790,27 +874,213 @@
               ))),
 
           h('div', { className: 'nd-foot' },
-
-            h('span', { className: 'nd-copy', dir: 'ltr' }, '© ' + new Date().getFullYear() + ' ' + (t.copyrightOwner || 'AborayaTechnologies')))
+            h('span', { className: 'nd-copy', dir: 'ltr' }, '© ' + new Date().getFullYear() + ' ' + (t.copyrightOwner || 'AborayaTechnologies')),
+            h(MadeByMagedBadge, { className: 'nd-maged' }))
         )
       ) : null
     );
   }
 
-  function Footer() {
+  function Footer({ onOpenSearch }) {
     const { t, lang } = useLang();
-    return h('footer', { className: 'ftr' },
+    const isAr = lang === 'ar';
+
+    const quickLinks = [
+      { href: '#/', label: isAr ? 'الصفحة الرئيسية' : 'Home Overview', tag: '00' },
+      { href: '#/courses', label: isAr ? 'كتالوج الكورسات' : 'Courses Catalog', tag: 'ALL' },
+      { href: '#/course/students', label: isAr ? 'منهج الصف الثاني الثانوي (البكالوريا)' : '2nd Secondary Baccalaureate Track', tag: '14' },
+      { href: '#/chapter/1', label: isAr ? 'الفصل 01: الذكاء الاصطناعي والأنظمة' : 'Chapter 01: AI & Computer Systems', tag: 'C1' },
+      { href: '#/chapter/2', label: isAr ? 'الفصل 02: الأمن السيبراني والتشفير' : 'Chapter 02: Cybersecurity & Crypto', tag: 'C2' },
+      { href: '#/chapter/3', label: isAr ? 'الفصل 03: هندسة الإنترنت وتطوير الويب' : 'Chapter 03: Internet & Web Engineering', tag: 'C3' },
+      { href: '#/chapter/4', label: isAr ? 'الفصل 04: الوسائط الرقمية وتجربة المستخدم' : 'Chapter 04: Digital Media & UX Design', tag: 'C4' }
+    ];
+
+    const labLinks = [
+      { href: '#/lesson/1-1', label: isAr ? 'محاكي قانون مور والترانزستورات' : "Moore's Law Transistor Simulator", badge: 'LAB 01' },
+      { href: '#/lesson/2-1', label: isAr ? 'مختبر شفرة قيصر وقوة كلمة المرور' : 'Caesar Cipher & Password Entropy Lab', badge: 'LAB 02' },
+      { href: '#/lesson/3-2', label: isAr ? 'محاكي طلبات واستجابات HTTP' : 'HTTP Client/Server Request Simulator', badge: 'LAB 03' },
+      { href: '#/lesson/3-3', label: isAr ? 'محرر أكواد HTML و CSS و JS الفوري' : 'Live HTML / CSS / JS Code Sandbox', badge: 'LAB 04' },
+      { href: '#/lesson/4-2', label: isAr ? 'فاحص تباين الألوان القياسي WCAG' : 'WCAG Accessibility Contrast Checker', badge: 'LAB 05' }
+    ];
+
+    const guidelines = [
+      {
+        num: '01',
+        title: isAr ? 'التدرّج المنهجي المنظّم' : 'Sequential Lesson Mastery',
+        desc: isAr
+          ? 'ابدأ بقراءة أهداف الدرس والمصطلحات الأساسية قبل الانتقال إلى الشرح التفصيلي والأمثلة الواقعية.'
+          : 'Read the lesson objectives and key terms first before diving into deep technical sections.'
+      },
+      {
+        num: '02',
+        title: isAr ? 'التجربة العملية داخل المحاكيات' : 'Hands-On Simulator Practice',
+        desc: isAr
+          ? 'جرّب تغيير القيم والأكواد بنفسك داخل المحاكيات التفاعلية المدمجة في كل فصل لتثبيت الفهم العملي.'
+          : 'Manipulate variables and live code inside the interactive labs embedded across every chapter.'
+      },
+      {
+        num: '03',
+        title: isAr ? 'إتقان المصطلحات بالعربية والإنجليزية' : 'Bilingual Technical Vocabulary',
+        desc: isAr
+          ? 'استخدم البطاقات القابلة للقلب والترجمة المرافقة لربط المفاهيم البرمجية بمصطلحاتها القياسية العالمية.'
+          : 'Use flip cards and bilingual companion notes to connect concepts with standard industry terms.'
+      },
+      {
+        num: '04',
+        title: isAr ? 'حل التمارين والاختبار الموقوت' : 'Exercises & Timed Quiz Check',
+        desc: isAr
+          ? 'اختبر فهمك بحل التمارين التطبيقية ثم اجتز الكويز الإلكتروني الموقوت قبل الانتقال للدرس التالي.'
+          : 'Solve the practice prompts first, then complete the timed quiz before advancing to the next lesson.'
+      }
+    ];
+
+    return h('footer', { className: 'ftr', 'data-reveal': '' },
       h('div', { className: 'ftr-in' },
-        h('div', { className: 'ftr-big', 'aria-hidden': 'true' }, t.brand || 'Syntax'),
-        h('div', { className: 'ftr-row' },
-          t.footerNote ? h('p', null, t.footerNote) : null,
-          h('p', { className: 'copy' },
-            h('bdi', { dir: 'ltr' }, '© ' + new Date().getFullYear() + ' ' + (t.copyrightOwner || 'AborayaTechnologies')),
-            ' · ',
-            t.footerRights,
-            '.'
+        /* Top Neo-Brutalist Callout Banner */
+        h('div', { className: 'ftr-top-banner' },
+          h('div', { className: 'ftr-tb-left' },
+            h('span', { className: 'ftr-tb-tag' }, isAr ? 'دليل الدراسة السريع' : 'STUDY PLAYBOOK'),
+            h('h2', { className: 'ftr-tb-title' },
+              isAr
+                ? 'منصة تعليمية تفاعلية مصممة للفهم العميق والتطبيق العملي خطوة بخطوة.'
+                : 'Built for deep technical comprehension, interactive experimentation, and exam readiness.'
+            )
           ),
-          /* ftr-edit-texts-btn removed */
+          h('div', { className: 'ftr-tb-actions' },
+            h('a', { href: '#/course/students', className: 'solid ftr-cta-btn' },
+              isAr ? 'ابدأ كورس البكالوريا الآن' : 'Open Baccalaureate Course',
+              h('span', { className: 'arr', 'aria-hidden': 'true' }, '→')
+            ),
+            onOpenSearch ? h('button', {
+              type: 'button',
+              className: 'ghost ftr-search-btn',
+              onClick: onOpenSearch
+            },
+              h(SearchIcon),
+              h('span', null, isAr ? 'بحث سريع (Ctrl+K)' : 'Quick Search (Ctrl+K)')
+            ) : null
+          )
+        ),
+
+        /* Main 4-Column Blocky Grid */
+        h('div', { className: 'ftr-grid' },
+          /* Col 1: Brand + About + Social Media Links */
+          h('div', { className: 'ftr-col ftr-col-brand' },
+            h('a', { href: '#/', className: 'ftr-brand', dir: 'ltr' },
+              h('span', { className: 'brand-mark', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')),
+              h('span', { className: 'ftr-brand-name' }, t.brand || 'Syntax')
+            ),
+            h('p', { className: 'ftr-desc' },
+              isAr
+                ? 'منصة Syntax لتعليم البرمجة والذكاء الاصطناعي والأمن السيبراني وتطوير الويب لطلاب الصف الثاني الثانوي (البكالوريا) بشرح تفاعلي ومحاكي عملي لكل درس.'
+                : 'Interactive computer science, AI, cybersecurity, and web engineering curriculum with live simulators, bilingual terminology, and timed assessments.'
+            ),
+            h('div', { className: 'ftr-social-block' },
+              h('span', { className: 'ftr-col-kicker' }, isAr ? 'تواصل وتابع المطور (Maged)' : 'CONNECT & FOLLOW MAGED'),
+              h('div', { className: 'ftr-social-list' },
+                SOCIAL_LINKS.map(soc =>
+                  h('a', {
+                    key: soc.id,
+                    href: soc.href,
+                    target: '_blank',
+                    rel: 'noopener noreferrer',
+                    className: 'ftr-social-card soc-' + soc.id,
+                    dir: 'ltr'
+                  },
+                    h('span', { className: 'ftr-soc-icon' }, h(soc.icon)),
+                    h('span', { className: 'ftr-soc-meta' },
+                      h('strong', null, soc.label),
+                      h('small', null, soc.handle)
+                    ),
+                    h('span', { className: 'ftr-soc-ext', 'aria-hidden': 'true' }, h(ArrowUpRightIcon))
+                  )
+                )
+              )
+            )
+          ),
+
+          /* Col 2: Quick Navigation & Curriculum Chapters */
+          h('div', { className: 'ftr-col' },
+            h('h3', { className: 'ftr-col-title' }, isAr ? 'روابط المنصة والفصول' : 'Navigation & Chapters'),
+            h('ul', { className: 'ftr-link-list' },
+              quickLinks.map((item, i) =>
+                h('li', { key: i },
+                  h('a', { href: item.href, className: 'ftr-link-item' },
+                    h('span', { className: 'ftr-link-tag', dir: 'ltr' }, item.tag),
+                    h('span', { className: 'ftr-link-txt' }, item.label)
+                  )
+                )
+              )
+            )
+          ),
+
+          /* Col 3: Interactive Simulators & Labs */
+          h('div', { className: 'ftr-col' },
+            h('h3', { className: 'ftr-col-title' }, isAr ? 'المختبرات والمحاكيات التفاعلية' : 'Interactive Simulators'),
+            h('ul', { className: 'ftr-link-list' },
+              labLinks.map((lab, i) =>
+                h('li', { key: i },
+                  h('a', {
+                    href: lab.href,
+                    className: 'ftr-link-item is-lab',
+                    onMouseEnter: () => {
+                      const m = lab.href.match(/lesson\/(\d-\d)/);
+                      if (m && App.prefetchLesson) App.prefetchLesson(m[1], lang);
+                    }
+                  },
+                    h('span', { className: 'ftr-link-tag lab-tag', dir: 'ltr' }, lab.badge),
+                    h('span', { className: 'ftr-link-txt' }, lab.label)
+                  )
+                )
+              )
+            )
+          ),
+
+          /* Col 4: Study Guidelines */
+          h('div', { className: 'ftr-col ftr-col-guidelines' },
+            h('h3', { className: 'ftr-col-title' }, isAr ? 'إرشادات الدراسة والتحصيل' : 'Study Guidelines & Rules'),
+            h('div', { className: 'ftr-guidelines-list' },
+              guidelines.map(g =>
+                h('div', { key: g.num, className: 'ftr-guide-card' },
+                  h('span', { className: 'ftr-guide-num', dir: 'ltr' }, g.num),
+                  h('div', { className: 'ftr-guide-body' },
+                    h('strong', null, g.title),
+                    h('p', null, g.desc)
+                  )
+                )
+              )
+            )
+          )
+        ),
+
+        /* Bottom Bar: Dual Copyrights */
+        h('div', { className: 'ftr-bottom' },
+          h('div', { className: 'ftr-copy-group' },
+            h('p', { className: 'copy' },
+              h('bdi', { dir: 'ltr' }, '© ' + new Date().getFullYear() + ' ' + (t.copyrightOwner || 'AborayaTechnologies')),
+              ' · ',
+              t.footerRights || (isAr ? 'جميع الحقوق محفوظة' : 'All rights reserved'),
+              '.'
+            ),
+            h('div', { className: 'ftr-made-by' },
+              h(MadeByMagedBadge)
+            )
+          ),
+          h('div', { className: 'ftr-bottom-social-strip', dir: 'ltr' },
+            SOCIAL_LINKS.map(soc =>
+              h('a', {
+                key: soc.id,
+                href: soc.href,
+                target: '_blank',
+                rel: 'noopener noreferrer',
+                className: 'ftr-mini-soc',
+                title: soc.label + ' (' + soc.handle + ')'
+              },
+                h(soc.icon),
+                h('span', null, soc.label)
+              )
+            )
+          )
         )
       )
     );
@@ -880,9 +1150,11 @@
 
     return h('section', { className: 'panel', id: 'chapter-' + c.id, style: { '--accent': c.accent }, 'data-idx': idx },
       h('div', { className: 'panel-in' },
-        h('div', { className: 'panel-num', 'aria-hidden': 'true' }, pad(c.id)),
         h('div', { className: 'panel-main' },
-          h('p', { className: 'kicker' }, `${t.chapter} ${pad(c.id)} · ${lessons.length} ${t.lessons}`),
+          h('div', { className: 'panel-kicker-row' },
+            h('span', { className: 'panel-badge-num', dir: 'ltr' }, `CH ${pad(c.id)}`),
+            h('p', { className: 'kicker' }, `${t.chapter} ${pad(c.id)} · ${lessons.length} ${t.lessons}`)
+          ),
           h(Words, { tag: 'h2', className: 'panel-title', text: lt(c.title, lang) }),
           isEn ? h('span', { className: 'ar-sub-title', dir: 'rtl' }, c.title.ar) : null,
           h('p', { className: 'panel-blurb', 'data-reveal': '' }, lt(c.blurb, lang)),
@@ -903,7 +1175,12 @@
             const isDone = st.best != null;
             const ok = ready(l.id);
             return h('li', { key: l.id },
-              h('a', { className: 'lrow' + (ok ? '' : ' off'), href: ok ? '#/lesson/' + l.id : undefined, 'aria-disabled': !ok },
+              h('a', {
+                className: 'lrow' + (ok ? '' : ' off'),
+                href: ok ? '#/lesson/' + l.id : undefined,
+                'aria-disabled': !ok,
+                onMouseEnter: () => ok && App.prefetchLesson && App.prefetchLesson(l.id, lang)
+              },
                 h('span', { className: 'lrow-n' }, `${c.id}.${i + 1}`),
                 h('div', { style: { display: 'flex', flexDirection: 'column', gap: '2px', flex: 1, minWidth: 0 } },
                   h('span', { className: 'lrow-t' }, lt(l.title, lang)),
@@ -937,6 +1214,60 @@
     const settingsRef = useRef(null);
 
     const ytEmbed = extractYouTubeEmbed(src);
+    const hasCustomVideo = Boolean(src && !String(src).includes('BigBuckBunny.mp4') && !ytEmbed);
+
+    const slides = useMemo(() => {
+      const isAr = lang === 'ar';
+      return [
+        {
+          step: '01',
+          tag: isAr ? 'مقدمة المحاضرة' : 'LECTURE OVERVIEW',
+          heading: title || (isAr ? 'مقدمة الكورس وخطة الدراسة' : 'Course & Lesson Overview'),
+          points: isAr
+            ? ['فهم الفكرة الأساسية والمفاهيم الهندسية خطوة بخطوة', 'ربط النظرية بالتطبيق العملي والأجهزة الحقيقية', 'الاستعداد لحل أسئلة الواجب والكويز الإلكتروني الموقوت']
+            : ['Master core engineering concepts step by step', 'Connect theory to real hardware and live code', 'Prepare for hands-on exercises and timed quizzes']
+        },
+        {
+          step: '02',
+          tag: isAr ? 'المفاهيم الأساسية' : 'KEY ARCHITECTURE',
+          heading: isAr ? 'تحليل الأنظمة والخوارزميات' : 'System Architecture & Logic',
+          points: isAr
+            ? ['استكشاف المصطلحات التقنية باللغتين العربية والإنجليزية', 'مقارنة الحلول البرمجية وتحليل الأداء والأمان', 'أمثلة واقعية من أنظمة الذكاء الاصطناعي والشبكات']
+            : ['Explore technical terminology in Arabic & English', 'Compare engineering trade-offs, security, and speed', 'Real-world case studies from AI and network systems']
+        },
+        {
+          step: '03',
+          tag: isAr ? 'التطبيق العملي' : 'INTERACTIVE LAB',
+          heading: isAr ? 'التجربة داخل المحاكي التفاعلي' : 'Hands-On Simulator Walkthrough',
+          points: isAr
+            ? ['تعديل المدخلات وملاحظة النتائج الفورية داخل المتصفح', 'تطبيق القواعد الحسابية والبرمجية بدون تعقيد', 'تثبيت المعلومة من خلال التجربة المباشرة']
+            : ['Modify inputs and inspect real-time outputs in-browser', 'Apply computational rules and code interactively', 'Reinforce retention through direct experimentation']
+        },
+        {
+          step: '04',
+          tag: isAr ? 'الخلاصة والاختبار' : 'SUMMARY & QUIZ',
+          heading: isAr ? 'مراجعة النقاط الحاسمة قبل الكويز' : 'Final Recap & Quiz Readiness',
+          points: isAr
+            ? ['مراجعة ملخص الدرس السريع وحل التمارين التدريبية', 'التأكد من إتقان جميع أهداف الدرس قبل بدء الاختبار', 'اجتياز الكويز الموقوت لتسجيل تقدمك في الفصول']
+            : ['Review the lesson recap and practice exercises', 'Verify mastery of all learning objectives', 'Complete the timed quiz to record your score']
+        }
+      ];
+    }, [title, lang]);
+
+    useEffect(() => {
+      if (hasCustomVideo || ytEmbed || !playing) return;
+      const iv = setInterval(() => {
+        setCurrentTime(prev => {
+          const next = prev + 0.25 * rate;
+          if (next >= duration) {
+            setPlaying(false);
+            return duration;
+          }
+          return next;
+        });
+      }, 250);
+      return () => clearInterval(iv);
+    }, [playing, hasCustomVideo, ytEmbed, rate, duration]);
 
     useEffect(() => {
       if (!settingsOpen) return;
@@ -958,20 +1289,26 @@
     };
 
     const togglePlay = () => {
-      if (!videoRef.current) return;
-      if (playing) {
-        videoRef.current.pause();
-        setPlaying(false);
-      } else {
-        videoRef.current.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+      if (hasCustomVideo && videoRef.current) {
+        if (playing) {
+          videoRef.current.pause();
+          setPlaying(false);
+        } else {
+          videoRef.current.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+        }
+        return;
       }
+      setPlaying(prev => {
+        if (!prev && currentTime >= duration) setCurrentTime(0);
+        return !prev;
+      });
     };
 
     const skip = (delta) => {
-      if (!videoRef.current) return;
       const maxDur = duration || 152;
-      const target = Math.max(0, Math.min(maxDur, (videoRef.current.currentTime || currentTime) + delta));
-      videoRef.current.currentTime = target;
+      const base = (hasCustomVideo && videoRef.current) ? videoRef.current.currentTime : currentTime;
+      const target = Math.max(0, Math.min(maxDur, base + delta));
+      if (hasCustomVideo && videoRef.current) videoRef.current.currentTime = target;
       setCurrentTime(target);
     };
 
@@ -980,13 +1317,13 @@
       const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / (rect.width || 1)));
       const maxDur = duration || 152;
       const target = pos * maxDur;
-      if (videoRef.current) videoRef.current.currentTime = target;
+      if (hasCustomVideo && videoRef.current) videoRef.current.currentTime = target;
       setCurrentTime(target);
     };
 
     const selectRate = (nextRate) => {
       setRate(nextRate);
-      if (videoRef.current) videoRef.current.playbackRate = nextRate;
+      if (hasCustomVideo && videoRef.current) videoRef.current.playbackRate = nextRate;
       setSettingsView('main');
       setSettingsOpen(false);
     };
@@ -1026,6 +1363,8 @@
       h('path', { d: 'M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3' }));
 
     const pct = Math.min(100, Math.max(0, (currentTime / (duration || 1)) * 100));
+    const slideIdx = Math.min(slides.length - 1, Math.floor((pct / 100) * slides.length));
+    const activeSlide = slides[slideIdx] || slides[0];
 
     return h('div', { className: 'custom-video-player', ref: containerRef },
       ytEmbed ? h('div', { className: 'cvp-stage' },
@@ -1039,11 +1378,11 @@
           style: { width: '100%', height: '100%', border: 0 }
         })
       ) : h('div', { className: 'cvp-stage' },
-        h('video', {
+        hasCustomVideo ? h('video', {
           ref: videoRef,
           className: 'cvp-video-el',
-          src: src || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-          preload: 'metadata',
+          src,
+          preload: 'none',
           onLoadedMetadata: () => {
             if (videoRef.current && videoRef.current.duration && isFinite(videoRef.current.duration)) {
               setDuration(videoRef.current.duration);
@@ -1055,12 +1394,44 @@
           onEnded: () => setPlaying(false),
           playsInline: true,
           onClick: togglePlay
-        }),
+        }) : h('div', {
+          className: 'cvp-lecture-board' + (playing ? ' is-playing' : ''),
+          dir: lang === 'ar' ? 'rtl' : 'ltr',
+          onClick: togglePlay
+        },
+          h('div', { className: 'cvp-lb-top' },
+            h('span', { className: 'cvp-lb-badge' }, activeSlide.tag),
+            h('div', { className: 'cvp-lb-steps', dir: 'ltr', onClick: e => e.stopPropagation() },
+              slides.map((s, idx) =>
+                h('button', {
+                  key: s.step,
+                  type: 'button',
+                  className: 'cvp-lb-step-btn' + (idx === slideIdx ? ' active' : ''),
+                  onClick: () => {
+                    const target = ((idx + 0.1) / slides.length) * (duration || 152);
+                    setCurrentTime(target);
+                  }
+                }, s.step)
+              )
+            )
+          ),
+          h('div', { className: 'cvp-lb-main' },
+            h('h3', { className: 'cvp-lb-title' }, activeSlide.heading),
+            h('ul', { className: 'cvp-lb-list' },
+              activeSlide.points.map((pt, i) =>
+                h('li', { key: i },
+                  h('span', { className: 'cvp-lb-bullet', dir: 'ltr' }, `0${i + 1}`),
+                  h('span', null, pt)
+                )
+              )
+            )
+          )
+        ),
         !playing ? h('button', {
           type: 'button',
           className: 'cvp-overlay-play-btn',
           onClick: togglePlay,
-          'aria-label': lang === 'ar' ? 'تشغيل الفيديو' : 'Play video'
+          'aria-label': lang === 'ar' ? 'تشغيل الشرح التفاعلي' : 'Play interactive overview'
         },
           h('svg', { width: 30, height: 30, viewBox: '0 0 24 24', fill: '#111111', style: { marginLeft: '3px' } },
             h('polygon', { points: '6 3 20 12 6 21 6 3' }))
@@ -1354,8 +1725,8 @@
         h('div', { className: 'cip-main' },
           /* Custom Video Player */
           h(CustomVideoPlayer, {
-            title: lang === 'ar' ? 'مقدمة الكورس' : 'Course Introduction',
-            src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            title: lang === 'ar' ? 'مقدمة الكورس وخطة الدراسة' : 'Course Introduction & Study Plan',
+            src: '',
             duration: 152
           }),
 
@@ -1446,7 +1817,8 @@
                       return h('a', {
                         key: ls.id,
                         href: '#/lesson/' + ls.id,
-                        className: 'cip-lesson-row'
+                        className: 'cip-lesson-row',
+                        onMouseEnter: () => App.prefetchLesson && App.prefetchLesson(ls.id, lang)
                       },
                         h('div', { className: 'cip-lesson-row-left' },
                           h('span', { style: { fontFamily: 'var(--f-mono)', color: '#2563eb' } }, ls.id),
@@ -1696,17 +2068,10 @@
     const questions = status && status.questions ? status.questions[lang] : 171;
 
     useEffect(() => {
-      if (App.reduced) return;
-      const ctxs = [];
-      ctxs.push(gsap.to('.hero-content', { yPercent: -14, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } }));
-      return () => ctxs.forEach(c => { if (c.scrollTrigger) c.scrollTrigger.kill(); c.kill(); });
-    }, [meta]);
-
-    useEffect(() => {
       if (!meta) return;
       const id = route.target;
       if (!id) return;
-      const t0 = setTimeout(() => { scrollToEl(document.getElementById(id), 0); }, 120);
+      const t0 = setTimeout(() => { scrollToEl(document.getElementById(id), 0); }, 60);
       return () => clearTimeout(t0);
     }, [route.target, meta]);
 
@@ -1714,13 +2079,13 @@
       h('section', { className: 'hero' },
         h('div', { className: 'hero-main' },
           h('div', { className: 'hero-content' },
-            h(Words, { tag: 'h1', className: 'hero-title', text: t.heroTitle, delay: .1 }),
-            h('p', { className: 'hero-sub', 'data-reveal': '', 'data-delay': .35 }, t.heroSub),
-            h('div', { className: 'hero-cta', 'data-reveal': '', 'data-delay': .55 },
+            h(Words, { tag: 'h1', className: 'hero-title', text: t.heroTitle, delay: .04 }),
+            h('p', { className: 'hero-sub', 'data-reveal': '', 'data-delay': .08 }, t.heroSub),
+            h('div', { className: 'hero-cta', 'data-reveal': '', 'data-delay': .12 },
               h('a', { className: 'solid big', href: '#/courses' }, t.heroCta, h('span', { className: 'arr', 'aria-hidden': 'true' }, '→')),
-              h('span', { className: 'scroll-hint' }, h('i'), t.scrollHint))),
+              h('span', { className: 'scroll-hint' }, h('span', { className: 'scroll-hint-box', 'aria-hidden': 'true' }, '↓'), t.scrollHint))),
           h(HeroVisualStage, { lang })),
-        h('div', { className: 'hero-stats', 'data-reveal': 'fade', 'data-delay': .75 },
+        h('div', { className: 'hero-stats', 'data-reveal': 'fade', 'data-delay': .16 },
           [[COURSES_DATA.length, t.stats[0]], [meta ? meta.chapters.reduce((n, c) => n + c.lessons.length, 0) : 14, t.stats[1]], [questions ? questions + '+' : '171+', t.stats[2]]].map(([n, l], i) =>
             h('div', { key: i }, h('b', { dir: 'ltr' }, n), h('span', null, l))))),
       h(Marquee),
@@ -1781,9 +2146,10 @@
     /* lesson explicitly has no video -> render nothing */
     if (!currentUrl && App.StoreVideos.isRemoved(id)) return null;
 
-    return h('section', { className: 'lesson-video-sec' },      h(CustomVideoPlayer, {
+    return h('section', { className: 'lesson-video-sec' },
+      h(CustomVideoPlayer, {
         title: title || (lang === 'ar' ? 'فيديو الشرح' : 'Lesson Video'),
-        src: currentUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        src: currentUrl || '',
         duration: 152
       }),
       h('button', {
@@ -1861,18 +2227,19 @@
 
     useEffect(() => {
       if (!data) return;
-      const st = ScrollTrigger.create({
-        start: 0,
-        end: 'max',
-        onUpdate: s => {
-          if (bar.current) bar.current.style.transform = `scaleX(${s.progress})`;
-          if (s.progress > 0.85) setReadEnd(true);
-        }
-      });
+      const onScroll = () => {
+        const doc = document.documentElement;
+        const max = Math.max(1, doc.scrollHeight - window.innerHeight);
+        const prog = Math.min(1, Math.max(0, window.scrollY / max));
+        if (bar.current) bar.current.style.transform = `scaleX(${prog})`;
+        if (prog > 0.85) setReadEnd(true);
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
       const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) setReadEnd(true); }, { threshold: 0 });
       if (end.current) io.observe(end.current);
       if (quizRef.current) io.observe(quizRef.current);
-      return () => { st.kill(); io.disconnect(); };
+      return () => { window.removeEventListener('scroll', onScroll); io.disconnect(); };
     }, [data]);
 
     const open = () => {
@@ -1895,9 +2262,10 @@
     return h('main', { id: 'main', className: 'lesson', style: { '--accent': accent } },
       h('div', { className: 'read-bar', ref: bar, 'aria-hidden': 'true' }),
       h('header', { className: 'l-hero' },
-        h('div', { className: 'l-num', 'aria-hidden': 'true', 'data-parallax': 40 }, chapter ? pad(chapter.id) : ''),
-        h('a', { className: 'crumb', href: '#/chapter/' + (chapter ? chapter.id : 1) }, (lang === 'ar' ? '→ ' : '← '), chapter ? lt(chapter.title, lang) : ''),
-        h('p', { className: 'kicker' }, `${t.lesson} ${info ? info.id.replace('-', '.') : ''}`),
+        h('div', { className: 'l-crumb-row' },
+          h('a', { className: 'crumb', href: '#/chapter/' + (chapter ? chapter.id : 1) }, (lang === 'ar' ? '→ ' : '← '), chapter ? lt(chapter.title, lang) : ''),
+          h('span', { className: 'l-ch-pill', dir: 'ltr' }, `${t.lesson} ${info ? info.id.replace('-', '.') : ''}`)
+        ),
         h(Words, { tag: 'h1', className: 'l-title', text: data.title }),
         isBi && arData ? h('span', { className: 'ar-sub-title', dir: 'rtl' }, arData.title) : null,
         lang === 'en' ? h('div', { className: 'lesson-action-strip' },
@@ -2209,8 +2577,8 @@
     const currentLang = store.lang || (authUser && authUser.stream) || 'ar';
     const [searchOpen, setSearchOpen] = useState(false);
     const [route, setRoute] = useState(parseRoute());
-    const [meta, setMeta] = useState(null);
-    const [status, setStatus] = useState(null);
+    const [meta, setMeta] = useState(() => App.initialMeta || null);
+    const [status, setStatus] = useState(() => App.initialStatus || null);
     const [textVersion, setTextVersion] = useState(0);
 
     const ctx = useMemo(() => ({ lang: currentLang, t: STR[currentLang], dir: currentLang === 'ar' ? 'rtl' : 'ltr' }), [currentLang, textVersion]);
@@ -2225,8 +2593,8 @@
       return () => window.removeEventListener('hashchange', f);
     }, []);
     useEffect(() => {
-      getJSON('/api/meta').then(setMeta).catch(() => { });
-      getJSON('/api/status').then(setStatus).catch(() => { });
+      if (!meta) getJSON('/api/meta').then(setMeta).catch(() => { });
+      if (!status) getJSON('/api/status').then(setStatus).catch(() => { });
     }, []);
     useEffect(() => {
       if (!authUser) return;
@@ -2252,11 +2620,8 @@
       if (!authUser) return;
       App.TTS.stop();
       if (route.name === 'lesson' || (route.name === 'course' && !route.targetChapter) || (route.name === 'home' && !route.target)) {
-        const l = getLenis();
-        if (l) l.scrollTo(0, { immediate: true }); else window.scrollTo(0, 0);
+        window.scrollTo(0, 0);
       }
-      const el = document.getElementById('main');
-      if (el && !App.reduced) gsap.fromTo(el, { opacity: 0 }, { opacity: 1, duration: .45, ease: 'power2.out', clearProps: 'opacity' });
       return () => killAll();
     }, [route.key, currentLang, authUser]);
 
@@ -2272,6 +2637,7 @@
     const setLangDirectly = (newLang) => Store.set({ lang: newLang });
 
     return h(LangCtx.Provider, { value: ctx },
+      h(BrutalScrollProgress),
       h('a', { className: 'skip', href: '#main' }, ctx.lang === 'ar' ? 'تخطَّ إلى المحتوى الرئيسي' : 'Skip to content'),
       h(Header, {
         meta,
@@ -2286,7 +2652,7 @@
         : route.name === 'course'
           ? h(CourseView, { key: route.key + currentLang, courseId: route.courseId, targetChapter: route.targetChapter, meta, status })
           : h(Home, { key: 'home' + currentLang, meta, status, route }),
-      h(Footer),
+      h(Footer, { onOpenSearch: () => setSearchOpen(true) }),
       h(SpotlightSearch, { open: searchOpen, onClose: () => setSearchOpen(false), lang: currentLang }),
       h(TTSPlayerBar)
     );

@@ -139,7 +139,7 @@
         h('div', { className: 'http-wire', dir: 'ltr' },
           h('span', null, L(lang, 'Client (العميل)', 'Client')), h('div', { className: 'wire' + (busy ? ' go' : '') }, h('i', null)), h('span', null, L(lang, 'Server (الخادم)', 'Server'))),
         h('pre', { className: 'http-pre', dir: 'ltr' }, `${method} ${path} HTTP/1.1\nHost: school.example\nAccept: application/json`),
-        h('pre', { className: 'http-pre res' + (log ? (log.status >= 400 ? ' bad' : ' good') : ''), dir: 'ltr' }, log ? `HTTP/1.1 ${log.status} ${log.text}\nContent-Type: application/json\n\n${log.body}` : (busy ? '…' : L(lang, '// ستظهر استجابة الخادم هنا بعد الإرسال', '// the response appears here'))),
+        h('pre', { className: 'http-pre res' + (log ? (log.status >= 400 ? ' bad' : ' good') : ''), dir: 'ltr' }, log ? `HTTP/1.1 ${log.status} ${log.text}\nContent-Type: application/json\n\n${log.body}` : (busy ? '…' : L(lang, 'ستظهر استجابة الخادم هنا بعد إرسال الطلب', 'Server response payload appears here after sending a request'))),
         h('div', { className: 'http-db', dir: 'ltr' }, 'students = ' + JSON.stringify(db))));
   }
 

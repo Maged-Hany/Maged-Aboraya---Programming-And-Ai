@@ -2,8 +2,11 @@
 (function () {
   const { useState, useEffect, useContext, createContext } = React;
   const h = React.createElement;
-  gsap.registerPlugin(ScrollTrigger);
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+  }
 
+  const BOOT = (typeof window !== 'undefined' && window.__SYNTAX_BOOTSTRAP__) || {};
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reduced) document.documentElement.classList.add('js-anim');
 
@@ -339,14 +342,31 @@
 
   const getLocalUsers = () => { try { return JSON.parse(localStorage.getItem(AUTH_USERS_KEY)) || {}; } catch (e) { return {}; } };
   const saveLocalUsers = (u) => { try { localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(u)); } catch (e) {} };
+  const AUTH_EXPLICIT_PORTAL_KEY = 'mabook:auth:explicit_portal';
+  const makeDefaultGuest = (langStream) => {
+    const prefs = getPrefs();
+    const cleanStream = (langStream || prefs.lang || 'ar') === 'en' ? 'en' : 'ar';
+    return {
+      isGuest: true,
+      username: 'guest',
+      name: cleanStream === 'en' ? 'Guest' : 'زائر',
+      gmail: 'guest@session',
+      phone: '—',
+      countryCode: '+20',
+      stream: cleanStream
+    };
+  };
   const getStoredUser = () => {
     try {
       const reg = JSON.parse(localStorage.getItem(AUTH_USER_KEY));
       if (reg) return reg;
       const guest = JSON.parse(sessionStorage.getItem(AUTH_GUEST_KEY));
       if (guest) return guest;
-      return null;
-    } catch (e) { return null; }
+      if (sessionStorage.getItem(AUTH_EXPLICIT_PORTAL_KEY) === '1') return null;
+      const autoGuest = makeDefaultGuest();
+      try { sessionStorage.setItem(AUTH_GUEST_KEY, JSON.stringify(autoGuest)); } catch (e) {}
+      return autoGuest;
+    } catch (e) { return makeDefaultGuest(); }
   };
 
   const Auth = {
@@ -455,17 +475,12 @@
 
     loginAsGuest(stream = 'ar') {
       const cleanStream = stream === 'en' ? 'en' : 'ar';
-      const guest = {
-        isGuest: true,
-        username: 'guest',
-        name: cleanStream === 'en' ? 'Guest' : 'زائر',
-        gmail: 'guest@session',
-        phone: '—',
-        countryCode: '+20',
-        stream: cleanStream
-      };
+      const guest = makeDefaultGuest(cleanStream);
       Auth.user = guest;
-      try { sessionStorage.setItem(AUTH_GUEST_KEY, JSON.stringify(guest)); } catch (e) {}
+      try {
+        sessionStorage.removeItem(AUTH_EXPLICIT_PORTAL_KEY);
+        sessionStorage.setItem(AUTH_GUEST_KEY, JSON.stringify(guest));
+      } catch (e) {}
       Store.activeUser = 'guest';
       const prefs = getPrefs();
       Store.data = { ...prefs, lang: cleanStream, lessons: {} };
@@ -479,6 +494,7 @@
       Auth.user = null;
       try { localStorage.removeItem(AUTH_USER_KEY); } catch (e) {}
       try { sessionStorage.removeItem(AUTH_GUEST_KEY); } catch (e) {}
+      try { sessionStorage.setItem(AUTH_EXPLICIT_PORTAL_KEY, '1'); } catch (e) {}
       Store.loadUser('guest');
       Auth.notify();
     }
@@ -585,10 +601,14 @@
   };
   const StoreVideos = {
     /* '' = lesson explicitly has no video (player is hidden) */
-    data: { '1-1': '', ...getLocalVideos() },
+    data: { '1-1': '', ...getLocalVideos(), ...(BOOT.videos || {}) },
     subs: new Set(),
     subscribe(fn) { StoreVideos.subs.add(fn); return () => StoreVideos.subs.delete(fn); },
     async init() {
+      if (BOOT.videos) {
+        try { localStorage.setItem(VIDEOS_KEY, JSON.stringify(StoreVideos.data)); } catch (e) {}
+        return;
+      }
       try {
         let res = await fetch('/api/lesson/videos');
         if (!res.ok) res = await fetch('./data/videos.json');
@@ -629,6 +649,8 @@
   /* ---------- fetch with cache & static fallback ---------- */
   const cache = new Map();
   const ALL_LESSON_IDS = ['1-1', '1-2', '1-3', '1-4', '2-1', '2-2', '2-3', '3-1', '3-2', '3-3', '4-1', '4-2', '4-3', '4-4'];
+  if (BOOT.meta) cache.set('/api/meta', Promise.resolve(BOOT.meta));
+  if (BOOT.status) cache.set('/api/status', Promise.resolve(BOOT.status));
 
   function mapStaticFallbackUrl(url) {
     if (url === '/api/meta') return './data/meta.json';
@@ -660,121 +682,103 @@
     return cache.get(url);
   }
 
-  /* ---------- smooth scroll (Lenis driven by GSAP ticker) ---------- */
-  let lenis = null;
+  function prefetchLesson(id, lang) {
+    if (!id) return;
+    const l = lang || Store.data.lang || 'ar';
+    getJSON(`/api/lesson/${l}/${id}`).catch(() => {});
+  }
+
+  /* ---------- fast native scroll helpers (zero wheel lag) ---------- */
   function initSmoothScroll() {
-    if (reduced || lenis || typeof Lenis === 'undefined') return;
-    lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 0.95, smoothWheel: true, autoResize: true });
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add(t => lenis.raf(t * 1000));
-    gsap.ticker.lagSmoothing(0);
+    // Native browser scroll is kept active for zero input latency
   }
   function scrollToY(y, immediate) {
-    if (lenis) {
-      if (lenis.resize) lenis.resize();
-      lenis.scrollTo(y, { immediate: !!immediate, duration: 1.2, easing: x => 1 - Math.pow(1 - x, 4) });
-    } else {
-      window.scrollTo({ top: y, behavior: immediate ? 'auto' : 'smooth' });
-    }
+    window.scrollTo({ top: y, behavior: immediate ? 'auto' : 'smooth' });
   }
   function scrollToEl(el, offset) {
     if (!el) return;
     scrollToY(el.getBoundingClientRect().top + window.scrollY - (offset || 0));
   }
-  const getLenis = () => lenis;
+  const getLenis = () => null;
 
-  /* ---------- scroll reveal engine ---------- */
-  const made = [];
-  let refreshTimer = 0;
+  /* ---------- Blocky Neo-Brutalist Scroll Animation Engine ---------- */
+  let brutalObserver = null;
+  let timelineObserver = null;
+
+  function ensureObservers() {
+    if (reduced || typeof IntersectionObserver === 'undefined') return;
+    if (!brutalObserver) {
+      brutalObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            el.classList.add('brutal-in');
+            brutalObserver.unobserve(el);
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -24px 0px' });
+    }
+    if (!timelineObserver) {
+      timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const fill = entry.target.querySelector('.tl-fill');
+            if (fill) fill.style.transform = 'scaleY(1)';
+            timelineObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+    }
+  }
+
   function scan(root) {
     if (reduced) return;
+    ensureObservers();
     const scope = root || document;
-    const isRtl = document.documentElement.dir === 'rtl';
 
-    scope.querySelectorAll('[data-reveal]:not([data-r])').forEach(el => {
+    const revealTargets = scope.querySelectorAll(
+      '[data-reveal]:not([data-r]), .course-card:not([data-r]), .cip-card:not([data-r]), .b-callout:not([data-r]), .fig-card:not([data-r]), .demo:not([data-r]), .ex:not([data-r]), .card:not([data-r]), .term:not([data-r])'
+    );
+    revealTargets.forEach((el, idx) => {
       el.dataset.r = '1';
-      const kind = el.dataset.reveal;
-      const from = kind === 'fade'
-        ? { opacity: 0 }
-        : kind === 'left'
-          ? { opacity: 0, x: isRtl ? 40 : -40 }
-          : kind === 'scale'
-            ? { opacity: 0, scale: .94 }
-            : { opacity: 0, y: 36 };
-      const tw = gsap.fromTo(el, from, {
-        opacity: 1, x: 0, y: 0, scale: 1, duration: .9, ease: 'power3.out',
-        delay: +(el.dataset.delay || 0),
-        scrollTrigger: { trigger: el, start: 'top 96%', once: true }
-      });
-      made.push(tw);
+      el.classList.add('brutal-block-anim');
+      el.style.setProperty('--b-delay', `${Math.min(idx % 5, 4) * 35}ms`);
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.92) {
+        requestAnimationFrame(() => el.classList.add('brutal-in'));
+      } else if (brutalObserver) {
+        brutalObserver.observe(el);
+      } else {
+        el.classList.add('brutal-in');
+      }
     });
+
     scope.querySelectorAll('[data-stagger]:not([data-r])').forEach(el => {
       el.dataset.r = '1';
       const kids = Array.from(el.children);
-      if (!kids.length) return;
-      const tw = gsap.fromTo(kids, { opacity: 0, y: 36 }, {
-        opacity: 1, y: 0, duration: .85, ease: 'power3.out', stagger: .08,
-        scrollTrigger: { trigger: el, start: 'top 96%', once: true }
+      kids.forEach((kid, idx) => {
+        if (kid.dataset.r) return;
+        kid.dataset.r = '1';
+        kid.classList.add('brutal-block-anim');
+        kid.style.setProperty('--b-delay', `${Math.min(idx, 8) * 45}ms`);
+        const rect = kid.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.94) {
+          requestAnimationFrame(() => kid.classList.add('brutal-in'));
+        } else if (brutalObserver) {
+          brutalObserver.observe(kid);
+        } else {
+          kid.classList.add('brutal-in');
+        }
       });
-      made.push(tw);
     });
-    scope.querySelectorAll('[data-words]:not([data-r])').forEach(el => {
-      el.dataset.r = '1';
-      const words = el.querySelectorAll('.wi');
-      if (!words.length) return;
-      const tw = gsap.fromTo(words, { yPercent: 115 }, {
-        yPercent: 0, duration: 1.0, ease: 'power4.out', stagger: .06,
-        delay: +(el.dataset.delay || 0),
-        scrollTrigger: { trigger: el, start: 'top 96%', once: true }
-      });
-      made.push(tw);
-    });
-    scope.querySelectorAll('[data-scrub-words]:not([data-r])').forEach(el => {
-      el.dataset.r = '1';
-      const words = el.querySelectorAll('.sw');
-      if (!words.length) return;
-      const tw = gsap.fromTo(words, { opacity: .18 }, {
-        opacity: 1, ease: 'none', stagger: .1,
-        scrollTrigger: { trigger: el, start: 'top 85%', end: 'bottom 45%', scrub: true }
-      });
-      made.push(tw);
-    });
+
     scope.querySelectorAll('[data-draw]:not([data-r])').forEach(el => {
       el.dataset.r = '1';
-      const fill = el.querySelector('.tl-fill');
-      if (!fill) return;
-      const tw = gsap.fromTo(fill, { scaleY: 0 }, {
-        scaleY: 1, ease: 'none',
-        scrollTrigger: { trigger: el, start: 'top 75%', end: 'bottom 60%', scrub: true }
-      });
-      made.push(tw);
+      if (timelineObserver) timelineObserver.observe(el);
     });
-    scope.querySelectorAll('[data-parallax]:not([data-r])').forEach(el => {
-      el.dataset.r = '1';
-      const amt = +el.dataset.parallax;
-      const tw = gsap.fromTo(el, { y: -amt }, {
-        y: amt, ease: 'none',
-        scrollTrigger: { trigger: el.parentElement || el, start: 'top bottom', end: 'bottom top', scrub: true }
-      });
-      made.push(tw);
-    });
-    clearTimeout(refreshTimer);
-    refreshTimer = setTimeout(() => {
-      if (lenis && lenis.resize) lenis.resize();
-      ScrollTrigger.refresh();
-    }, 180);
   }
 
   function killAll() {
-    while (made.length) {
-      const tw = made.pop();
-      const targets = tw.targets ? tw.targets() : [];
-      if (tw.scrollTrigger) tw.scrollTrigger.kill();
-      tw.kill();
-      if (targets.length) {
-        try { gsap.set(targets, { clearProps: 'opacity,transform,translate,rotate,scale' }); } catch (e) {}
-      }
-    }
     document.querySelectorAll('[data-r]').forEach(el => {
       delete el.dataset.r;
     });
@@ -788,20 +792,14 @@
   }
 
   /* ---------- tiny components ---------- */
-  function Words({ text, tag, className, delay }) {
+  function Words({ text, tag, className }) {
     const T = tag || 'span';
     const arr = Array.isArray(text) ? text : String(text || '').split(/\s+/).filter(Boolean);
-    return h(T, { className: 'words ' + (className || ''), 'data-words': '', 'data-delay': delay || 0, 'aria-label': arr.join(' ') },
-      arr.map((w, i) =>
-        h(React.Fragment, { key: i },
-          h('span', { className: 'w', 'aria-hidden': 'true' }, h('span', { className: 'wi' }, w)),
-          i < arr.length - 1 ? ' ' : null)));
+    return h(T, { className: 'words ' + (className || '') }, arr.join(' '));
   }
 
   function ScrubWords({ text, className }) {
-    const arr = String(text || '').split(/\s+/).filter(Boolean);
-    return h('p', { className: 'scrub ' + (className || ''), 'data-scrub-words': '' },
-      arr.map((w, i) => h(React.Fragment, { key: i }, h('span', { className: 'sw' }, w), i < arr.length - 1 ? ' ' : null)));
+    return h('p', { className: 'scrub ' + (className || '') }, String(text || ''));
   }
 
   /* ---------- Text-to-Speech (TTS) Engine ---------- */
@@ -1062,7 +1060,7 @@
 
   const StoreRatings = {
     state: {
-      students: computeLocalStats('students')
+      students: (BOOT.ratings && BOOT.ratings.students) ? BOOT.ratings.students : computeLocalStats('students')
     },
     subs: new Set(),
     subscribe(fn) {
@@ -1100,6 +1098,22 @@
       };
     },
     async load(courseId = 'students') {
+      if (BOOT.ratings && BOOT.ratings[courseId]) {
+        const b = BOOT.ratings[courseId];
+        const localSt = computeLocalStats(courseId);
+        const rdb = getLocalRatings();
+        if (!rdb.courses) rdb.courses = {};
+        const merged = { ...(rdb.courses[courseId] || {}), ...(b.ratings || {}) };
+        rdb.courses[courseId] = merged;
+        saveLocalRatings(rdb);
+        const vals = Object.values(merged).map(Number).filter(n => n >= 1 && n <= 5);
+        const count = vals.length;
+        const average = count > 0 ? Number((vals.reduce((a, b) => a + b, 0) / count).toFixed(1)) : 0;
+        const studentsCount = Math.max(localSt.studentsCount || 0, Number(b.studentsCount || 0));
+        StoreRatings.state[courseId] = { average, count, studentsCount, ratings: merged };
+        StoreRatings.notify();
+        return;
+      }
       const localSt = computeLocalStats(courseId);
       StoreRatings.state[courseId] = localSt;
       StoreRatings.notify();
@@ -1167,6 +1181,12 @@
   const notifyTextChange = () => textListeners.forEach(fn => fn(STR));
   const subscribeTexts = (fn) => { textListeners.add(fn); return () => textListeners.delete(fn); };
 
+  // Synchronously hydrate texts from bootstrap if available
+  if (BOOT.texts) {
+    if (BOOT.texts.ar) Object.assign(STR.ar, BOOT.texts.ar);
+    if (BOOT.texts.en) Object.assign(STR.en, BOOT.texts.en);
+  }
+
   async function loadSiteTexts() {
     try {
       const localCustom = JSON.parse(localStorage.getItem(TEXTS_LOCAL_KEY) || 'null');
@@ -1175,6 +1195,10 @@
         if (localCustom.en) Object.assign(STR.en, localCustom.en);
       }
     } catch (e) {}
+    if (BOOT.texts) {
+      notifyTextChange();
+      return BOOT.texts;
+    }
     try {
       let res = await fetch('/api/site/texts');
       if (res.ok) {
@@ -1231,9 +1255,11 @@
   loadSiteTexts();
 
   window.App = {
-    h, STR, Store, useStore, LangCtx, useLang, getJSON, initSmoothScroll, scrollToY, scrollToEl, getLenis,
+    h, STR, Store, useStore, LangCtx, useLang, getJSON, prefetchLesson, initSmoothScroll, scrollToY, scrollToEl, getLenis,
     scan, killAll, useScan, Words, ScrubWords, reduced, TTS, search, SEARCH_ITEMS,
     Auth, useAuth, COUNTRIES, StoreVideos, StoreRatings,
-    loadSiteTexts, saveSiteTexts, subscribeTexts
+    loadSiteTexts, saveSiteTexts, subscribeTexts,
+    initialMeta: BOOT.meta || null,
+    initialStatus: BOOT.status || null
   };
 })();

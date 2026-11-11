@@ -58,11 +58,19 @@
 
   /* Callout */
   const Callout = ({ b, arB, bilingual }) => {
+    const { lang } = useLang();
     const arTitle = (bilingual && arB && arB.title) || null;
     const arText = (bilingual && arB && arB.text) || null;
+    const toneLabels = {
+      tip: lang === 'ar' ? 'نصيحة' : 'TIP',
+      note: lang === 'ar' ? 'ملاحظة' : 'NOTE',
+      warning: lang === 'ar' ? 'تنبيه' : 'ALERT',
+      think: lang === 'ar' ? 'فكّر' : 'IDEA'
+    };
+    const badgeTxt = toneLabels[b.tone] || (lang === 'ar' ? 'ملاحظة' : 'NOTE');
     return h('aside', { className: 'b-callout tone-' + b.tone, 'data-reveal': '' },
-      h('span', { className: 'co-mark', 'aria-hidden': 'true' }),
-      h('div', null,
+      h('span', { className: 'co-badge' }, badgeTxt),
+      h('div', { className: 'co-body' },
         h('strong', null, b.title),
         h('p', null, b.text),
         (arTitle || arText) ? h(ArSub, { text: (arTitle ? arTitle + ': ' : '') + (arText || '') }) : null));
