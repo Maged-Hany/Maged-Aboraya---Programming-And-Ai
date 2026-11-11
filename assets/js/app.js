@@ -303,8 +303,7 @@
   }
 
   /* ============ auth portal (register + login) ============ */
-  /* Register / login are paused until the database is connected. Set to false to re-enable. */
-  const AUTH_PAUSED = true;
+  const AUTH_PAUSED = false;
 
   function AuthPortal({ onAuthSuccess, onOpenTextsEditor }) {
     const [tab, setTab] = useState('register');
@@ -651,9 +650,28 @@
     );
   }
 
-  /* ============ student profile menu in header ============ */
-  function StudentProfileMenu({ user, onLogout, lang, totalLessons, doneLessons }) {
+  const ChartBarIcon = () => h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.3, strokeLinecap: 'round', strokeLinejoin: 'round', style: { flex: 'none' } },
+    h('line', { x1: 18, y1: 20, x2: 18, y2: 10 }),
+    h('line', { x1: 12, y1: 20, x2: 12, y2: 4 }),
+    h('line', { x1: 6, y1: 20, x2: 6, y2: 14 }),
+    h('line', { x1: 3, y1: 20, x2: 21, y2: 20 }));
+
+  const ClockIcon = () => h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round', style: { flex: 'none' } },
+    h('circle', { cx: 12, cy: 12, r: 10 }),
+    h('polyline', { points: '12 6 12 12 16 14' }));
+
+  const TrophyIcon = () => h('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round', style: { flex: 'none' } },
+    h('path', { d: 'M6 9H4.5a2.5 2.5 0 0 1 0-5H6' }),
+    h('path', { d: 'M18 9h1.5a2.5 2.5 0 0 0 0-5H18' }),
+    h('path', { d: 'M4 22h16' }),
+    h('path', { d: 'M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22' }),
+    h('path', { d: 'M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22' }),
+    h('path', { d: 'M18 2H6v7a6 6 0 0 0 12 0V2Z' }));
+
+  /* ============ Neo-Brutalist student profile menu in header ============ */
+  function StudentProfileMenu({ user, meta, onLogout, onSetLang, lang, route }) {
     const { t } = useLang();
+    const store = useStore();
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
 
@@ -663,60 +681,804 @@
       return () => document.removeEventListener('pointerdown', onDoc);
     }, [open]);
 
+    useEffect(() => {
+      setOpen(false);
+    }, [route && route.key]);
+
+    const isAr = lang === 'ar';
     const isGuest = !!user.isGuest;
-    const initial = isGuest ? (lang === 'ar' ? 'ز' : 'G') : (user.name || user.username || 'S')[0].toUpperCase();
-    const displayName = isGuest ? (lang === 'ar' ? 'زائر' : 'Guest') : (user.name || user.username);
+    const metrics = useMemo(() => {
+      if (App.ProgressMetrics && App.ProgressMetrics.computeDashboardMetrics) {
+        return App.ProgressMetrics.computeDashboardMetrics(meta, store, lang);
+      }
+      return {
+        totalLessons: 14,
+        completedLessons: 0,
+        completionPct: 0,
+        avgQuizPct: 0,
+        studyDuration: { shortFormatted: isAr ? '0 د' : '0m', formatted: isAr ? '0 دقيقة' : '0 min' },
+        rank: { title: isAr ? 'متعلّم نشط' : 'Active Learner', color: '#ffd233' },
+        nextRecommendedLesson: { id: '1-1', numberLabel: '1.1', title: '' }
+      };
+    }, [meta, store, lang]);
+
+    const displayName = user.name || (isAr ? 'طالب Syntax' : 'Syntax Student');
+    const cleanName = String(displayName).trim();
+    const initial = cleanName ? cleanName[0].toUpperCase() : (isAr ? 'ط' : 'S');
+    const avatarBg = user.avatarColor || '#ffd233';
+    const avatarFg = avatarBg === '#ffd233' ? '#111111' : '#ffffff';
+    const isDashboardActive = route && route.name === 'dashboard';
 
     return h('div', { className: 'student-profile-wrap', ref },
       h('button', {
         type: 'button',
-        className: 'student-profile-btn' + (open ? ' is-active' : '') + (isGuest ? ' is-guest' : ''),
+        className: 'student-profile-btn' + (open ? ' is-active' : '') + (isDashboardActive ? ' on-dashboard' : ''),
         onClick: () => setOpen(!open),
-        title: t.accountInfo || (lang === 'ar' ? 'بيانات الحساب' : 'Account Profile')
+        'aria-expanded': open,
+        'aria-label': isAr ? 'فتح قائمة حساب الطالب ولوحة التقدم' : 'Open student profile and progress menu'
       },
-        h('span', { className: 'student-avatar' + (isGuest ? ' guest-avatar' : '') },
-          isGuest
-            ? h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' },
-              h('path', { d: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2' }),
-              h('circle', { cx: 12, cy: 7, r: 4 }))
-            : initial
+        h('span', {
+          className: 'student-avatar-block',
+          style: { background: avatarBg, color: avatarFg }
+        }, initial),
+        h('span', { className: 'student-btn-info' },
+          h('span', { className: 'student-name-pill' }, displayName),
+          h('span', { className: 'student-prog-mini', dir: 'ltr' }, `${metrics.completedLessons}/${metrics.totalLessons}`)
         ),
-        /* Guest: profile icon only (no name / "temporary" tag) */
-        isGuest ? null : h('span', { className: 'student-name-pill' }, displayName)
+        h('svg', {
+          className: 'student-btn-chev' + (open ? ' is-open' : ''),
+          width: 12,
+          height: 12,
+          viewBox: '0 0 24 24',
+          fill: 'none',
+          stroke: 'currentColor',
+          strokeWidth: 2.8,
+          strokeLinecap: 'round',
+          strokeLinejoin: 'round'
+        }, h('polyline', { points: '6 9 12 15 18 9' }))
       ),
-      open ? h('div', { className: 'student-menu-card' + (isGuest ? ' is-guest' : ''), dir: lang === 'ar' ? 'rtl' : 'ltr' },
-        /* Guest: no warning banner, only language + exit button */
-        isGuest ? null : h('div', { className: 'smc-head' },
-          h('div', { className: 'smc-avatar-big' }, initial),
+      open ? h('div', {
+        className: 'student-menu-card',
+        dir: isAr ? 'rtl' : 'ltr',
+        role: 'dialog',
+        'aria-label': isAr ? 'بطاقة حساب الطالب' : 'Student Account Card'
+      },
+        /* 1. Identity Header */
+        h('div', { className: 'smc-head' },
+          h('div', {
+            className: 'smc-avatar-big',
+            style: { background: avatarBg, color: avatarFg }
+          }, initial),
           h('div', { className: 'smc-info' },
-            h('div', { className: 'smc-name' }, user.name),
-            h('div', { className: 'smc-username', dir: 'ltr' }, '@' + user.username),
-            h('div', { className: 'smc-gmail', dir: 'ltr' }, user.gmail)
+            h('div', { className: 'smc-name-row' },
+              h('span', { className: 'smc-name' }, displayName),
+              h('a', {
+                href: '#/dashboard?edit=1',
+                className: 'smc-edit-mini',
+                onClick: () => setOpen(false),
+                title: isAr ? 'تعديل الملف الشخصي' : 'Edit Profile'
+              }, h(EditIcon))
+            ),
+            h('div', { className: 'smc-grade' },
+              user.gradeTitle || (isAr ? 'الصف الثاني الثانوي · البكالوريا' : '2nd Secondary · Baccalaureate')
+            ),
+            h('div', { className: 'smc-rank-line' },
+              h('span', { className: 'smc-rank-tag' }, metrics.rank.title),
+              h('span', { className: 'smc-sep', 'aria-hidden': 'true' }, '·'),
+              h('span', { className: 'smc-user-handle', dir: 'ltr' }, '@' + (user.username || 'syntax_student'))
+            )
           )
         ),
-        h('div', { className: 'smc-details' },
-          !isGuest ? h('div', { className: 'smc-row' },
-            h('span', null, lang === 'ar' ? 'رقم الهاتف:' : 'Phone:'),
-            h('b', { dir: 'ltr' }, (user.countryCode || '+20') + ' ' + user.phone)
-          ) : null,
-          h('div', { className: 'smc-row' },
-            h('span', null, lang === 'ar' ? 'اللغة:' : 'Language:'),
-            h('b', { dir: 'ltr' }, lang === 'en' ? 'EN' : 'AR')
+
+        /* 2. 3-Column Live Telemetry Strip */
+        h('div', { className: 'smc-stats-grid' },
+          h('div', { className: 'smc-stat-box' },
+            h('strong', { className: 'smc-stat-val', dir: 'ltr' }, `${metrics.completedLessons}/${metrics.totalLessons}`),
+            h('span', { className: 'smc-stat-lbl' }, isAr ? 'الدروس المكتملة' : 'Completed')
           ),
-          !isGuest ? h('div', { className: 'smc-row' },
-            h('span', null, t.coursesCompleted ? t.coursesCompleted + ':' : (lang === 'ar' ? 'الدروس المكتملة:' : 'Lessons Done:')),
-            h('b', { dir: 'ltr' }, `${doneLessons} / ${totalLessons}`)
-          ) : null
+          h('div', { className: 'smc-stat-box' },
+            h('strong', { className: 'smc-stat-val', dir: 'ltr' }, `${metrics.avgQuizPct}%`),
+            h('span', { className: 'smc-stat-lbl' }, isAr ? 'متوسط الاختبارات' : 'Quiz Score')
+          ),
+          h('div', { className: 'smc-stat-box' },
+            h('strong', { className: 'smc-stat-val', dir: isAr ? 'rtl' : 'ltr' }, metrics.studyDuration.shortFormatted),
+            h('span', { className: 'smc-stat-lbl' }, isAr ? 'وقت التعلّم' : 'Study Time')
+          )
         ),
-        h('button', {
-          type: 'button',
-          className: 'smc-logout-btn',
-          onClick: () => { setOpen(false); onLogout(); }
+
+        /* 3. Overall Mastery Bar */
+        h('div', { className: 'smc-mastery-box' },
+          h('div', { className: 'smc-mastery-top' },
+            h('span', null, isAr ? 'إتقان المنهج الكلي' : 'Overall Course Mastery'),
+            h('b', { dir: 'ltr' }, `${metrics.completionPct}%`)
+          ),
+          h('div', { className: 'smc-mastery-track' },
+            h('div', {
+              className: 'smc-mastery-fill',
+              style: { width: `${metrics.completionPct}%` }
+            })
+          )
+        ),
+
+        /* 4. Primary CTA: Open Visual Progress Dashboard */
+        h('a', {
+          href: '#/dashboard',
+          className: 'smc-dashboard-cta',
+          onClick: () => setOpen(false)
         },
-          h(LogoutIcon),
-          h('span', null, isGuest ? (t.exitGuest || (lang === 'ar' ? 'الخروج من وضع الزائر' : 'Exit Guest Mode')) : (t.logout || (lang === 'ar' ? 'تسجيل الخروج' : 'Sign Out')))
+          h(ChartBarIcon),
+          h('span', null, isAr ? 'لوحة التقدم والإحصائيات' : 'Visual Progress Dashboard'),
+          h('span', { className: 'smc-cta-arr', 'aria-hidden': 'true' }, isAr ? '←' : '→')
+        ),
+
+        /* 5. Secondary Quick Actions */
+        h('div', { className: 'smc-quick-links' },
+          metrics.nextRecommendedLesson ? h('a', {
+            href: '#/lesson/' + metrics.nextRecommendedLesson.id,
+            className: 'smc-quick-item',
+            onClick: () => setOpen(false)
+          },
+            h('span', { className: 'smc-qi-badge', dir: 'ltr' }, metrics.nextRecommendedLesson.numberLabel),
+            h('span', { className: 'smc-qi-text' },
+              isAr
+                ? `استكمل: ${metrics.nextRecommendedLesson.title}`
+                : `Continue: ${metrics.nextRecommendedLesson.title}`
+            )
+          ) : null,
+          h('div', { className: 'smc-lang-row' },
+            h('span', { className: 'smc-lang-lbl' }, isAr ? 'لغة الدراسة:' : 'Study Language:'),
+            h('div', { className: 'smc-lang-btns', dir: 'ltr' },
+              h('button', {
+                type: 'button',
+                className: 'smc-lang-btn' + (lang === 'ar' ? ' active' : ''),
+                onClick: () => onSetLang && onSetLang('ar')
+              }, 'AR'),
+              h('button', {
+                type: 'button',
+                className: 'smc-lang-btn' + (lang === 'en' ? ' active' : ''),
+                onClick: () => onSetLang && onSetLang('en')
+              }, 'EN')
+            )
+          )
+        ),
+
+        /* 6. Account / Sign In / Logout Footer */
+        h('div', { className: 'smc-foot-actions' },
+          h('a', {
+            href: '#/dashboard?edit=1',
+            className: 'smc-edit-profile-btn',
+            onClick: () => setOpen(false)
+          },
+            h(EditIcon),
+            h('span', null, isAr ? 'تعديل الملف' : 'Edit Profile')
+          ),
+          h('button', {
+            type: 'button',
+            className: 'smc-logout-btn',
+            onClick: () => {
+              setOpen(false);
+              onLogout();
+            }
+          },
+            h(LogoutIcon),
+            h('span', null, isGuest ? (isAr ? 'بوابة الحساب' : 'Account Portal') : (t.logout || (isAr ? 'تسجيل الخروج' : 'Sign Out')))
+          )
         )
       ) : null
+    );
+  }
+
+  /* ============ Visual Student Progress Dashboard (#/dashboard) ============ */
+  const AVATAR_PALETTE = [
+    { hex: '#ffd233', labelAr: 'أصفر Syntax', labelEn: 'Syntax Yellow' },
+    { hex: '#2563eb', labelAr: 'أزرق هندسي', labelEn: 'Royal Blue' },
+    { hex: '#16a34a', labelAr: 'أخضر زمردي', labelEn: 'Emerald Green' },
+    { hex: '#e5484d', labelAr: 'أحمر قرمزي', labelEn: 'Crimson Red' }
+  ];
+
+  function StudentProgressDashboard({ meta, user, route }) {
+    const { lang } = useLang();
+    const store = useStore();
+    useScan();
+    const isAr = lang === 'ar';
+
+    const [statusFilter, setStatusFilter] = useState('all'); // all | completed | in-progress | not-started
+    const [chapterFilter, setChapterFilter] = useState('all'); // all | 1 | 2 | 3 | 4
+    const [editingProfile, setEditingProfile] = useState(() => Boolean(route && route.editProfile));
+    const [editName, setEditName] = useState(user ? user.name || '' : '');
+    const [editGrade, setEditGrade] = useState(user ? user.gradeTitle || '' : '');
+    const [editColor, setEditColor] = useState(user ? user.avatarColor || '#ffd233' : '#ffd233');
+    const [editGoal, setEditGoal] = useState(store.dailyGoalMinutes || 30);
+    const [savedToast, setSavedToast] = useState('');
+
+    useEffect(() => {
+      if (route && route.editProfile) setEditingProfile(true);
+    }, [route && route.editProfile]);
+
+    useEffect(() => {
+      if (user) {
+        setEditName(user.name || '');
+        setEditGrade(user.gradeTitle || (isAr ? 'الصف الثاني الثانوي · البكالوريا' : '2nd Secondary · Baccalaureate'));
+        setEditColor(user.avatarColor || '#ffd233');
+      }
+    }, [user, isAr]);
+
+    const metrics = useMemo(() => {
+      return App.ProgressMetrics.computeDashboardMetrics(meta, store, lang);
+    }, [meta, store, lang]);
+
+    const filteredLessons = useMemo(() => {
+      return metrics.allLessons.filter(ls => {
+        if (statusFilter !== 'all' && ls.status !== statusFilter) return false;
+        if (chapterFilter !== 'all' && Number(ls.chapterId) !== Number(chapterFilter)) return false;
+        return true;
+      });
+    }, [metrics.allLessons, statusFilter, chapterFilter]);
+
+    const showToast = (msg) => {
+      setSavedToast(msg);
+      setTimeout(() => setSavedToast(''), 2600);
+    };
+
+    const handleSaveProfile = (e) => {
+      e.preventDefault();
+      const cleanName = editName.trim() || (isAr ? 'طالب Syntax' : 'Syntax Student');
+      const cleanGrade = editGrade.trim() || (isAr ? 'الصف الثاني الثانوي · البكالوريا' : '2nd Secondary · Baccalaureate');
+      App.Auth.updateProfile({
+        name: cleanName,
+        gradeTitle: cleanGrade,
+        avatarColor: editColor
+      });
+      Store.setDailyGoal(editGoal);
+      setEditingProfile(false);
+      showToast(isAr ? 'تم حفظ بيانات ملفك الشخصي وهدفك اليومي بنجاح!' : 'Profile & daily study goal saved!');
+    };
+
+    const handleLogStudyMinutes = (mins, lessonId = null) => {
+      Store.recordStudyTime(lessonId, mins * 60);
+      showToast(
+        isAr
+          ? `تم تسجيل +${mins} دقيقة في سجل دراستك اليوم!`
+          : `Logged +${mins} minutes to today's study time!`
+      );
+    };
+
+    const handleToggleLesson = (ls) => {
+      Store.toggleLessonComplete(ls.id, ls.estimatedMinutes);
+      showToast(
+        ls.isCompleted
+          ? (isAr ? `تم إعادة الدرس ${ls.numberLabel} إلى قيد المراجعة` : `Marked Lesson ${ls.numberLabel} as in review`)
+          : (isAr ? `أحسنت! تم تسجيل الدرس ${ls.numberLabel} كمكتمل` : `Lesson ${ls.numberLabel} marked as completed!`)
+      );
+    };
+
+    const displayName = (user && user.name) || (isAr ? 'طالب Syntax' : 'Syntax Student');
+    const initial = String(displayName).trim()[0] ? String(displayName).trim()[0].toUpperCase() : 'S';
+    const avatarBg = (user && user.avatarColor) || '#ffd233';
+    const avatarFg = avatarBg === '#ffd233' ? '#111111' : '#ffffff';
+    const rankFg = metrics.rank.color === '#ffd233' ? '#111111' : '#ffffff';
+    const maxWeeklyMin = Math.max(metrics.dailyGoalMinutes, ...metrics.weeklySeries.map(d => d.minutes), 45);
+
+    return h('main', { id: 'main', className: 'progress-dashboard-view' },
+      /* 1. Breadcrumb */
+      h('nav', { className: 'cip-breadcrumb spd-breadcrumb', 'aria-label': 'Breadcrumb' },
+        h('a', { href: '#/' }, isAr ? 'الرئيسية' : 'Home'),
+        h('span', null, '/'),
+        h('a', { href: '#/course/students' }, isAr ? 'كورس البكالوريا' : 'Baccalaureate Course'),
+        h('span', null, '/'),
+        h('span', { style: { color: '#111111', fontWeight: 800 } }, isAr ? 'لوحة التقدم والإحصائيات' : 'Student Progress Dashboard')
+      ),
+
+      savedToast ? h('div', { className: 'spd-toast', role: 'status' },
+        h(CheckIcon),
+        h('span', null, savedToast)
+      ) : null,
+
+      /* 2. Student Profile & Mastery Hero Card */
+      h('section', { className: 'spd-hero-card' },
+        h('div', { className: 'spd-hero-main' },
+          h('div', { className: 'spd-identity-block' },
+            h('div', {
+              className: 'spd-avatar-xl',
+              style: { background: avatarBg, color: avatarFg }
+            }, initial),
+            h('div', { className: 'spd-identity-text' },
+              h('div', { className: 'spd-rank-kicker' },
+                h('span', { className: 'spd-rank-badge', style: { background: metrics.rank.color, color: rankFg } }, metrics.rank.title),
+                h('span', { className: 'spd-sep', 'aria-hidden': 'true' }, '·'),
+                h('span', { className: 'spd-handle', dir: 'ltr' }, '@' + ((user && user.username) || 'syntax_student'))
+              ),
+              h('h1', { className: 'spd-student-name' }, displayName),
+              h('p', { className: 'spd-student-grade' },
+                (user && user.gradeTitle) || (isAr ? 'الصف الثاني الثانوي · مسار البرمجة والذكاء الاصطناعي' : '2nd Secondary Baccalaureate · Programming & AI Track')
+              ),
+              h('div', { className: 'spd-profile-actions' },
+                h('button', {
+                  type: 'button',
+                  className: 'spd-btn-outline' + (editingProfile ? ' active' : ''),
+                  onClick: () => setEditingProfile(!editingProfile)
+                },
+                  h(EditIcon),
+                  h('span', null, editingProfile ? (isAr ? 'إغلاق التعديل' : 'Close Editor') : (isAr ? 'تعديل الملف والهدف اليومي' : 'Edit Profile & Daily Goal'))
+                ),
+                h('button', {
+                  type: 'button',
+                  className: 'spd-btn-outline',
+                  onClick: () => handleLogStudyMinutes(15, metrics.nextRecommendedLesson ? metrics.nextRecommendedLesson.id : null)
+                },
+                  h(ClockIcon),
+                  h('span', null, isAr ? 'تسجيل +15 د مذاكرة' : 'Log +15m Study')
+                )
+              )
+            )
+          ),
+
+          /* Next Lesson CTA Box */
+          metrics.nextRecommendedLesson ? h('div', { className: 'spd-next-card' },
+            h('div', { className: 'spd-next-top' },
+              h('span', { className: 'spd-next-tag' },
+                metrics.nextRecommendedLesson.status === 'in-progress'
+                  ? (isAr ? 'قيد الدراسة حالياً' : 'IN PROGRESS NOW')
+                  : (isAr ? 'الخطوة التالية المقترحة' : 'NEXT RECOMMENDED')
+              ),
+              h('span', { className: 'spd-next-code', dir: 'ltr' }, `Lesson ${metrics.nextRecommendedLesson.numberLabel}`)
+            ),
+            h('h2', { className: 'spd-next-title' }, metrics.nextRecommendedLesson.title),
+            h('p', { className: 'spd-next-meta' },
+              `${metrics.nextRecommendedLesson.chapterTitle} · ${metrics.nextRecommendedLesson.estimatedMinutes} ${isAr ? 'دقيقة' : 'min'}`
+            ),
+            h('div', { className: 'spd-next-btns' },
+              h('a', {
+                href: '#/lesson/' + metrics.nextRecommendedLesson.id,
+                className: 'solid spd-next-cta'
+              },
+                h('span', null, isAr ? 'استكمل الدرس الآن' : 'Continue Lesson Now'),
+                h('span', { 'aria-hidden': 'true' }, isAr ? '←' : '→')
+              )
+            )
+          ) : null
+        ),
+
+        /* Inline Profile & Study Goal Editor Drawer */
+        editingProfile ? h('form', { className: 'spd-profile-editor', onSubmit: handleSaveProfile },
+          h('div', { className: 'spd-pe-head' },
+            h('h3', null, isAr ? 'تخصيص ملف الطالب وهدف الدراسة اليومي' : 'Customize Student Profile & Daily Study Goal'),
+            h('p', null, isAr ? 'تظهر هذه البيانات في شريط المنصة العلوي وفي تقارير تقدمك.' : 'Your name, badge color, and study goal appear across your header and progress reports.')
+          ),
+          h('div', { className: 'spd-pe-grid' },
+            h('label', { className: 'spd-pe-field' },
+              h('span', null, isAr ? 'اسم الطالب' : 'Student Name'),
+              h('input', {
+                type: 'text',
+                className: 'spd-pe-input',
+                value: editName,
+                onChange: e => setEditName(e.target.value),
+                placeholder: isAr ? 'اكتب اسمك...' : 'Enter your name...'
+              })
+            ),
+            h('label', { className: 'spd-pe-field' },
+              h('span', null, isAr ? 'الصف الدراسي / المسار' : 'Grade / Study Track'),
+              h('input', {
+                type: 'text',
+                className: 'spd-pe-input',
+                value: editGrade,
+                onChange: e => setEditGrade(e.target.value),
+                placeholder: isAr ? 'الصف الثاني الثانوي · البكالوريا' : '2nd Secondary · Baccalaureate'
+              })
+            ),
+            h('div', { className: 'spd-pe-field' },
+              h('span', null, isAr ? 'هدف الدراسة اليومي (دقيقة)' : 'Daily Study Goal (Minutes)'),
+              h('div', { className: 'spd-goal-pills', dir: 'ltr' },
+                [15, 30, 45, 60, 90].map(g =>
+                  h('button', {
+                    key: g,
+                    type: 'button',
+                    className: 'spd-goal-pill' + (Number(editGoal) === g ? ' active' : ''),
+                    onClick: () => setEditGoal(g)
+                  }, `${g}m`)
+                )
+              )
+            ),
+            h('div', { className: 'spd-pe-field' },
+              h('span', null, isAr ? 'لون شارة الملف الشخصي' : 'Profile Badge Color'),
+              h('div', { className: 'spd-color-swatches' },
+                AVATAR_PALETTE.map(sw =>
+                  h('button', {
+                    key: sw.hex,
+                    type: 'button',
+                    className: 'spd-color-swatch' + (editColor === sw.hex ? ' active' : ''),
+                    style: { background: sw.hex },
+                    onClick: () => setEditColor(sw.hex),
+                    title: isAr ? sw.labelAr : sw.labelEn,
+                    'aria-label': isAr ? sw.labelAr : sw.labelEn
+                  }, editColor === sw.hex ? '✓' : '')
+                )
+              )
+            )
+          ),
+          h('div', { className: 'spd-pe-actions' },
+            h('button', { type: 'submit', className: 'solid spd-pe-save' },
+              h(CheckIcon),
+              h('span', null, isAr ? 'حفظ التعديلات' : 'Save Profile Changes')
+            ),
+            h('button', {
+              type: 'button',
+              className: 'ghost spd-pe-cancel',
+              onClick: () => setEditingProfile(false)
+            }, isAr ? 'إلغاء' : 'Cancel')
+          )
+        ) : null
+      ),
+
+      /* 3. 4-Card KPI Summary Strip */
+      h('section', { className: 'spd-kpi-grid', 'aria-label': isAr ? 'ملخص الإحصائيات' : 'Key Progress Metrics' },
+        /* KPI 1: Completed Lessons */
+        h('article', { className: 'spd-kpi-card' },
+          h('div', { className: 'spd-kpi-top' },
+            h('span', { className: 'spd-kpi-label' }, isAr ? 'الدروس المكتملة' : 'COMPLETED LESSONS'),
+            h('span', { className: 'spd-kpi-tag tag-blue', dir: 'ltr' }, `${metrics.completionPct}%`)
+          ),
+          h('div', { className: 'spd-kpi-value', dir: 'ltr' },
+            h('strong', null, metrics.completedLessons),
+            h('span', { className: 'spd-kpi-denom' }, `/ ${metrics.totalLessons}`)
+          ),
+          h('div', { className: 'spd-14-segments', dir: 'ltr', 'aria-hidden': 'true' },
+            metrics.allLessons.map(ls =>
+              h('span', {
+                key: ls.id,
+                className: 'spd-seg-block is-' + ls.status,
+                title: `${ls.numberLabel}: ${ls.title}`
+              })
+            )
+          ),
+          h('p', { className: 'spd-kpi-foot' },
+            isAr
+              ? `${metrics.inProgressLessons} قيد الدراسة · ${metrics.notStartedLessons} متبقي`
+              : `${metrics.inProgressLessons} in progress · ${metrics.notStartedLessons} remaining`
+          )
+        ),
+
+        /* KPI 2: Quiz Score Average */
+        h('article', { className: 'spd-kpi-card' },
+          h('div', { className: 'spd-kpi-top' },
+            h('span', { className: 'spd-kpi-label' }, isAr ? 'متوسط درجات الاختبارات' : 'QUIZ SCORE AVERAGE'),
+            h('span', { className: 'spd-kpi-tag tag-yellow', dir: 'ltr' },
+              metrics.quizTakenCount > 0 ? `${metrics.totalEarnedPoints}/${metrics.totalPossiblePoints}` : '0/0'
+            )
+          ),
+          h('div', { className: 'spd-kpi-value', dir: 'ltr' },
+            h('strong', null, `${metrics.avgQuizPct}%`)
+          ),
+          h('div', { className: 'spd-kpi-bar-track' },
+            h('div', {
+              className: 'spd-kpi-bar-fill fill-green',
+              style: { width: `${metrics.avgQuizPct}%` }
+            })
+          ),
+          h('p', { className: 'spd-kpi-foot' },
+            isAr
+              ? `أعلى درجة: ${metrics.bestQuizPct}% · ${metrics.quizTakenCount} اختبارات مجتازة`
+              : `Best score: ${metrics.bestQuizPct}% · ${metrics.quizTakenCount} quizzes completed`
+          )
+        ),
+
+        /* KPI 3: Time Spent Learning */
+        h('article', { className: 'spd-kpi-card' },
+          h('div', { className: 'spd-kpi-top' },
+            h('span', { className: 'spd-kpi-label' }, isAr ? 'الوقت المستغرق في التعلّم' : 'TIME SPENT LEARNING'),
+            h('span', { className: 'spd-kpi-tag tag-green', dir: 'ltr' }, `${metrics.todayMinutes}/${metrics.dailyGoalMinutes}m`)
+          ),
+          h('div', { className: 'spd-kpi-value' },
+            h('strong', null, metrics.studyDuration.formatted)
+          ),
+          h('div', { className: 'spd-kpi-bar-track' },
+            h('div', {
+              className: 'spd-kpi-bar-fill fill-yellow',
+              style: { width: `${metrics.dailyGoalPct}%` }
+            })
+          ),
+          h('p', { className: 'spd-kpi-foot' },
+            isAr
+              ? `مذاكرة اليوم: ${metrics.todayMinutes} د من هدفك (${metrics.dailyGoalMinutes} د)`
+              : `Today: ${metrics.todayMinutes}m of your ${metrics.dailyGoalMinutes}m daily goal`
+          )
+        ),
+
+        /* KPI 4: Study Streak & Strongest Chapter */
+        h('article', { className: 'spd-kpi-card' },
+          h('div', { className: 'spd-kpi-top' },
+            h('span', { className: 'spd-kpi-label' }, isAr ? 'سلسلة الالتزام والأداء' : 'STUDY STREAK & FOCUS'),
+            h('span', { className: 'spd-kpi-tag tag-dark', dir: 'ltr' }, `${metrics.weeklyTotalMinutes}m / 7d`)
+          ),
+          h('div', { className: 'spd-kpi-value' },
+            h('strong', null, `${metrics.streakDays} ${isAr ? 'أيام' : 'Days'}`)
+          ),
+          h('div', { className: 'spd-kpi-bar-track' },
+            h('div', {
+              className: 'spd-kpi-bar-fill fill-blue',
+              style: { width: `${Math.min(100, metrics.streakDays * 16)}%` }
+            })
+          ),
+          h('p', { className: 'spd-kpi-foot' },
+            metrics.strongestChapter
+              ? (isAr
+                ? `أقوى فصل: الفصل 0${metrics.strongestChapter.id} (${metrics.strongestChapter.pct}%)`
+                : `Top module: Chapter 0${metrics.strongestChapter.id} (${metrics.strongestChapter.pct}%)`)
+              : (isAr ? 'ابدأ أول درس اليوم لبناء سلسلتك' : 'Start a lesson today to build your streak')
+          )
+        )
+      ),
+
+      /* 4. 2-Column Visual Analytics Grid: Chapter Mastery + Weekly Study Time & Quiz Distribution */
+      h('section', { className: 'spd-charts-grid' },
+        /* Left Card: Chapter-by-Chapter Progress & Quiz Mastery */
+        h('div', { className: 'spd-panel-card' },
+          h('div', { className: 'spd-panel-head' },
+            h('div', null,
+              h('span', { className: 'spd-panel-kicker' }, isAr ? 'تحليل الفصول الأربعة' : 'MODULE BREAKDOWN'),
+              h('h2', { className: 'spd-panel-title' }, isAr ? 'مستوى التقدم والدرجات لكل فصل' : 'Chapter Completion & Quiz Mastery')
+            )
+          ),
+          h('div', { className: 'spd-chapter-bars' },
+            metrics.chapters.map(ch =>
+              h('div', { key: ch.id, className: 'spd-ch-item' },
+                h('div', { className: 'spd-ch-top' },
+                  h('div', { className: 'spd-ch-title-group' },
+                    h('span', {
+                      className: 'spd-ch-badge',
+                      style: { background: ch.accent },
+                      dir: 'ltr'
+                    }, `CH 0${ch.id}`),
+                    h('strong', { className: 'spd-ch-name' }, ch.title)
+                  ),
+                  h('div', { className: 'spd-ch-metrics', dir: 'ltr' },
+                    h('span', null, `${ch.completedCount}/${ch.totalCount} ${isAr ? 'دروس' : 'done'}`),
+                    h('span', { 'aria-hidden': 'true' }, '·'),
+                    h('span', null, ch.avgQuizPct != null ? `${ch.avgQuizPct}% quiz` : (isAr ? 'بدون اختبار' : 'no quiz')),
+                    h('span', { 'aria-hidden': 'true' }, '·'),
+                    h('span', null, `${ch.studyMinutes}m`)
+                  )
+                ),
+                h('div', { className: 'spd-ch-bar-track' },
+                  h('div', {
+                    className: 'spd-ch-bar-fill',
+                    style: { width: `${ch.pct}%`, background: ch.accent }
+                  })
+                ),
+                h('div', { className: 'spd-ch-lessons-mini' },
+                  ch.lessons.map(ls =>
+                    h('a', {
+                      key: ls.id,
+                      href: '#/lesson/' + ls.id,
+                      className: 'spd-mini-lesson-btn is-' + ls.status,
+                      title: `${ls.numberLabel} ${ls.title}`
+                    },
+                      h('span', { dir: 'ltr' }, ls.numberLabel),
+                      h('span', null, ls.isCompleted ? '✓' : ls.isStarted ? '◐' : '○')
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ),
+
+        /* Right Card: 7-Day Study Time Chart + Quiz Score Tier Breakdown */
+        h('div', { className: 'spd-panel-card' },
+          h('div', { className: 'spd-panel-head' },
+            h('div', null,
+              h('span', { className: 'spd-panel-kicker' }, isAr ? 'سجل الوقت والاختبارات' : 'STUDY TIME & QUIZ ANALYTICS'),
+              h('h2', { className: 'spd-panel-title' }, isAr ? 'نشاط الدراسة الأسبوعي وتوزيع الدرجات' : '7-Day Study Log & Score Tiers')
+            ),
+            h('div', { className: 'spd-goal-quick', dir: 'ltr' },
+              [15, 30, 45, 60].map(g =>
+                h('button', {
+                  key: g,
+                  type: 'button',
+                  className: 'spd-goal-chip' + (metrics.dailyGoalMinutes === g ? ' active' : ''),
+                  onClick: () => Store.setDailyGoal(g),
+                  title: isAr ? `تحديد الهدف اليومي: ${g} دقيقة` : `Set daily goal: ${g} minutes`
+                }, `${g}m`)
+              )
+            )
+          ),
+
+          /* 7-Day Bar Chart */
+          h('div', { className: 'spd-weekly-chart' },
+            metrics.weeklySeries.map(day => {
+              const heightPct = Math.min(100, Math.max(8, Math.round((day.minutes / maxWeeklyMin) * 100)));
+              return h('div', {
+                key: day.dateKey,
+                className: 'spd-day-col' + (day.isToday ? ' is-today' : '') + (day.metGoal ? ' met-goal' : '')
+              },
+                h('span', { className: 'spd-day-val', dir: 'ltr' }, `${day.minutes}m`),
+                h('div', { className: 'spd-day-bar-wrap' },
+                  h('div', {
+                    className: 'spd-day-bar',
+                    style: { height: `${heightPct}%` }
+                  })
+                ),
+                h('span', { className: 'spd-day-lbl' }, day.dayLabel)
+              );
+            })
+          ),
+
+          /* Quiz Score Distribution Breakdown */
+          h('div', { className: 'spd-quiz-dist' },
+            h('div', { className: 'spd-qd-head' },
+              h('strong', null, isAr ? 'توزيع نتائج الاختبارات (الكويزات)' : 'Quiz Score Breakdown'),
+              h('span', { dir: 'ltr' }, `${metrics.quizTakenCount} / ${metrics.totalLessons} ${isAr ? 'مكتمل' : 'graded'}`)
+            ),
+            h('div', { className: 'spd-qd-grid' },
+              h('div', { className: 'spd-qd-box tier-excellent' },
+                h('strong', { dir: 'ltr' }, metrics.scoreDistribution.excellent),
+                h('span', null, isAr ? 'ممتاز (80%+)' : 'Excellent (80%+)')
+              ),
+              h('div', { className: 'spd-qd-box tier-good' },
+                h('strong', { dir: 'ltr' }, metrics.scoreDistribution.good),
+                h('span', null, isAr ? 'جيد (50–79%)' : 'Good (50–79%)')
+              ),
+              h('div', { className: 'spd-qd-box tier-review' },
+                h('strong', { dir: 'ltr' }, metrics.scoreDistribution.review),
+                h('span', null, isAr ? 'مراجعة (<50%)' : 'Needs Review (<50%)')
+              ),
+              h('div', { className: 'spd-qd-box tier-remaining' },
+                h('strong', { dir: 'ltr' }, metrics.scoreDistribution.remaining),
+                h('span', null, isAr ? 'لم يُختبر بعد' : 'Not Taken Yet')
+              )
+            )
+          )
+        )
+      ),
+
+      /* 5. Interactive All-14-Lessons Progress, Quiz Scores & Study Time Ledger */
+      h('section', { className: 'spd-ledger-card' },
+        h('div', { className: 'spd-ledger-head' },
+          h('div', null,
+            h('span', { className: 'spd-panel-kicker' }, isAr ? 'سجل الدروس التفصيلي' : 'COMPLETE LESSON LEDGER'),
+            h('h2', { className: 'spd-panel-title' }, isAr ? 'تتبع الدروس ودرجات الكويز ووقت المذاكرة' : 'Track Lessons, Quiz Scores & Time Spent')
+          ),
+          h('div', { className: 'spd-ledger-controls' },
+            /* Status Segmented Filter */
+            h('div', { className: 'spd-filter-seg' },
+              [
+                { id: 'all', label: isAr ? `الكل (${metrics.totalLessons})` : `All (${metrics.totalLessons})` },
+                { id: 'completed', label: isAr ? `مكتمل (${metrics.completedLessons})` : `Done (${metrics.completedLessons})` },
+                { id: 'in-progress', label: isAr ? `قيد الدراسة (${metrics.inProgressLessons})` : `Active (${metrics.inProgressLessons})` },
+                { id: 'not-started', label: isAr ? `متبقي (${metrics.notStartedLessons})` : `To Do (${metrics.notStartedLessons})` }
+              ].map(f =>
+                h('button', {
+                  key: f.id,
+                  type: 'button',
+                  className: 'spd-seg-btn' + (statusFilter === f.id ? ' active' : ''),
+                  onClick: () => setStatusFilter(f.id)
+                }, f.label)
+              )
+            ),
+            /* Chapter Filter */
+            h('div', { className: 'spd-filter-seg', dir: 'ltr' },
+              [
+                { id: 'all', label: isAr ? 'كل الفصول' : 'All Ch' },
+                { id: '1', label: 'CH 01' },
+                { id: '2', label: 'CH 02' },
+                { id: '3', label: 'CH 03' },
+                { id: '4', label: 'CH 04' }
+              ].map(cf =>
+                h('button', {
+                  key: cf.id,
+                  type: 'button',
+                  className: 'spd-seg-btn' + (String(chapterFilter) === String(cf.id) ? ' active' : ''),
+                  onClick: () => setChapterFilter(cf.id)
+                }, cf.label)
+              )
+            )
+          )
+        ),
+
+        filteredLessons.length > 0 ? h('div', { className: 'spd-table-wrap' },
+          h('table', { className: 'spd-table' },
+            h('thead', null,
+              h('tr', null,
+                h('th', null, isAr ? 'الحالة' : 'Done'),
+                h('th', null, isAr ? 'الدرس والفصل' : 'Lesson & Module'),
+                h('th', null, isAr ? 'تقدم الدرس' : 'Status'),
+                h('th', null, isAr ? 'درجة الاختبار (الكويز)' : 'Quiz Score'),
+                h('th', null, isAr ? 'وقت التعلّم' : 'Time Spent'),
+                h('th', null, isAr ? 'الإجراء' : 'Action')
+              )
+            ),
+            h('tbody', null,
+              filteredLessons.map(ls =>
+                h('tr', { key: ls.id, className: 'spd-row is-' + ls.status },
+                  h('td', { className: 'spd-cell-check' },
+                    h('button', {
+                      type: 'button',
+                      className: 'spd-check-btn' + (ls.isCompleted ? ' is-checked' : ''),
+                      onClick: () => handleToggleLesson(ls),
+                      'aria-label': ls.isCompleted
+                        ? (isAr ? `إلغاء اكتمال الدرس ${ls.numberLabel}` : `Mark lesson ${ls.numberLabel} incomplete`)
+                        : (isAr ? `تحديد الدرس ${ls.numberLabel} كمكتمل` : `Mark lesson ${ls.numberLabel} complete`),
+                      title: isAr ? 'اضغط لتبديل حالة اكتمال الدرس' : 'Click to toggle lesson completion'
+                    }, ls.isCompleted ? '✓' : '')
+                  ),
+                  h('td', { className: 'spd-cell-title' },
+                    h('div', { className: 'spd-lt-wrap' },
+                      h('span', {
+                        className: 'spd-lt-num',
+                        style: { borderColor: ls.chapterAccent, color: ls.chapterAccent },
+                        dir: 'ltr'
+                      }, ls.numberLabel),
+                      h('div', { className: 'spd-lt-text' },
+                        h('a', { href: '#/lesson/' + ls.id, className: 'spd-lt-link' }, ls.title),
+                        h('span', { className: 'spd-lt-ch' }, `${isAr ? 'الفصل' : 'Chapter'} 0${ls.chapterId}: ${ls.chapterTitle}`)
+                      )
+                    )
+                  ),
+                  h('td', { className: 'spd-cell-status' },
+                    h('span', { className: 'spd-status-label status-' + ls.status },
+                      ls.isCompleted
+                        ? (isAr ? 'مكتمل ✓' : 'Completed ✓')
+                        : ls.isStarted
+                          ? (isAr ? 'قيد الدراسة' : 'In Progress')
+                          : (isAr ? 'لم يبدأ' : 'Not Started')
+                    )
+                  ),
+                  h('td', { className: 'spd-cell-quiz' },
+                    ls.hasQuizScore
+                      ? h('div', { className: 'spd-quiz-cell-inner', dir: 'ltr' },
+                        h('div', { className: 'spd-qc-top' },
+                          h('strong', null, `${ls.best}/${ls.total}`),
+                          h('span', { className: 'spd-qc-pct' }, `${ls.quizPct}%`)
+                        ),
+                        h('div', { className: 'spd-qc-bar' },
+                          h('div', {
+                            className: 'spd-qc-fill',
+                            style: {
+                              width: `${ls.quizPct}%`,
+                              background: ls.quizPct >= 80 ? '#16a34a' : ls.quizPct >= 50 ? '#ffd233' : '#dc2626'
+                            }
+                          })
+                        )
+                      )
+                      : h('span', { className: 'spd-no-quiz' }, isAr ? 'لم يُختبر بعد' : 'No quiz yet')
+                  ),
+                  h('td', { className: 'spd-cell-time' },
+                    h('div', { className: 'spd-time-cell-inner' },
+                      h('strong', { dir: 'ltr' },
+                        ls.studyMinutes > 0
+                          ? `${ls.studyMinutes} ${isAr ? 'د' : 'm'}`
+                          : `${ls.estimatedMinutes} ${isAr ? 'د (مقدر)' : 'm (est)'}`
+                      ),
+                      h('button', {
+                        type: 'button',
+                        className: 'spd-add-time-btn',
+                        onClick: () => handleLogStudyMinutes(5, ls.id),
+                        title: isAr ? 'إضافة +5 دقائق مذاكرة لهذا الدرس' : 'Log +5m study time for this lesson'
+                      }, '+5m')
+                    )
+                  ),
+                  h('td', { className: 'spd-cell-action' },
+                    h('a', {
+                      href: '#/lesson/' + ls.id,
+                      className: 'spd-open-lesson-btn'
+                    },
+                      h('span', null, ls.isCompleted ? (isAr ? 'مراجعة' : 'Review') : ls.isStarted ? (isAr ? 'استكمل' : 'Resume') : (isAr ? 'ابدأ' : 'Start')),
+                      h('span', { 'aria-hidden': 'true' }, isAr ? '←' : '→')
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ) : h('div', { className: 'spd-empty-filter' },
+          h('p', null, isAr ? 'لا توجد دروس مطابقة لفلتر البحث الحالي.' : 'No lessons match the selected filter.'),
+          h('button', {
+            type: 'button',
+            className: 'ghost sm',
+            onClick: () => { setStatusFilter('all'); setChapterFilter('all'); }
+          }, isAr ? 'عرض جميع الدروس (14)' : 'Show All 14 Lessons')
+        )
+      )
     );
   }
 
@@ -726,8 +1488,6 @@
     const store = useStore();
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
-    const total = meta ? meta.chapters.reduce((n, c) => n + c.lessons.length, 0) : 14;
-    const done = Object.values(store.lessons || {}).filter(l => l.best != null).length;
 
     useEffect(() => {
       const f = () => setScrolled(window.scrollY > 24);
@@ -748,6 +1508,7 @@
     }, [menuOpen]);
 
     const isCoursesActive = route.name === 'course' || route.target === 'courses';
+    const isDashboardActive = route.name === 'dashboard';
     const isHomeActive = route.name === 'home' && !isCoursesActive;
 
     return h(React.Fragment, null,
@@ -769,11 +1530,24 @@
             style: { '--a': '#2f5bff' }
           },
             h(LayersIcon),
-            h('span', { className: 'nav-t' }, t.coursesNav || (lang === 'ar' ? 'كورسات' : 'Courses')))),
+            h('span', { className: 'nav-t' }, t.coursesNav || (lang === 'ar' ? 'كورسات' : 'Courses'))),
+          h('a', {
+            href: '#/dashboard',
+            className: 'nav-i nav-dashboard-link' + (isDashboardActive ? ' on' : ''),
+            style: { '--a': '#2f5bff' }
+          },
+            h(ChartBarIcon),
+            h('span', { className: 'nav-t' }, lang === 'ar' ? 'لوحة التقدم' : 'Progress'))),
 
         h('div', { className: 'hdr-r' },
-
-          authUser ? h(StudentProfileMenu, { user: authUser, onLogout, lang, totalLessons: total, doneLessons: done }) : null,
+          authUser ? h(StudentProfileMenu, {
+            user: authUser,
+            meta,
+            onLogout,
+            onSetLang,
+            lang,
+            route
+          }) : null,
           h('button', {
             type: 'button',
             className: 'ham-btn' + (menuOpen ? ' is-open' : ''),
@@ -850,6 +1624,15 @@
                 h('div', { className: 'nd-nav-text' },
                   h('strong', null, lang === 'ar' ? 'الصفحة الرئيسية' : 'Home'),
                   h('span', null, lang === 'ar' ? 'نظرة عامة على المنصة والمسارات' : 'Platform overview & learning tracks'))),
+              h('a', {
+                href: '#/dashboard',
+                className: 'nd-nav-item' + (isDashboardActive ? ' active' : ''),
+                onClick: () => setMenuOpen(false)
+              },
+                h('span', { className: 'nd-nav-num' }, 'PRG'),
+                h('div', { className: 'nd-nav-text' },
+                  h('strong', null, lang === 'ar' ? 'لوحة التقدم والإحصائيات' : 'Student Progress Dashboard'),
+                  h('span', null, lang === 'ar' ? 'تتبع الدروس المكتملة ودرجات الاختبارات ووقت التعلّم' : 'Track completed lessons, quiz scores & study time'))),
               h('a', {
                 href: '#/courses',
                 className: 'nd-nav-item' + (route.target === 'courses' ? ' active' : ''),
@@ -2227,6 +3010,17 @@
 
     useEffect(() => {
       if (!data) return;
+      // Record active study time every 15 seconds while the lesson tab is visible
+      const studyIv = setInterval(() => {
+        if (!document.hidden && Store.recordStudyTime) {
+          Store.recordStudyTime(id, 15);
+        }
+      }, 15000);
+      return () => clearInterval(studyIv);
+    }, [data, id]);
+
+    useEffect(() => {
+      if (!data) return;
       const onScroll = () => {
         const doc = document.documentElement;
         const max = Math.max(1, doc.scrollHeight - window.innerHeight);
@@ -2247,9 +3041,22 @@
       setQuizOpen(true);
       setTimeout(() => scrollToEl(quizRef.current, 90), 120);
     };
-    const finished = (score, total) => {
-      const prev = ((Store.data.lessons || {})[id] || {}).best || 0;
-      Store.setLesson(id, { read: true, best: Math.max(prev, score), total });
+    const finished = (score, total, elapsedSeconds) => {
+      const cur = ((Store.data.lessons || {})[id] || {});
+      const prevBest = cur.best || 0;
+      const prevAttempts = Number(cur.attempts) || 0;
+      if (elapsedSeconds && Store.recordStudyTime) {
+        Store.recordStudyTime(id, elapsedSeconds);
+      }
+      Store.setLesson(id, {
+        read: true,
+        completed: true,
+        best: Math.max(prevBest, score),
+        lastScore: score,
+        total,
+        attempts: prevAttempts + 1,
+        lastStudiedAt: new Date().toISOString()
+      });
     };
 
     if (err === 'prep') return h('main', { id: 'main', className: 'lesson-state', style: { '--accent': accent } }, h('h1', null, t.prepTitle), h('p', null, t.prepText), h('a', { className: 'solid', href: '#/course/students' }, t.backChapter));
@@ -2562,8 +3369,16 @@
 
   /* ============ root ============ */
   function parseRoute() {
-    const hash = location.hash.replace(/^#/, '') || '/';
+    const rawHash = location.hash.replace(/^#/, '') || '/';
+    const [hash, queryStr] = rawHash.split('?');
     let m;
+    if (hash === '/dashboard' || hash === '/profile' || hash === '/progress') {
+      return {
+        name: 'dashboard',
+        editProfile: Boolean(queryStr && queryStr.includes('edit=1')),
+        key: 'dashboard'
+      };
+    }
     if ((m = hash.match(/^\/lesson\/(\d-\d)$/))) return { name: 'lesson', id: m[1], key: hash, chapter: +m[1][0] };
     if ((m = hash.match(/^\/course\/([a-z0-9_-]+)$/i))) return { name: 'course', courseId: m[1].toLowerCase(), key: 'course-' + m[1].toLowerCase() };
     if ((m = hash.match(/^\/chapter\/(\d)$/))) return { name: 'course', courseId: 'students', targetChapter: +m[1], key: 'course-students', chapter: +m[1] };
@@ -2619,7 +3434,7 @@
     useEffect(() => {
       if (!authUser) return;
       App.TTS.stop();
-      if (route.name === 'lesson' || (route.name === 'course' && !route.targetChapter) || (route.name === 'home' && !route.target)) {
+      if (route.name === 'lesson' || route.name === 'dashboard' || (route.name === 'course' && !route.targetChapter) || (route.name === 'home' && !route.target)) {
         window.scrollTo(0, 0);
       }
       return () => killAll();
@@ -2647,11 +3462,13 @@
         authUser,
         onLogout: () => App.Auth.logout()
       }),
-      route.name === 'lesson'
-        ? h(Lesson, { key: route.id + currentLang, id: route.id, meta, status })
-        : route.name === 'course'
-          ? h(CourseView, { key: route.key + currentLang, courseId: route.courseId, targetChapter: route.targetChapter, meta, status })
-          : h(Home, { key: 'home' + currentLang, meta, status, route }),
+      route.name === 'dashboard'
+        ? h(StudentProgressDashboard, { key: 'dashboard-' + currentLang, meta, user: authUser, route })
+        : route.name === 'lesson'
+          ? h(Lesson, { key: route.id + currentLang, id: route.id, meta, status })
+          : route.name === 'course'
+            ? h(CourseView, { key: route.key + currentLang, courseId: route.courseId, targetChapter: route.targetChapter, meta, status })
+            : h(Home, { key: 'home' + currentLang, meta, status, route }),
       h(Footer, { onOpenSearch: () => setSearchOpen(true) }),
       h(SpotlightSearch, { open: searchOpen, onClose: () => setSearchOpen(false), lang: currentLang }),
       h(TTSPlayerBar)

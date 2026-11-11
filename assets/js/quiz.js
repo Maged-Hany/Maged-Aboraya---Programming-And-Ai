@@ -128,7 +128,7 @@
           if (prev <= 1) {
             clearInterval(timer);
             setDone(true);
-            onDone(score, total);
+            onDone(score, total, initialSeconds);
             return 0;
           }
           return prev - 1;
@@ -139,7 +139,12 @@
 
     const answer = ok => {
       const s = score + (ok ? 1 : 0);
-      if (i + 1 >= total) { setScore(s); setDone(true); onDone(s, total); }
+      if (i + 1 >= total) {
+        const elapsed = Math.max(30, initialSeconds - timeLeft);
+        setScore(s);
+        setDone(true);
+        onDone(s, total, elapsed);
+      }
       else { setScore(s); setI(i + 1); }
     };
     const retry = () => {
@@ -164,6 +169,7 @@
           h('div', { className: 'res-actions' },
             h('button', { type: 'button', className: 'ghost', onClick: retry }, t.retry),
             nextLesson ? h('a', { className: 'solid', href: '#/lesson/' + nextLesson }, t.nextLesson) : null,
+            h('a', { className: 'ghost', href: '#/dashboard' }, t.progress || 'لوحة التقدم'),
             h('a', { className: 'ghost', href: '#/course/students' }, t.backChapter))));
     }
     return h('div', { ref: wrap, key: run + '-' + i },

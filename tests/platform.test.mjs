@@ -61,3 +61,55 @@ test('Curriculum integrity: all 28 bilingual lessons and meta.json are valid', (
     }
   }
 });
+
+test('ProgressMetrics pure logic: accurately computes completed lessons, quiz averages, study time, and 7-day history', async () => {
+  const { createRequire } = await import('node:module');
+  const require = createRequire(import.meta.url);
+  const ProgressMetrics = require(path.join(root, 'assets/js/progress-metrics.js'));
+  const meta = JSON.parse(fs.readFileSync(path.join(root, 'data/meta.json'), 'utf8'));
+
+  assert.equal(ProgressMetrics.formatStudyDuration(2700, 'en').shortFormatted, '45m');
+  assert.equal(ProgressMetrics.formatStudyDuration(5400, 'en').shortFormatted, '1h 30m');
+
+  const fixedNow = new Date('2025-05-10T12:00:00Z');
+  const todayKey = ProgressMetrics.toDateKey(fixedNow);
+  const storeSample = {
+    lessons: {
+      '1-1': { completed: true, best: 6, total: 6, studySeconds: 1200 },
+      '1-2': { completed: true, best: 5, total: 6, studySeconds: 1500 },
+      '2-1': { completed: false, read: true, best: null, total: 6, studySeconds: 600 }
+    },
+    studyLog: {
+      [todayKey]: 1800
+    },
+    dailyGoalMinutes: 30
+  };
+
+  const m = ProgressMetrics.computeDashboardMetrics(meta, storeSample, 'ar', fixedNow);
+  assert.equal(m.totalLessons, 14);
+  assert.equal(m.completedLessons, 2);
+  assert.equal(m.inProgressLessons, 1);
+  assert.equal(m.completionPct, 14);
+  assert.equal(m.quizTakenCount, 2);
+  assert.equal(m.avgQuizPct, Math.round((100 + 83) / 2));
+  assert.equal(m.bestQuizPct, 100);
+  assert.equal(m.totalStudySeconds, 3300);
+  assert.equal(m.todayMinutes, 30);
+  assert.equal(m.dailyGoalPct, 100);
+  assert.equal(m.weeklySeries.length, 7);
+  assert.equal(m.chapters.length, 4);
+  assert.equal(m.chapters[0].completedCount, 2);
+});
+
+test('Student Profile Menu & Visual Progress Dashboard: wired into index.html, app.js, and styles.css', () => {
+  const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+  const appCode = fs.readFileSync(path.join(root, 'assets/js/app.js'), 'utf8');
+  const cssCode = fs.readFileSync(path.join(root, 'assets/css/styles.css'), 'utf8');
+
+  assert.ok(html.includes('progress-metrics.js'), 'index.html must load progress-metrics.js');
+  assert.ok(appCode.includes('function StudentProgressDashboard'), 'app.js must define StudentProgressDashboard');
+  assert.ok(appCode.includes('smc-dashboard-cta'), 'Profile menu must include primary CTA to #/dashboard');
+  assert.ok(appCode.includes("name: 'dashboard'"), 'Router must support #/dashboard route');
+  assert.ok(cssCode.includes('.progress-dashboard-view') && cssCode.includes('.student-avatar-block'), 'styles.css must style the new profile button and dashboard');
+});
+

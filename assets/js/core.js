@@ -343,16 +343,92 @@
   const getLocalUsers = () => { try { return JSON.parse(localStorage.getItem(AUTH_USERS_KEY)) || {}; } catch (e) { return {}; } };
   const saveLocalUsers = (u) => { try { localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(u)); } catch (e) {} };
   const AUTH_EXPLICIT_PORTAL_KEY = 'mabook:auth:explicit_portal';
+  const DEFAULT_PROFILE_KEY = 'mabook:profile:default';
+
+  const getTodayKey = (d) => {
+    if (window.App && window.App.ProgressMetrics && window.App.ProgressMetrics.toDateKey) {
+      return window.App.ProgressMetrics.toDateKey(d);
+    }
+    const dt = d instanceof Date ? d : new Date(d || Date.now());
+    return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+  };
+
+  const makeInitialStarterStore = (langStream) => {
+    const now = new Date();
+    const d0 = getTodayKey(now);
+    const d1 = getTodayKey(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1));
+    const d2 = getTodayKey(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 2));
+    const d3 = getTodayKey(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 3));
+    const d4 = getTodayKey(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 4));
+    const d5 = getTodayKey(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 5));
+    return {
+      lang: langStream || 'ar',
+      dailyGoalMinutes: 30,
+      extraStudySeconds: 0,
+      studyLog: {
+        [d5]: 20 * 60,
+        [d4]: 35 * 60,
+        [d3]: 25 * 60,
+        [d2]: 40 * 60,
+        [d1]: 32 * 60,
+        [d0]: 24 * 60
+      },
+      lessons: {
+        '1-1': {
+          read: true,
+          completed: true,
+          videoWatched: true,
+          best: 8,
+          total: 9,
+          attempts: 2,
+          studySeconds: 22 * 60,
+          lastStudiedAt: new Date(now.getTime() - 86400000 * 2).toISOString()
+        },
+        '1-2': {
+          read: true,
+          completed: true,
+          videoWatched: true,
+          best: 9,
+          total: 9,
+          attempts: 1,
+          studySeconds: 25 * 60,
+          lastStudiedAt: new Date(now.getTime() - 86400000).toISOString()
+        },
+        '1-3': {
+          read: true,
+          completed: false,
+          videoWatched: true,
+          studySeconds: 14 * 60,
+          lastStudiedAt: now.toISOString()
+        },
+        '2-1': {
+          read: true,
+          completed: true,
+          videoWatched: true,
+          best: 8,
+          total: 9,
+          attempts: 1,
+          studySeconds: 24 * 60,
+          lastStudiedAt: new Date(now.getTime() - 3600000 * 5).toISOString()
+        }
+      }
+    };
+  };
+
   const makeDefaultGuest = (langStream) => {
     const prefs = getPrefs();
     const cleanStream = (langStream || prefs.lang || 'ar') === 'en' ? 'en' : 'ar';
+    let savedProf = {};
+    try { savedProf = JSON.parse(localStorage.getItem(DEFAULT_PROFILE_KEY)) || {}; } catch (e) {}
     return {
       isGuest: true,
-      username: 'guest',
-      name: cleanStream === 'en' ? 'Guest' : 'زائر',
-      gmail: 'guest@session',
-      phone: '—',
-      countryCode: '+20',
+      username: savedProf.username || 'syntax_student',
+      name: savedProf.name || (cleanStream === 'en' ? 'Syntax Student' : 'طالب Syntax'),
+      gmail: savedProf.gmail || 'student@syntax.edu',
+      phone: savedProf.phone || '10 1234 5678',
+      countryCode: savedProf.countryCode || '+20',
+      avatarColor: savedProf.avatarColor || '#ffd233',
+      gradeTitle: savedProf.gradeTitle || (cleanStream === 'en' ? '2nd Secondary · Baccalaureate' : 'الصف الثاني الثانوي · البكالوريا'),
       stream: cleanStream
     };
   };
@@ -375,6 +451,29 @@
     getUser() { return Auth.user; },
     subscribe(fn) { Auth.subs.add(fn); return () => Auth.subs.delete(fn); },
     notify() { Auth.subs.forEach(fn => fn(Auth.user)); },
+
+    updateProfile(patch) {
+      if (!Auth.user) return null;
+      const updated = { ...Auth.user, ...patch };
+      Auth.user = updated;
+      if (updated.isGuest) {
+        try {
+          localStorage.setItem(DEFAULT_PROFILE_KEY, JSON.stringify(updated));
+          sessionStorage.setItem(AUTH_GUEST_KEY, JSON.stringify(updated));
+        } catch (e) {}
+      } else {
+        try {
+          localStorage.setItem(AUTH_USER_KEY, JSON.stringify(updated));
+          const local = getLocalUsers();
+          if (local[updated.username]) {
+            local[updated.username] = { ...local[updated.username], ...patch };
+            saveLocalUsers(local);
+          }
+        } catch (e) {}
+      }
+      Auth.notify();
+      return updated;
+    },
 
     async register(data, uiLang) {
       const isAr = (uiLang || data.stream || 'ar') === 'ar';
@@ -418,10 +517,20 @@
           phone: cleanPhone,
           password: pass,
           stream: data.stream === 'en' ? 'en' : 'ar',
+          avatarColor: '#ffd233',
           registeredAt: new Date().toISOString()
         };
         saveLocalUsers(local);
       }
+
+      // Copy existing guest progress to the new student account if any
+      try {
+        const guestSaved = JSON.parse(localStorage.getItem('mabook:user:guest') || 'null');
+        if (guestSaved && guestSaved.lessons) {
+          localStorage.setItem('mabook:user:' + cleanUser, JSON.stringify(guestSaved));
+        }
+      } catch (e) {}
+
       return { ok: true, username: cleanUser };
     },
 
@@ -463,6 +572,7 @@
 
       if (user) {
         Auth.user = user;
+        try { sessionStorage.removeItem(AUTH_EXPLICIT_PORTAL_KEY); } catch (e) {}
         try { sessionStorage.removeItem(AUTH_GUEST_KEY); } catch (e) {}
         try { localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user)); } catch (e) {}
         Store.loadUser(user.username);
@@ -481,11 +591,8 @@
         sessionStorage.removeItem(AUTH_EXPLICIT_PORTAL_KEY);
         sessionStorage.setItem(AUTH_GUEST_KEY, JSON.stringify(guest));
       } catch (e) {}
-      Store.activeUser = 'guest';
-      const prefs = getPrefs();
-      Store.data = { ...prefs, lang: cleanStream, lessons: {} };
-      savePrefs({ lang: cleanStream });
-      Store.subs.forEach(fn => fn(Store.data));
+      Store.loadUser('guest');
+      Store.set({ lang: cleanStream });
       Auth.notify();
       return { ok: true, user: guest };
     },
@@ -506,19 +613,29 @@
     return u;
   }
 
-  /* ---------- per-account isolated progress store ---------- */
-  const getUserKey = (uname) => 'mabook:user:' + (uname || (Auth.user ? Auth.user.username : 'guest'));
+  /* ---------- per-account persistent progress store ---------- */
+  const getUserKey = (uname) => 'mabook:user:' + (uname && uname !== 'syntax_student' ? uname : 'guest');
   const readUserStore = (uname) => {
     const prefs = getPrefs();
-    if (!uname || uname === 'guest') {
-      const guestStream = Auth.user && Auth.user.isGuest ? Auth.user.stream : undefined;
-      return { ...prefs, lang: guestStream || prefs.lang || 'ar', lessons: {} };
-    }
+    const key = getUserKey(uname);
     try {
-      const saved = JSON.parse(localStorage.getItem(getUserKey(uname))) || {};
-      return { ...prefs, ...saved, lessons: saved.lessons || {} };
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        const saved = JSON.parse(raw) || {};
+        return {
+          ...prefs,
+          dailyGoalMinutes: 30,
+          extraStudySeconds: 0,
+          ...saved,
+          studyLog: saved.studyLog || {},
+          lessons: saved.lessons || {}
+        };
+      }
+      const starter = makeInitialStarterStore(prefs.lang || 'ar');
+      try { localStorage.setItem(key, JSON.stringify(starter)); } catch (e) {}
+      return { ...prefs, ...starter };
     } catch (e) {
-      return { ...prefs, lessons: {} };
+      return { ...prefs, ...makeInitialStarterStore(prefs.lang || 'ar') };
     }
   };
 
@@ -527,22 +644,19 @@
     data: readUserStore((Auth.user && !Auth.user.isGuest) ? Auth.user.username : 'guest'),
     subs: new Set(),
     loadUser(username) {
-      Store.activeUser = username || 'guest';
-      const isGuest = Store.activeUser === 'guest' || (Auth.user && Auth.user.isGuest);
-      const prefs = getPrefs();
-      if (isGuest) {
-        const guestStream = Auth.user && Auth.user.isGuest ? Auth.user.stream : prefs.lang;
-        Store.data = { ...prefs, lang: guestStream || 'ar', lessons: {} };
-        Store.subs.forEach(fn => fn(Store.data));
-        return;
-      }
+      Store.activeUser = (username && username !== 'syntax_student') ? username : 'guest';
       Store.data = readUserStore(Store.activeUser);
-      if (username && username !== 'guest') {
-        fetch('/api/user/progress/' + encodeURIComponent(username))
+      if (Store.activeUser && Store.activeUser !== 'guest') {
+        fetch('/api/user/progress/' + encodeURIComponent(Store.activeUser))
           .then(r => r.ok ? r.json() : null)
           .then(res => {
-            if (res && res.progress && res.progress.lessons) {
-              Store.data = { ...Store.data, lessons: { ...(Store.data.lessons || {}), ...res.progress.lessons } };
+            if (res && res.progress) {
+              Store.data = {
+                ...Store.data,
+                ...res.progress,
+                lessons: { ...(Store.data.lessons || {}), ...(res.progress.lessons || {}) },
+                studyLog: { ...(Store.data.studyLog || {}), ...(res.progress.studyLog || {}) }
+              };
               try { localStorage.setItem(getUserKey(Store.activeUser), JSON.stringify(Store.data)); } catch (e) {}
               Store.subs.forEach(fn => fn(Store.data));
             }
@@ -564,23 +678,101 @@
         Auth.user = { ...Auth.user, stream: patch.lang };
         try { sessionStorage.setItem(AUTH_GUEST_KEY, JSON.stringify(Auth.user)); } catch (e) {}
       }
+      try {
+        localStorage.setItem(getUserKey(Store.activeUser), JSON.stringify(Store.data));
+      } catch (e) {}
       const isGuest = Store.activeUser === 'guest' || (Auth.user && Auth.user.isGuest);
-      if (!isGuest) {
-        try { localStorage.setItem(getUserKey(Store.activeUser), JSON.stringify(Store.data)); } catch (e) {}
-        if (Auth.user && Auth.user.username && patch.lessons) {
-          fetch('/api/user/progress', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: Auth.user.username, progress: { lessons: Store.data.lessons } })
-          }).catch(() => {});
-        }
+      if (!isGuest && Auth.user && Auth.user.username && (patch.lessons || patch.studyLog || patch.dailyGoalMinutes !== undefined)) {
+        fetch('/api/user/progress', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: Auth.user.username,
+            progress: {
+              lessons: Store.data.lessons,
+              studyLog: Store.data.studyLog,
+              dailyGoalMinutes: Store.data.dailyGoalMinutes,
+              extraStudySeconds: Store.data.extraStudySeconds || 0
+            }
+          })
+        }).catch(() => {});
       }
       Store.subs.forEach(fn => fn(Store.data));
     },
     setLesson(id, patch) {
       const lessons = { ...(Store.data.lessons || {}) };
-      lessons[id] = { ...(lessons[id] || {}), ...patch };
+      const prev = lessons[id] || {};
+      lessons[id] = {
+        ...prev,
+        ...patch,
+        lastStudiedAt: patch.lastStudiedAt || new Date().toISOString()
+      };
       Store.set({ lessons });
+    },
+    recordStudyTime(lessonId, seconds = 60) {
+      const addSecs = Math.max(1, Math.round(Number(seconds) || 0));
+      const todayKey = getTodayKey();
+      const studyLog = { ...(Store.data.studyLog || {}) };
+      studyLog[todayKey] = Math.max(0, Number(studyLog[todayKey]) || 0) + addSecs;
+
+      if (lessonId) {
+        const lessons = { ...(Store.data.lessons || {}) };
+        const prev = lessons[lessonId] || {};
+        lessons[lessonId] = {
+          ...prev,
+          read: true,
+          studySeconds: Math.max(0, Number(prev.studySeconds) || 0) + addSecs,
+          lastStudiedAt: new Date().toISOString()
+        };
+        Store.set({ lessons, studyLog });
+      } else {
+        const extraStudySeconds = Math.max(0, Number(Store.data.extraStudySeconds) || 0) + addSecs;
+        Store.set({ extraStudySeconds, studyLog });
+      }
+    },
+    toggleLessonComplete(lessonId, estimatedMinutes = 16) {
+      if (!lessonId) return;
+      const lessons = { ...(Store.data.lessons || {}) };
+      const prev = lessons[lessonId] || {};
+      const currentlyDone = Boolean(prev.best != null || prev.completed);
+      if (currentlyDone) {
+        const next = { ...prev, completed: false };
+        delete next.best;
+        lessons[lessonId] = next;
+      } else {
+        const defaultSecs = Math.max(60, (Number(estimatedMinutes) || 16) * 60);
+        lessons[lessonId] = {
+          ...prev,
+          read: true,
+          completed: true,
+          best: prev.best != null ? prev.best : 9,
+          total: prev.total || 9,
+          attempts: Math.max(1, Number(prev.attempts) || 1),
+          studySeconds: Math.max(Number(prev.studySeconds) || 0, defaultSecs),
+          lastStudiedAt: new Date().toISOString()
+        };
+      }
+      Store.set({ lessons });
+    },
+    setDailyGoal(minutes) {
+      const goal = Math.max(10, Math.min(240, Math.round(Number(minutes) || 30)));
+      Store.set({ dailyGoalMinutes: goal });
+    },
+    resetProgress() {
+      Store.set({
+        lessons: {},
+        studyLog: {},
+        extraStudySeconds: 0
+      });
+    },
+    loadSampleProgress() {
+      const sample = makeInitialStarterStore(Store.data.lang || 'ar');
+      Store.set({
+        lessons: sample.lessons,
+        studyLog: sample.studyLog,
+        dailyGoalMinutes: sample.dailyGoalMinutes,
+        extraStudySeconds: 0
+      });
     }
   };
   function useStore() {
@@ -1255,6 +1447,7 @@
   loadSiteTexts();
 
   window.App = {
+    ...(window.App || {}),
     h, STR, Store, useStore, LangCtx, useLang, getJSON, prefetchLesson, initSmoothScroll, scrollToY, scrollToEl, getLenis,
     scan, killAll, useScan, Words, ScrubWords, reduced, TTS, search, SEARCH_ITEMS,
     Auth, useAuth, COUNTRIES, StoreVideos, StoreRatings,
